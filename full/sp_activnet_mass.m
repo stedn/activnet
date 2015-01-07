@@ -1,13 +1,13 @@
 function Mz = sp_activnet_mass(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
 t
-    
+    tic
     %% create velocity coupling matrix    
     l0 = L/(ncnt-1);
 
     p = reshape(z,[],2);
     p = [mod(p(:,1),2*D),mod(p(:,2),D)];
     
-    Mo = sparse(length(p),length(p));
+    Mo = zeros(length(p),length(p));
     
     
     indL = 1:length(p);
@@ -49,7 +49,7 @@ t
     
     indL = [indL indL(subXY)];
     
-    g = lineSegmentIntersect(indL,XY,D,l0);
+    g = lineSegmentGrid(indL,XY,D,l0);
 
     f = min(1,max(0,(g-lf/2)/(1-lf)));
     for ind=1:size(g,1)
@@ -107,5 +107,5 @@ t
     %% and bring it all home
     
     Mz = sparse(blkdiag(Mo+diag(gx),Mo+diag(gy)));
-    
+    toc
 end

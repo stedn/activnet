@@ -3,25 +3,26 @@
 tfin = 10;
 tinc = 0.1;
 
-ls = 0.5;
+% ls = 0.5;
 lf = 0.01;
 Df= 0.01;
 
 zet = 0.005;
 mu = 1;
-kap = 0.000001;
+kap = 0;
 
-del = 10000;
+del = 100000;
 max_nu = 0;
 phi = 0;
 psi = 0;
 
 r = 0;
 
-D = 4;
-sig = 0.2;
+D = 8;
+sig = 0.5;
 
 L = 2;
+ls = L;
 lc = 0.1;
 
 ncnt = ceil(L/ls)+1;
@@ -30,7 +31,7 @@ N = floor(4*D^2/lc/L);
 nu=[];
 if(max_nu>0)
     nu = max_nu*double(rand(N,N)<phi);
-    nu = (nu+nu')/2;
+    nu = sparse((nu+nu')/2);
 end
 %% initialize network
 % p = zeros(N*ncnt,2);
@@ -80,15 +81,16 @@ tt = 0:tinc:tfin;
 zt = zeros(length(tt),length(z0));
 zt(1,:)=z0';
 
-tic
+% tic
 
 options = odeset('Mass',@sp_activnet_mass,'AbsTol',0.001,'RelTol',0.001);
 
 figure('Position', [50, 100, 1200, 600]);
 hold on
 ind = 2;
+istep = 2;
 while(ind<length(tt))
-    [t,z] = ode15s(@activnet_ode_pull,[tt(ind-1) tt(ind) tt(ind+1)],z0,options,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf);
+    [t,z] = ode15s(@activnet_ode_pull,tt(ind-1:ind-1+istep),z0,options,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf);
     zt(ind:ind+1,:) = z(2:3,:);
     
     %plot live
@@ -111,7 +113,7 @@ while(ind<length(tt))
             thet = thet+pi/32*randn;
         end
     end
-    toc
+%     toc
 end
 
 

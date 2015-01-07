@@ -1,25 +1,23 @@
 function activnet_pull(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf,r,tinc,fileID)
-    options = odeset('Mass',@activnet_mass_pull,'AbsTol',0.005,'RelTol',0.005);
+    options = odeset('Mass',@sp_activnet_mass,'AbsTol',0.005,'RelTol',0.005);
 
     ind = 2;
+    istep = length(tt)-1;
     while(ind<length(tt))
         % solve for one timestep
-        [~,z] = ode23(@activnet_ode_pull,[tt(ind-1) tt(ind) tt(ind+1)],z0,options,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf);
+        [~,z] = ode15s(@activnet_ode_pull,tt(ind-1:ind-1+istep),z0,options,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf);
 
         % output to file
-        fprintf(fileID,'%.3f',tt(ind));
-        for i=1:size(z,2)
-            fprintf(fileID,' %.4f',z(2,i));
+        for is=2:istep
+            fprintf(fileID,'%.3f',tt(ind-1+is));
+            for i=1:size(z,2)
+                fprintf(fileID,' %.4f',z(is,i));
+            end
+            fprintf(fileID,'\n');
         end
-        fprintf(fileID,'\n');
-        fprintf(fileID,'%.3f',tt(ind+1));
-        for i=1:size(z,2)
-            fprintf(fileID,' %.4f',z(3,i));
-        end
-        fprintf(fileID,'\n');
-
+        
         % setup for next iteration
-        z0 = z(3,:);
+        z0 = z(end,:);
         if(r>0)
             p = reshape(z0,[],2);
             p = [mod(p(:,1),2*D),mod(p(:,2),D)];
@@ -33,6 +31,6 @@ function activnet_pull(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf,r,tinc,f
             z0 = reshape(p,1,[]);
         end
 
-        ind = ind+2;
+        ind = ind+istep;
     end
 end
