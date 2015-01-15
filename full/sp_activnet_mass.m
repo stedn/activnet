@@ -1,6 +1,5 @@
 function Mz = sp_activnet_mass(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
-t
-    tic
+
     %% create velocity coupling matrix    
     l0 = L/(ncnt-1);
 
@@ -107,5 +106,4 @@ t
     %% and bring it all home
     
     Mz = sparse(blkdiag(Mo+diag(gx),Mo+diag(gy)));
-    toc
 end
