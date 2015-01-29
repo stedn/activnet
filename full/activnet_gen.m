@@ -38,7 +38,7 @@ function activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,D,Df,ls,lf,tinc,tfin
             p((i-1)*ncnt+j,:) = p((i-1)*ncnt+j-1,:)+L/(ncnt-1.0)*[cos(thet) sin(thet)];
         end
     end
-
+    
     p = [mod(p(:,1),2*D),mod(p(:,2),D)];
 
     fileID = 1;
