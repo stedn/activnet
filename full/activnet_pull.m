@@ -1,5 +1,5 @@
 function activnet_pull(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf,r,tinc,fileID)
-    options = odeset('Mass',@sp_activnet_mass,'AbsTol',0.05,'RelTol',0.05);
+    options = odeset('Mass',@sp_activnet_mass,'AbsTol',0.01,'RelTol',0.01);
 
     ind = 2;
     istep = length(tt)-1;
