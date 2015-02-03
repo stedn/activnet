@@ -7,9 +7,9 @@ function netplot(p,L,lf,ls,D,clr)
     subpL=subpL(mod(1:length(subpL),ncnt)~=0,:);
     subpR=subpR(mod(1:length(subpR),ncnt)~=1,:);
     subpL(subpL(:,1)<D/2&subpR(:,1)>3*D/2,1)=subpL(subpL(:,1)<D/2&subpR(:,1)>3*D/2,1)+2*D;
-    subpL(subpL(:,2)<D/4&subpR(:,2)>3*D/4,2)=subpL(subpL(:,2)<D/4&subpR(:,2)>3*D/4,2)+D;
+    subpL(subpL(:,2)<D/3&subpR(:,2)>2*D/3,2)=subpL(subpL(:,2)<D/3&subpR(:,2)>2*D/3,2)+D;
     subpR(subpR(:,1)<D/2&subpL(:,1)>3*D/2,1)=subpR(subpR(:,1)<D/2&subpL(:,1)>3*D/2,1)+2*D;
-    subpR(subpR(:,2)<D/4&subpL(:,2)>3*D/4,2)=subpR(subpR(:,2)<D/4&subpL(:,2)>3*D/4,2)+D;
+    subpR(subpR(:,2)<D/3&subpL(:,2)>2*D/3,2)=subpR(subpR(:,2)<D/3&subpL(:,2)>2*D/3,2)+D;
     
     subv = subpR-subpL;
     subv = subv./repmat(sqrt(subv(:,1).^2+subv(:,2).^2),1,2);

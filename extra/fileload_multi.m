@@ -6,7 +6,7 @@
 r=0;
 origbp = pwd;
 %#ok<*ST2NM>
-bp = '/Users/wmcfadden/xlrelaxtest4';
+bp = '/Users/wmcfadden/xlrelaxtest_err_sm';
 cd(bp);
 files = dir;
 files = {files.name};
@@ -42,7 +42,7 @@ for f = files
     %         r=str2num(paree{10});sig=str2num(paree{10});D=str2num(paree{11});Df=str2num(paree{12});ncnt=str2num(paree{13});lf=str2num(paree{14});
             %         tinc=str2num(paree{16});tfin=str2num(paree{17});
             fclose(fid);
-            if(L<4)
+            if(1)
                 imp = importdata([code{1} '_out.txt'],' ',4);
                 A = imp.data;
                 if(~isempty(A))
