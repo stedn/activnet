@@ -6,7 +6,7 @@
 r=0;
 origbp = pwd;
 %#ok<*ST2NM>
-bp = '/Users/wmcfadden/xlrelax_all';
+bp = '/Users/wmcfadden/xlrelaxtest_all';
 cd(bp);
 files = dir;
 files = {files.name};
@@ -21,7 +21,7 @@ stokr0 = [];
 stoall = [];
 stoconf = [];
 stogofs = [];
-stogams = [];
+stogam = [];
 
 
 pars = {};
