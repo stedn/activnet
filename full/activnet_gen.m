@@ -1,5 +1,5 @@
 %% setup initiation params
-function activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,D,Df,ls,lf,tinc,tfin)
+function activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,D,Df,ls,lf,tinc,tfin,seed)
     zet = str2num(zet);
     L = str2num(L);
     mu = str2num(mu);
@@ -17,7 +17,9 @@ function activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,D,Df,ls,lf,tinc,tfin
     lf = str2num(lf);
     tinc = str2num(tinc);
     tfin = str2num(tfin);
-
+    seed = str2num(seed);
+    
+    rng(seed);
     
     %% convert inputs
     ncnt = ceil(L/ls)+1;

@@ -98,18 +98,16 @@ for f = files
                             ss=[ss; -nanmean(sv(subs)./sp(subs))];
                         end
                         G0 = 3*pi/8*mu/L*(L/lc + 2*lc/L - 3);
-                        xi0 = zet*D^2/lc;
-                        kr0 = lc^2/zet/del/L^2;
                         a_t = sig/G0;
-                        b_t = G0/xi0;
-                        c_t = G0*kr0;
+                        b_t = psi;
+                        c_t = pi/2;
                         as = [];
                         bs = [];
                         cs = [];
                         gofs= [];
                         confs = [];
                         for i=1:10
-                            [fito, gof] = fit(tt,ss,'a*(1-exp(-b*x)+c*x)','StartPoint', [a_t, b_t, c_t],'Lower',[0 0 0],'Display','final');
+                            [fito, gof] = fit(tt,ss,'a*sin(b*x+c)','StartPoint', [a_t, b_t, c_t],'Lower',[0 0 0],'Display','final');
                             a_t = fito.a*(1+0.5*randn);
                             b_t = fito.b*(1+0.5*randn);
                             c_t = fito.c*(1+0.5*randn);
@@ -120,21 +118,16 @@ for f = files
                             conf = confint(fito);
                             confs = [confs; diff(conf)./coeffvalues(fito)];
                         end
+%                        
                         if(~isnan(gofs))
                             spt = find(gofs==min(gofs));
                             spt = spt(1);
-                            G = sig/as(spt);
-                            xi = G/bs(spt);
-                            kr = cs(spt)/G;
-                            kr2 = mean(diff(ss(end-25:end))./diff(tt(end-25:end)))/sig;
-
-                            stoG = [stoG; G];
-                            stoG0 = [stoG0; G0];
-                            stoxi = [stoxi; xi];
-                            stoxi0 = [stoxi0; xi0];
-                            stokr = [stokr; kr];
-                            stokr2 = [stokr2; kr2];
-                            stokr0 = [stokr0; kr0];
+                            Gp = sig/as(spt)*cos(cs(spt));
+                            Gpp = sig/as(spt)*sin(cs(spt));
+                            
+                            stoGp = [stoGp; Gp];
+                            stoGpp = [stoGpp; Gpp];
+                            stomega = [stomega; bs(spt)];
                             stoall = [stoall; zet L mu kap lc del ups phi psi r sig D Df ls lf];
                             stoconf = [stoconf; confs(spt,:)];
                             stogofs = [stogofs; gofs(spt)];
@@ -145,7 +138,7 @@ for f = files
                             box on
                             plot(tt,ss,'yo');
                             hold on
-                            plot(tt,as(spt)*((1-exp(-bs(spt)*tt))+tt*cs(spt)),'m','LineWidth',2);
+                            plot(tt,as(spt)*sin(bs(spt)*tt + cs(spt)),'m','LineWidth',2);
                             set(gca,'fontsize',14)
                             h_leg=annotation('textbox', [0.75 0.2 0.12 0.45],'BackgroundColor',[1 1 1],...
                                 'String',{code{1},['zeta = ' num2str(zet)],['L = ' num2str(L)],['lc = ' num2str(lc)],['mu = ' num2str(mu)],['kap = ' num2str(kap)],...
@@ -173,7 +166,7 @@ end
 % stoall(minds,:)=[];
 % stoconf(minds,:)=[];
 % stogofs(minds,:)=[];
-save('fitvals','stoG','stoxi','stokr','stokr2','stoall','stoconf','stogofs','stogams');
+save('fitvals','stoGp','stoGpp','stomega','stoall','stoconf','stogofs','stogams');
 
 zet = stoall(:,1);
 L = stoall(:,2);

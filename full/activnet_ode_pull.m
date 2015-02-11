@@ -39,7 +39,7 @@ function dz = activnet_ode_pull(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
     
     %% add external force at centerline and constrain edges
     if(psi>0)
-        val = sig*sin(psi);
+        val = sig*sin(psi*t);
     else
         val = sig;
     end
