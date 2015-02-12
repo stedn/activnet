@@ -1,4 +1,4 @@
-%% setup initiation params
+%% setup initiation params  0.0005 9 1 0 0.25 100000 0 0 0 0 1.296 54 0.05 9 0.05 0.1 1000 1
 function activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,D,Df,ls,lf,tinc,tfin,seed)
     zet = str2num(zet);
     L = str2num(L);
@@ -18,6 +18,11 @@ function activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,D,Df,ls,lf,tinc,tfin
     tinc = str2num(tinc);
     tfin = str2num(tfin);
     seed = str2num(seed);
+    ext = 0;
+    if(sig<0)
+        sig = -sig;
+        ext = 1;
+    end
     
     rng(seed);
     
@@ -59,7 +64,11 @@ function activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,D,Df,ls,lf,tinc,tfin
     fprintf(fileID,'\n');
     
     if(ups==0&&sig>0)
-        activnet_pull(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf,r,tinc,fileID);
+        if(ext)
+            activnet_pullext(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf,r,tinc,fileID);
+        else
+            activnet_pull(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf,r,tinc,fileID);
+        end
     else
         activnet_act(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf,r,tinc,fileID);
     end
