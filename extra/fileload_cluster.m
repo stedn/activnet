@@ -46,7 +46,7 @@ function fileload_cluster(bp)
                 
                 sig = sig*sin(psi); % stupid line cause I messed something up temporarily
                 fclose(fid);
-                if(1)
+                if(sig.*lc^2/zet/del/L^2>0.0001)
                     imp = importdata([code{1} '_out.txt'],' ',4);
                     A = imp.data;
                     if(~isempty(A))
@@ -102,18 +102,18 @@ function fileload_cluster(bp)
                             cs = [];
                             gofs= [];
                             confs = [];
-                            for i=1:10
-                                [fito, gof] = fit(tt,ss,'a*(1-exp(-b*x)+c*x)','StartPoint', [a_t, b_t, c_t],'Lower',[0 0 0],'Display','final');
-                                a_t = fito.a*(1+0.5*randn);
-                                b_t = fito.b*(1+0.5*randn);
-                                c_t = fito.c*(1+0.5*randn);
-                                as = [as;fito.a];
-                                bs = [bs;fito.b];
-                                cs = [cs;fito.c];
-                                gofs=[gofs;gof.rmse];
-                                conf = confint(fito);
-                                confs = [confs; diff(conf)./coeffvalues(fito)];
-                            end
+%                             for i=1:10
+%                                 [fito, gof] = fit(tt,ss,'a*(1-exp(-b*x)+c*x)','StartPoint', [a_t, b_t, c_t],'Lower',[0 0 0],'Display','final');
+%                                 a_t = fito.a*(1+0.5*randn);
+%                                 b_t = fito.b*(1+0.5*randn);
+%                                 c_t = fito.c*(1+0.5*randn);
+%                                 as = [as;fito.a];
+%                                 bs = [bs;fito.b];
+%                                 cs = [cs;fito.c];
+%                                 gofs=[gofs;gof.rmse];
+%                                 conf = confint(fito);
+%                                 confs = [confs; diff(conf)./coeffvalues(fito)];
+%                             end
                             if(~isnan(gofs))
                                 spt = find(gofs==min(gofs));
                                 spt = spt(1);
