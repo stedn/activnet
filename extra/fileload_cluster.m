@@ -46,7 +46,8 @@ function fileload_cluster(bp)
                 
                 sig = sig*sin(psi); % stupid line cause I messed something up temporarily
                 fclose(fid);
-                if(sig.*lc^2/zet/del/L^2>0.0001)
+                sig.*lc^2/zet/del/L^2
+                if(1)
                     imp = importdata([code{1} '_out.txt'],' ',4);
                     A = imp.data;
                     if(~isempty(A))

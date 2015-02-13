@@ -6,7 +6,7 @@
 r=0;
 origbp = pwd;
 %#ok<*ST2NM>
-bp = '/Users/wmcfadden/xlrelax_better';
+bp = '/Users/wmcfadden/oscil_all';
 cd(bp);
 files = dir;
 files = {files.name};
