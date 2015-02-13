@@ -115,31 +115,28 @@ function fileload_cluster(bp)
 %                                 conf = confint(fito);
 %                                 confs = [confs; diff(conf)./coeffvalues(fito)];
 %                             end
-                            if(~isnan(gofs))
-                                spt = find(gofs==min(gofs));
-                                spt = spt(1);
-                                G = sig/as(spt);
-                                xi = G/bs(spt);
-                                kr = cs(spt)/G;
-                                kr2 = mean(diff(ss((end/2):end))./diff(tt((end/2):end)))/sig;
-                                kr3 = mean(diff(ss((3*end/4):end))./diff(tt((3*end/4):end)))/sig;
+                            spt = 1;
+                            G = 1;
+                            xi = 1;
+                            kr = 1;
+                            kr2 = mean(diff(ss((end/2):end))./diff(tt((end/2):end)))/sig;
+                            kr3 = mean(diff(ss((3*end/4):end))./diff(tt((3*end/4):end)))/sig;
 
-                                stoG = [stoG; G];
-                                stoG0 = [stoG0; G0];
-                                stoxi = [stoxi; xi];
-                                stoxi0 = [stoxi0; xi0];
-                                stokr = [stokr; kr];
-                                stokr2 = [stokr2; kr2];
-                                stokr3 = [stokr3; kr3];
-                                stokr0 = [stokr0; kr0];
-                                stoall = [stoall; zet L mu kap lc del ups phi psi r sig D Df ls lf];
-                                stoconf = [stoconf; confs(spt,:)];
-                                stogofs = [stogofs; gofs(spt)];
-                                stogams = [stogams; ss(end)/tt(end)];
-                                stoname = [stoname; code{1}];
+                            stoG = [stoG; G];
+                            stoG0 = [stoG0; G0];
+                            stoxi = [stoxi; xi];
+                            stoxi0 = [stoxi0; xi0];
+                            stokr = [stokr; kr];
+                            stokr2 = [stokr2; kr2];
+                            stokr3 = [stokr3; kr3];
+                            stokr0 = [stokr0; kr0];
+                            stoall = [stoall; zet L mu kap lc del ups phi psi r sig D Df ls lf];
+                            stoconf = [stoconf; confs(spt,:)];
+                            stogofs = [stogofs; gofs(spt)];
+                            stogams = [stogams; ss(end)/tt(end)];
+                            stoname = [stoname; code{1}];
 
 
-                            end
                         end
                     end
                 end
