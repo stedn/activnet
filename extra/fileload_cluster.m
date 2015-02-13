@@ -131,8 +131,8 @@ function fileload_cluster(bp)
                             stokr3 = [stokr3; kr3];
                             stokr0 = [stokr0; kr0];
                             stoall = [stoall; zet L mu kap lc del ups phi psi r sig D Df ls lf];
-                            stoconf = [stoconf; confs(spt,:)];
-                            stogofs = [stogofs; gofs(spt)];
+                            stoconf = [stoconf; 1];
+                            stogofs = [stogofs; 1];
                             stogams = [stogams; ss(end)/tt(end)];
                             stoname = [stoname; code{1}];
 
