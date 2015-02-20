@@ -6,22 +6,18 @@
 r=0;
 origbp = pwd;
 %#ok<*ST2NM>
-bp = '/Users/wmcfadden/xlrelaxtest_all';
+bp = '/Users/wmcfadden/oscil_all';
 cd(bp);
 files = dir;
 files = {files.name};
-stoG = [];
-stoG0 = [];
-stoxi = [];
-stoxi0 = [];
-stokr = [];
-stokr2 = [];
-stokre = [];
-stokr0 = [];
+stoGp = [];
+stoGpp = [];
+stomega = [];
 stoall = [];
 stoconf = [];
 stogofs = [];
-stogam = [];
+stogams = [];
+
 
 
 pars = {};
@@ -45,8 +41,8 @@ for f = files
             %         tinc=str2num(paree{16});tfin=str2num(paree{17});
             fclose(fid);
             if(1)
-                imp = importdata([code{1} '_out.txt'],' ',4);
-                A = imp.data;
+                imp = importdata([code{1} '_out.txt'],' ');
+                A = imp;
                 if(~isempty(A))
                     t = A(:,1);
                     zt = A(:,2:end);
@@ -57,17 +53,18 @@ for f = files
                         trp = repmat((1:lst)'/lst,1,3);
                         cc = (1-trp.^2).*(winter(lst)*0.75+0.25*spring(lst))+(trp.^2).*copper(lst);
                         h = figure('Position', [50, 100, 1200, 600]);
-                        hold on
+%                         hold on
             %             cc = copper(size(zt,1));
                         whitebg('black')
                         set(gcf,'Color',[0 0 0])
                         set(gcf,'InvertHardcopy','off')
-                        for ind = 1:ceil(size(zt,1)/10):size(zt,1)
+                        for ind = 1:1:size(zt,1)
                             p = reshape(zt(ind,:),[],2);
                             p = [mod(p(:,1),2*D),mod(p(:,2),D)];
 
                             netplot(p,L,lf,ls,D,cc(ind,:));
                             drawnow
+                            clf
                         end
 
 
@@ -107,7 +104,7 @@ for f = files
                         gofs= [];
                         confs = [];
                         for i=1:10
-                            [fito, gof] = fit(tt,ss,'a*sin(b*x+c)','StartPoint', [a_t, b_t, c_t],'Lower',[0 0 0],'Display','final');
+                            [fito, gof] = fit(tt,ss,'a*sin(b*x+c)+d*x','StartPoint', [a_t, b_t, c_t, 0.01],'Lower',[0 0 0 -Inf],'Display','final');
                             a_t = fito.a*(1+0.5*randn);
                             b_t = fito.b*(1+0.5*randn);
                             c_t = fito.c*(1+0.5*randn);
@@ -127,7 +124,7 @@ for f = files
                             
                             stoGp = [stoGp; Gp];
                             stoGpp = [stoGpp; Gpp];
-                            stomega = [stomega; kr0];
+                            stomega = [stomega; bs(spt)];
                             stoall = [stoall; zet L mu kap lc del ups phi psi r sig D Df ls lf];
                             stoconf = [stoconf; confs(spt,:)];
                             stogofs = [stogofs; gofs(spt)];
@@ -138,7 +135,7 @@ for f = files
                             box on
                             plot(tt,ss,'yo');
                             hold on
-                            plot(tt,as(spt)*((1-exp(-bs(spt)*tt))+tt*cs(spt)),'m','LineWidth',2);
+                            plot(tt,as(spt)*sin(bs(spt)*tt + cs(spt)),'m','LineWidth',2);
                             set(gca,'fontsize',14)
                             h_leg=annotation('textbox', [0.75 0.2 0.12 0.45],'BackgroundColor',[1 1 1],...
                                 'String',{code{1},['zeta = ' num2str(zet)],['L = ' num2str(L)],['lc = ' num2str(lc)],['mu = ' num2str(mu)],['kap = ' num2str(kap)],...
@@ -166,7 +163,7 @@ end
 % stoall(minds,:)=[];
 % stoconf(minds,:)=[];
 % stogofs(minds,:)=[];
-save('fitvals','stoG','stoxi','stokr','stokr2','stoall','stoconf','stogofs','stogams');
+save('fitvals','stoGp','stoGpp','stomega','stoall','stoconf','stogofs','stogams');
 
 zet = stoall(:,1);
 L = stoall(:,2);

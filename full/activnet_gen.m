@@ -56,7 +56,6 @@ function activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,D,Df,ls,lf,tinc,tfin
     end
     ext = 0;
     if(sig<0)
-        sig = -sig;
         ext = 1;
     end
     

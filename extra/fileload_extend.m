@@ -6,7 +6,7 @@
 r=0;
 origbp = pwd;
 %#ok<*ST2NM>
-bp = '/Users/wmcfadden/xlrelaxtest_all';
+bp = '/Users/wmcfadden/xlrelax_ext';
 cd(bp);
 files = dir;
 files = {files.name};
@@ -16,12 +16,14 @@ stoxi = [];
 stoxi0 = [];
 stokr = [];
 stokr2 = [];
+stokr3 = [];
 stokre = [];
 stokr0 = [];
 stoall = [];
 stoconf = [];
 stogofs = [];
-stogam = [];
+stogams = [];
+stoname = [];
 
 
 pars = {};
@@ -43,11 +45,18 @@ for f = files
             r=str2num(paree{11});sig=str2num(paree{12});D=str2num(paree{13});Df=str2num(paree{14});ls=str2num(paree{15});lf=str2num(paree{16});
     %         r=str2num(paree{10});sig=str2num(paree{10});D=str2num(paree{11});Df=str2num(paree{12});ncnt=str2num(paree{13});lf=str2num(paree{14});
             %         tinc=str2num(paree{16});tfin=str2num(paree{17});
+%             sig = sig*sin(psi); % stupid line cause I messed something up temporarily
             fclose(fid);
             if(1)
                 imp = importdata([code{1} '_out.txt'],' ',4);
                 A = imp.data;
                 if(~isempty(A))
+                    if(size(A,1)==1)
+                        imp2 = importdata([code{1} '_out.txt'],' ',9);
+                        if(isfield(imp2,'data'))
+                            A = [A;imp2.data];
+                        end
+                    end
                     t = A(:,1);
                     zt = A(:,2:end);
                     code{1}
@@ -71,8 +80,8 @@ for f = files
                         end
 
 
-                        xt = zt(:,1:end/2);
-                        yt = zt(:,end/2+1:end);
+                        xt = 2*D-zt(:,1:end/2);
+                        yt = 2*D-zt(:,1:end/2);
             %             dy = yt-repmat(yt(1,:),size(yt,1),1);
 
                         coff = abs(2*median(yt(2,:)-yt(1,:)));
@@ -87,15 +96,17 @@ for f = files
                         nbins = 30;
                         brng = linspace(0,2*D,nbins+1)';
                         sp = brng(1:end-1)+brng(2)/2;
-                        sp(sp>D)=2*D-sp(sp>D);
+%                         sp(sp>D)=2*D-sp(sp>D);
 
                         ss = [];
                         tt = [];
                         for k=1:size(xt,1)
-                            sv = bindata(dy(k,:),xt(k,:),brng);
-                            subs = sp>Df*D&sp<D*(1-Df);
-                            tt=[tt; t(k)];
-                            ss=[ss; -nanmean(sv(subs)./sp(subs))];
+                            if(sum(isnan(xt(k,:)))==0)
+                                sv = bindata(dy(k,:),xt(k,:),brng);
+                                subs = sp>Df*D&sp<D*(1-Df);
+                                tt=[tt; t(k)];
+                                ss=[ss; nanmean(sv(subs)./sp(subs))];
+                            end
                         end
                         G0 = 3*pi/8*mu/L*(L/lc + 2*lc/L - 3);
                         xi0 = zet*D^2/lc;
@@ -126,7 +137,8 @@ for f = files
                             G = sig/as(spt);
                             xi = G/bs(spt);
                             kr = cs(spt)/G;
-                            kr2 = mean(diff(ss(end-25:end))./diff(tt(end-25:end)))/sig;
+                            kr2 = mean(diff(ss((end/2):end))./diff(tt((end/2):end)))/sig;
+                            kr3 = mean(diff(ss((3*end/4):end))./diff(tt((3*end/4):end)))/sig;
 
                             stoG = [stoG; G];
                             stoG0 = [stoG0; G0];
@@ -134,11 +146,13 @@ for f = files
                             stoxi0 = [stoxi0; xi0];
                             stokr = [stokr; kr];
                             stokr2 = [stokr2; kr2];
+                            stokr3 = [stokr3; kr3];
                             stokr0 = [stokr0; kr0];
                             stoall = [stoall; zet L mu kap lc del ups phi psi r sig D Df ls lf];
                             stoconf = [stoconf; confs(spt,:)];
                             stogofs = [stogofs; gofs(spt)];
-                            stogams = [stogams; ss(end)];
+                            stogams = [stogams; ss(end)/tt(end)];
+                            stoname = [stoname; code{1}];
 
                             axes('Position',[.75 .7 .12 .2])
                             title('strain plot')
@@ -173,7 +187,7 @@ end
 % stoall(minds,:)=[];
 % stoconf(minds,:)=[];
 % stogofs(minds,:)=[];
-save('fitvals','stoG','stoxi','stokr','stokr2','stoall','stoconf','stogofs',stogams);
+save('fitvals','stoG','stoxi','stokr','stokr2','stoall','stoconf','stogofs','stogams','stoname');
 
 zet = stoall(:,1);
 L = stoall(:,2);

@@ -6,22 +6,18 @@
 r=0;
 origbp = pwd;
 %#ok<*ST2NM>
-bp = '/Users/wmcfadden/xlrelaxtest_all';
+bp = '/Users/wmcfadden/oscil_all';
 cd(bp);
 files = dir;
 files = {files.name};
-stoG = [];
-stoG0 = [];
-stoxi = [];
-stoxi0 = [];
-stokr = [];
-stokr2 = [];
-stokre = [];
-stokr0 = [];
+stoGp = [];
+stoGpp = [];
+stomega = [];
 stoall = [];
 stoconf = [];
 stogofs = [];
-stogam = [];
+stogams = [];
+
 
 
 pars = {};
@@ -45,8 +41,8 @@ for f = files
             %         tinc=str2num(paree{16});tfin=str2num(paree{17});
             fclose(fid);
             if(1)
-                imp = importdata([code{1} '_out.txt'],' ',4);
-                A = imp.data;
+                imp = importdata([code{1} '_out.txt'],' ');
+                A = imp;
                 if(~isempty(A))
                     t = A(:,1);
                     zt = A(:,2:end);
@@ -57,17 +53,18 @@ for f = files
                         trp = repmat((1:lst)'/lst,1,3);
                         cc = (1-trp.^2).*(winter(lst)*0.75+0.25*spring(lst))+(trp.^2).*copper(lst);
                         h = figure('Position', [50, 100, 1200, 600]);
-                        hold on
+%                         hold on
             %             cc = copper(size(zt,1));
                         whitebg('black')
                         set(gcf,'Color',[0 0 0])
                         set(gcf,'InvertHardcopy','off')
-                        for ind = 1:ceil(size(zt,1)/10):size(zt,1)
+                        for ind = 1:100:size(zt,1)
                             p = reshape(zt(ind,:),[],2);
                             p = [mod(p(:,1),2*D),mod(p(:,2),D)];
 
                             netplot(p,L,lf,ls,D,cc(ind,:));
                             drawnow
+                            clf
                         end
 
 
@@ -91,29 +88,33 @@ for f = files
 
                         ss = [];
                         tt = [];
-                        for k=1:size(xt,1)
+                        for k=1:1000%size(xt,1)
                             sv = bindata(dy(k,:),xt(k,:),brng);
                             subs = sp>Df*D&sp<D*(1-Df);
                             tt=[tt; t(k)];
                             ss=[ss; -nanmean(sv(subs)./sp(subs))];
                         end
                         G0 = 3*pi/8*mu/L*(L/lc + 2*lc/L - 3);
-                        a_t = sig/G0;
+                        a_t = 1000*sig/G0;
                         b_t = psi;
-                        c_t = pi/2;
+                        c_t = 0;
                         as = [];
                         bs = [];
                         cs = [];
+                        ds = [];
+                        es = [];
                         gofs= [];
                         confs = [];
                         for i=1:10
-                            [fito, gof] = fit(tt,ss,'a*sin(b*x+c)','StartPoint', [a_t, b_t, c_t],'Lower',[0 0 0],'Display','final');
+                            [fito, gof] = fit(tt,ss,'a*sin(b*x+c)+d*x + e','StartPoint', [a_t, b_t, c_t, -1, 1],'Display','final');
                             a_t = fito.a*(1+0.5*randn);
                             b_t = fito.b*(1+0.5*randn);
                             c_t = fito.c*(1+0.5*randn);
                             as = [as;fito.a];
                             bs = [bs;fito.b];
                             cs = [cs;fito.c];
+                            ds = [ds;fito.d];
+                            es = [es;fito.e];
                             gofs=[gofs;gof.rmse];
                             conf = confint(fito);
                             confs = [confs; diff(conf)./coeffvalues(fito)];
@@ -133,12 +134,12 @@ for f = files
                             stogofs = [stogofs; gofs(spt)];
                             stogams = [stogams; ss(end)];
 
-                            axes('Position',[.75 .7 .12 .2])
-                            title('strain plot')
-                            box on
+%                             axes('Position',[.75 .7 .12 .2])
+%                             title('strain plot')
+%                             box on
                             plot(tt,ss,'yo');
                             hold on
-                            plot(tt,as(spt)*sin(bs(spt)*tt + cs(spt)),'m','LineWidth',2);
+                            plot(tt,as(spt)*sin(bs(spt)*tt + cs(spt))+ds(spt)*tt + es(spt),'m','LineWidth',2);
                             set(gca,'fontsize',14)
                             h_leg=annotation('textbox', [0.75 0.2 0.12 0.45],'BackgroundColor',[1 1 1],...
                                 'String',{code{1},['zeta = ' num2str(zet)],['L = ' num2str(L)],['lc = ' num2str(lc)],['mu = ' num2str(mu)],['kap = ' num2str(kap)],...

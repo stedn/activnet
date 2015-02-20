@@ -1,5 +1,5 @@
 bp = '/Users/wmcfadden/xlrelax_final/';
-code = 'swxrycgy';
+code = 'wmynazh';
 A = importdata([bp code '_out.txt']);
 fid = fopen([bp code '_scr.txt']);
 C = textscan(fid, '%s','delimiter', '\n');
@@ -34,7 +34,7 @@ for ind = 1:100:size(zt,1)
 
     netplot_str(p,L,lf,ls,D,cc,0.1);
     
-    mov(indi) = getframe;
+    mov(indi) = getframe;fi
     clf
     indi = indi +1;
 end

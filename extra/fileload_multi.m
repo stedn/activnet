@@ -6,7 +6,7 @@
 r=0;
 origbp = pwd;
 %#ok<*ST2NM>
-bp = '/Users/wmcfadden/oscil_all';
+bp = '/Users/wmcfadden/xlrelax_final';
 cd(bp);
 files = dir;
 files = {files.name};
@@ -51,12 +51,12 @@ for f = files
                 imp = importdata([code{1} '_out.txt'],' ',4);
                 A = imp.data;
                 if(~isempty(A))
-                    if(size(A,1)==1)
-                        imp2 = importdata([code{1} '_out.txt'],' ',9);
-                        if(isfield(imp2,'data'))
-                            A = [A;imp2.data];
-                        end
-                    end
+%                     if(size(A,1)==1)
+%                         imp2 = importdata([code{1} '_out.txt'],' ',9);
+%                         if(isfield(imp2,'data'))
+%                             A = [A;imp2.data];
+%                         end
+%                     end
                     t = A(:,1);
                     zt = A(:,2:end);
                     code{1}
