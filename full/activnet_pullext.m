@@ -8,10 +8,10 @@ function activnet_pullext(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf,r,tin
         [~,z] = ode15s(@activnet_ode_pullext,tt(ind-1:ind-1+istep),z0,options,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf);
 
         % output to file
-        for is=2:istep
-            fprintf(fileID,'%.3f',tt(ind-1+is));
+        for is=1:istep
+            fprintf(fileID,'%.3f',tt(ind+is));
             for i=1:size(z,2)
-                fprintf(fileID,' %.4f',z(is,i));
+                fprintf(fileID,' %.4f',z(is+1,i));
             end
             fprintf(fileID,'\n');
         end
