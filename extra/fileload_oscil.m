@@ -42,7 +42,7 @@ for f = files
             fclose(fid);
             if(1)
                 imp = importdata([code{1} '_out.txt'],' ');
-                A = imp;
+                A = imp.data;
                 if(~isempty(A))
                     t = A(:,1);
                     zt = A(:,2:end);
@@ -58,7 +58,7 @@ for f = files
                         whitebg('black')
                         set(gcf,'Color',[0 0 0])
                         set(gcf,'InvertHardcopy','off')
-                        for ind = 1:100:size(zt,1)
+                        for ind = 1:10000:size(zt,1)
                             p = reshape(zt(ind,:),[],2);
                             p = [mod(p(:,1),2*D),mod(p(:,2),D)];
 
@@ -88,7 +88,7 @@ for f = files
 
                         ss = [];
                         tt = [];
-                        for k=1:1000%size(xt,1)
+                        for k=1:10000%size(xt,1)
                             sv = bindata(dy(k,:),xt(k,:),brng);
                             subs = sp>Df*D&sp<D*(1-Df);
                             tt=[tt; t(k)];
@@ -141,12 +141,12 @@ for f = files
                             hold on
                             plot(tt,as(spt)*sin(bs(spt)*tt + cs(spt))+ds(spt)*tt + es(spt),'m','LineWidth',2);
                             set(gca,'fontsize',14)
-                            h_leg=annotation('textbox', [0.75 0.2 0.12 0.45],'BackgroundColor',[1 1 1],...
-                                'String',{code{1},['zeta = ' num2str(zet)],['L = ' num2str(L)],['lc = ' num2str(lc)],['mu = ' num2str(mu)],['kap = ' num2str(kap)],...
-                                ['del = ' num2str(del)],['xi = ' num2str(xi)],['kr = ' num2str(kr)],...
-                                ['G = ' num2str(G)]});
-                            set(h_leg,'FontSize',16);
-                            set(h,'PaperPositionMode','auto')
+%                             h_leg=annotation('textbox', [0.75 0.2 0.12 0.45],'BackgroundColor',[1 1 1],...
+%                                 'String',{code{1},['zeta = ' num2str(zet)],['L = ' num2str(L)],['lc = ' num2str(lc)],['mu = ' num2str(mu)],['kap = ' num2str(kap)],...
+%                                 ['del = ' num2str(del)],['xi = ' num2str(xi)],['kr = ' num2str(kr)],...
+%                                 ['G = ' num2str(G)]});
+%                             set(h_leg,'FontSize',16);
+%                             set(h,'PaperPositionMode','auto')
                             drawnow
                             print('-dpng','-r0',[code{1} '_fig.png']);%saveas(h,['fig_' code{2} '.png'],'png');
                         end

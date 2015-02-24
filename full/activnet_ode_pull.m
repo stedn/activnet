@@ -1,5 +1,5 @@
 function dz = activnet_ode_pull(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
-    t
+    
     %% compute intrafilament forces    
     l0 = L/(ncnt-1);
     p = reshape(z,[],2);
