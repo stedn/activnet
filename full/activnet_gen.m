@@ -98,7 +98,7 @@ function activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,D,Df,ls,lf,tinc,tfin
     end
     fprintf(fileID,'\n');
     
-    if(ups==0&&sig>0)
+    if(ups==0&&sig~=0)
         if(ext)
             activnet_pullext(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf,r,tinc,fileID);
         else
