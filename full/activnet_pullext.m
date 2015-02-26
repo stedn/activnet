@@ -9,7 +9,7 @@ function activnet_pullext(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf,r,tin
 
         % output to file
         for is=1:istep
-            fprintf(fileID,'%.3f',tt(ind+is));
+            fprintf(fileID,'%.3f',tt(ind-1+is));
             for i=1:size(z,2)
                 fprintf(fileID,' %.4f',z(is+1,i));
             end
