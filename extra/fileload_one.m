@@ -1,5 +1,5 @@
-bp = '/Users/wmcfadden/oscil_all/';
-code = 'badajqgd';
+bp = '/Users/wmcfadden/xlrelax_ext/';
+code = 'dielczls';
 A = importdata([bp code '_out.txt']);
 fid = fopen([bp code '_scr.txt']);
 C = textscan(fid, '%s','delimiter', '\n');
@@ -25,7 +25,7 @@ trp = repmat((1:lst)'/lst,1,3);
 cc = (1-trp.^2).*(winter(lst)*0.75+0.25*spring(lst))+(trp.^2).*copper(lst);
             
 indi = 1;
-for ind = 1:1:size(zt,1)
+for ind = 1:10:size(zt,1)
     p = reshape(zt(ind,:),[],2);
     p = [mod(p(:,1),2*D),mod(p(:,2),D)];
     whitebg('black')

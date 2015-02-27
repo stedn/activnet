@@ -78,7 +78,7 @@ function Mz = sp_activnet_mass(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
     
     
     %% decouple nodes as they enter the edge zone
-    if(sig>0)
+    if(sig~=0)
         sz = size(Mo,2);
 
         subp = p(:,1)<Df*D;

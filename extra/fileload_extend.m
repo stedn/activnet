@@ -71,17 +71,18 @@ for f = files
                         whitebg('black')
                         set(gcf,'Color',[0 0 0])
                         set(gcf,'InvertHardcopy','off')
-                        for ind = 1:ceil(size(zt,1)/10):size(zt,1)
+                        for ind = 1:1:size(zt,1)
                             p = reshape(zt(ind,:),[],2);
                             p = [mod(p(:,1),2*D),mod(p(:,2),D)];
 
                             netplot(p,L,lf,ls,D,cc(ind,:));
                             drawnow
+                            clf
                         end
 
 
-                        xt = 2*D-zt(:,1:end/2);
-                        yt = 2*D-zt(:,1:end/2);
+                        xt = zt(:,1:end/2);
+                        yt = zt(:,1:end/2);
             %             dy = yt-repmat(yt(1,:),size(yt,1),1);
 
                         coff = abs(2*median(yt(2,:)-yt(1,:)));
