@@ -6,7 +6,7 @@
 r=0;
 origbp = pwd;
 %#ok<*ST2NM>
-bp = '/Users/wmcfadden/xlrelax_ext';
+bp = '/Users/wmcfadden/xlrelax_ext2';
 cd(bp);
 files = dir;
 files = {files.name};
@@ -34,9 +34,9 @@ for f = files
             fid = fopen(f{1});
             C = textscan(fid, '%s','delimiter', '\n');
             try
-                pare = strsplit(C{1}{9}, '>');
+                pare = strsplit(C{1}{10}, '>');
             catch
-                pare = strsplit(C{1}{8}, '>');
+                pare = strsplit(C{1}{9}, '>');
             end
             paree = strsplit(pare{1}, ' ');
             paree = {paree{2:end}};
@@ -71,13 +71,13 @@ for f = files
                         whitebg('black')
                         set(gcf,'Color',[0 0 0])
                         set(gcf,'InvertHardcopy','off')
-                        for ind = 1:1:size(zt,1)
+                        for ind = 1:ceil(size(zt,1)/10):size(zt,1)
                             p = reshape(zt(ind,:),[],2);
                             p = [mod(p(:,1),2*D),mod(p(:,2),D)];
 
                             netplot(p,L,lf,ls,D,cc(ind,:));
                             drawnow
-                            clf
+%                             clf
                         end
 
 

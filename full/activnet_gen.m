@@ -72,17 +72,31 @@ function activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,D,Df,ls,lf,tinc,tfin
     end
     
     %% initialize network
-    p = zeros(N*ncnt,2);
-    for i=1:N
-        p((i-1)*ncnt+1,:) = D*[2*rand rand];
-        thet = rand*2*pi;
-        for j = 2:ncnt
-            p((i-1)*ncnt+j,:) = p((i-1)*ncnt+j-1,:)+L/(ncnt-1.0)*[cos(thet) sin(thet)];
+    if(ext)
+        N = N/2;
+        p = zeros(N*ncnt,2);
+        for i=1:N
+            p((i-1)*ncnt+1,:) = D*[rand rand];
+            thet = rand*2*pi;
+            for j = 2:ncnt
+                p((i-1)*ncnt+j,:) = p((i-1)*ncnt+j-1,:)+L/(ncnt-1.0)*[cos(thet) sin(thet)];
+            end
+        end
+    else
+        p = zeros(N*ncnt,2);
+        for i=1:N
+            p((i-1)*ncnt+1,:) = D*[2*rand rand];
+            thet = rand*2*pi;
+            for j = 2:ncnt
+                p((i-1)*ncnt+j,:) = p((i-1)*ncnt+j-1,:)+L/(ncnt-1.0)*[cos(thet) sin(thet)];
+            end
         end
     end
     
+    
     p = [mod(p(:,1),2*D),mod(p(:,2),D)];
 
+    
     fileID = 1;
     %% solve ode
     z0 = reshape(p,1,[]);
