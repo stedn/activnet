@@ -72,8 +72,6 @@ function Mz = sp_activnet_mass(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
         Mo(i:i+1,i:i+1) = Mo(i:i+1,i:i+1) + edg*del*zet*[[1-f(ind,1) f(ind,1)]*(1-f(ind,1)); [1-f(ind,1) f(ind,1)]*f(ind,1)]; 
         Mo(i:i+1,j:j+1) = Mo(i:i+1,j:j+1) - edg*del*zet*[[1-f(ind,2) f(ind,2)]*(1-f(ind,1)); [1-f(ind,2) f(ind,2)]*f(ind,1)]; 
         
-        
-        
     end
     
     

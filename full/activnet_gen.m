@@ -73,7 +73,7 @@ function activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,D,Df,ls,lf,tinc,tfin
     
     %% initialize network
     if(ext)
-        N = N/2;
+        N = floor(N/2);
         p = zeros(N*ncnt,2);
         for i=1:N
             p((i-1)*ncnt+1,:) = D*[rand rand];

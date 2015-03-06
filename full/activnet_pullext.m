@@ -1,5 +1,5 @@
 function activnet_pullext(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf,r,tinc,fileID)
-    options = odeset('Mass',@sp_activnet_mass,'AbsTol',0.01,'RelTol',0.01);
+    options = odeset('Mass',@sp_activnet_mass,'AbsTol',0.001,'RelTol',0.001);
 
     ind = 2;
     istep = length(tt)-1;
@@ -8,7 +8,7 @@ function activnet_pullext(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf,r,tin
         [~,z] = ode15s(@activnet_ode_pullext,tt(ind-1:ind-1+istep),z0,options,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf);
 
         % output to file
-        for is=1:istep
+        for is=1:size(z,1)-1
             fprintf(fileID,'%.3f',tt(ind-1+is));
             for i=1:size(z,2)
                 fprintf(fileID,' %.4f',z(is+1,i));
@@ -33,4 +33,5 @@ function activnet_pullext(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf,r,tin
 
         ind = ind+istep;
     end
+    fprintf(fileID,'And I finished');
 end
