@@ -1,5 +1,5 @@
 %% setup initiation params  0.0005 9 1 0 0.25 100000 0 0 0 0 1.296 54 0.05 9 0.05 0.1 1000 1
-function activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,D,Df,ls,lf,tinc,tfin,seed)
+function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,D,Df,ls,lf,tinc,tfin,seed)
     if(ischar(zet))
         zet = str2num(zet);
     end
@@ -121,5 +121,5 @@ function activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,D,Df,ls,lf,tinc,tfin
     else
         activnet_act(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf,r,tinc,fileID);
     end
-    
+
 end

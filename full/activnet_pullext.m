@@ -1,5 +1,5 @@
 function activnet_pullext(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf,r,tinc,fileID)
-    options = odeset('Mass',@sp_activnet_mass,'AbsTol',0.001,'RelTol',0.001);
+    options = odeset('Mass',@sparse_activnet_mass,'AbsTol',0.001,'RelTol',0.001);
 
     ind = 2;
     istep = length(tt)-1;
@@ -33,5 +33,4 @@ function activnet_pullext(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf,r,tin
 
         ind = ind+istep;
     end
-    fprintf(fileID,'And I finished');
 end
