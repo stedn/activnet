@@ -6,7 +6,7 @@
 r=0;
 origbp = pwd;
 %#ok<*ST2NM>
-bp = '/Users/wmcfadden/xlrelax_small100';
+bp = '/Users/wmcfadden/xlrelax_small100_2';
 cd(bp);
 files = dir;
 files = {files.name};
@@ -110,7 +110,7 @@ for f = files
                         end
                         G0 = 3*pi/8*mu/L*(L/lc + 2*lc/L - 3);
                         xi0 = zet*D^2/lc;
-                        kr0 = lc.^2./zet./del./(L-lc).^2*4*pi;
+                        kr0 = lc.^2./zet./del./(L-lc).^2*16*pi/3;
                         a_t = sig/G0;
                         b_t = G0/xi0;
                         c_t = G0*kr0;
@@ -131,27 +131,26 @@ for f = files
 %                             conf = confint(fito);
 %                             confs = [confs; diff(conf)./coeffvalues(fito)];
 %                         end
-                        if(1)
-%                             spt = find(gofs==min(gofs));
-%                             spt = spt(1);
-%                             G = sig/as(spt);
-%                             xi = G/bs(spt);
-%                             kr = cs(spt)/G;
-                            
+                        if(~isnan(gofs))
+                            spt = find(gofs==min(gofs));
+                            spt = spt(1);
+                            G = sig/as(spt);
+                            xi = G/bs(spt);
+                            kr = cs(spt)/G;
                             kr2 = mean(diff(ss((end/2):end))./diff(tt((end/2):end)))/sig;
                             kr3 = mean(diff(ss((3*end/4):end))./diff(tt((3*end/4):end)))/sig;
-                            
-%                             stoG = [stoG; G];
+
+                            stoG = [stoG; G];
                             stoG0 = [stoG0; G0];
-%                             stoxi = [stoxi; xi];
+                            stoxi = [stoxi; xi];
                             stoxi0 = [stoxi0; xi0];
-%                             stokr = [stokr; kr];
+                            stokr = [stokr; kr];
                             stokr2 = [stokr2; kr2];
                             stokr3 = [stokr3; kr3];
                             stokr0 = [stokr0; kr0];
                             stoall = [stoall; zet L mu kap lc del ups phi psi r sig D Df ls lf];
-%                             stoconf = [stoconf; confs(spt,:)];
-%                             stogofs = [stogofs; gofs(spt)];
+                            stoconf = [stoconf; confs(spt,:)];
+                            stogofs = [stogofs; gofs(spt)];
                             stogams = [stogams; ss(end)/tt(end)];
                             stoname = [stoname; code{1}];
 
@@ -160,7 +159,7 @@ for f = files
                             box on
                             plot(tt,ss,'yo');
                             hold on
-%                             plot(tt,as(spt)*((1-exp(-bs(spt)*tt))+tt*cs(spt)),'m','LineWidth',2);
+                            plot(tt,as(spt)*((1-exp(-bs(spt)*tt))+tt*cs(spt)),'m','LineWidth',2);
                             set(gca,'fontsize',14)
                             h_leg=annotation('textbox', [0.75 0.2 0.12 0.45],'BackgroundColor',[1 1 1],...
                                 'String',{code{1},['zeta = ' num2str(zet)],['L/lc = ' num2str(L/lc)],['mu = ' num2str(mu)],['kap = ' num2str(kap)],...

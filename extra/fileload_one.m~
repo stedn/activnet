@@ -1,5 +1,5 @@
-bp = '/Users/wmcfadden/xlrelax_small100/xlrelax_small100_sparse/';
-code = 'ypbkjbgx';
+bp = '/Users/wmcfadden/xlrelax_small100/';
+code = 'sldd';
 A = importdata([bp code '_out.txt']);
 fid = fopen([bp code '_scr.txt']);
 C = textscan(fid, '%s','delimiter', '\n');
@@ -25,7 +25,7 @@ end
 t = A(:,1);
 zt = A(:,2:end);
 clear mov
-figure('Position', [50, 100, 1200, 600]);
+figure('Position', [50, 100, 600, 600]);
 lst = size(zt,1);
 trp = repmat((1:lst)'/lst,1,3);
 cc = (1-trp.^2).*(winter(lst)*0.75+0.25*spring(lst))+(trp.^2).*copper(lst);
@@ -33,7 +33,7 @@ temp=hot(2*lst);
 cc2 = (1-trp.^2).*(winter(lst)*0.75+0.25*spring(lst))+(trp.^2).*temp(1:lst,:);
             
 indi = 1;
-for ind = 1:100:size(zt,1)
+for ind = 1:1000:size(zt,1)
     p = reshape(zt(ind,:),[],2);
     p = [mod(p(:,1),2*D),mod(p(:,2),D)];
     whitebg('black')
