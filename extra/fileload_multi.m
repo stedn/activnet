@@ -4,15 +4,16 @@
 %fraction, spatial variation of ups, recycling rate, stress applied, domain
 %size, portion of domainedge deciated to applying forces, 
 r=0;
+pause(14400);
 origbp = pwd;
 %#ok<*ST2NM>
-bp = '/Users/wmcfadden/xlrelax_small100';
+bp = '/Users/wmcfadden/xlrelax_retest';
 cd(bp);
 files = dir;
 files = {files.name};
-stoG = [];
+stoA = [];
 stoG0 = [];
-stoxi = [];
+ston = [];
 stoxi0 = [];
 stokr = [];
 stokr2 = [];
@@ -108,42 +109,34 @@ for f = files
                                 ss=[ss; -nanmean(sv(subs)./sp(subs))];
                             end
                         end
-                        G0 = 3*pi/8*mu/L*(L/lc + 2*lc/L - 3);
-                        xi0 = zet*D^2/lc;
-                        kr0 = lc.^2./zet./del./(L-lc).^2*4*pi;
-                        a_t = sig/G0;
-                        b_t = G0/xi0;
-                        c_t = G0*kr0;
+                        a_t = 1;
+                        b_t = 1;
                         as = [];
                         bs = [];
-                        cs = [];
                         gofs= [];
                         confs = [];
-%                         for i=1:10
-%                             [fito, gof] = fit(tt,ss,'a*(1-exp(-b*x)+c*x)','StartPoint', [a_t, b_t, c_t],'Lower',[0 0 0],'Display','final');
-%                             a_t = fito.a*(1+0.5*randn);
-%                             b_t = fito.b*(1+0.5*randn);
-%                             c_t = fito.c*(1+0.5*randn);
-%                             as = [as;fito.a];
-%                             bs = [bs;fito.b];
-%                             cs = [cs;fito.c];
-%                             gofs=[gofs;gof.rmse];
-%                             conf = confint(fito);
-%                             confs = [confs; diff(conf)./coeffvalues(fito)];
-%                         end
+                        for i=1:10
+                            [fito, gof] = fit(tt((end/2):end),ss((end/2):end),'a*x^b','StartPoint', [a_t, b_t],'Lower',[0 0],'Display','final');
+                            a_t = fito.a*(1+0.5*randn);
+                            b_t = fito.b*(1+0.5*randn);
+                            as = [as;fito.a];
+                            bs = [bs;fito.b];
+                            gofs=[gofs;gof.rmse];
+                            conf = confint(fito);
+                            confs = [confs; diff(conf)./coeffvalues(fito)];
+                        end
                         if(1)
-%                             spt = find(gofs==min(gofs));
-%                             spt = spt(1);
-%                             G = sig/as(spt);
-%                             xi = G/bs(spt);
-%                             kr = cs(spt)/G;
+                            spt = find(gofs==min(gofs));
+                            spt = spt(1);
+                            a = as(spt);
+                            b = bs(spt);
                             
                             kr2 = mean(diff(ss((end/2):end))./diff(tt((end/2):end)))/sig;
                             kr3 = mean(diff(ss((3*end/4):end))./diff(tt((3*end/4):end)))/sig;
                             
-%                             stoG = [stoG; G];
+                            stoA = [stoA; a];
                             stoG0 = [stoG0; G0];
-%                             stoxi = [stoxi; xi];
+                            ston = [ston; b];
                             stoxi0 = [stoxi0; xi0];
 %                             stokr = [stokr; kr];
                             stokr2 = [stokr2; kr2];
