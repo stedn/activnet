@@ -4,17 +4,16 @@
 %fraction, spatial variation of ups, recycling rate, stress applied, domain
 %size, portion of domainedge deciated to applying forces, 
 r=0;
-pause(14400);
 origbp = pwd;
 %#ok<*ST2NM>
-bp = '/Users/wmcfadden/xlrelax_retest';
+bp = '/Users/wmcfadden/xlorient';
 cd(bp);
 files = dir;
 files = {files.name};
 stoA = [];
 stoG0 = [];
-ston = [];
-stoxi0 = [];
+stoB = [];
+stoC = [];
 stokr = [];
 stokr2 = [];
 stokr3 = [];
@@ -113,14 +112,16 @@ for f = files
                         b_t = 1;
                         as = [];
                         bs = [];
+                        cs = [];
                         gofs= [];
                         confs = [];
                         for i=1:10
-                            [fito, gof] = fit(tt((end/2):end),ss((end/2):end),'a*x^b','StartPoint', [a_t, b_t],'Lower',[0 0],'Display','final');
+                            [fito, gof] = fit(tt((end/2):end),ss((end/2):end),'a*x^b+c','StartPoint', [a_t, b_t,1],'Lower',[0 0 -Inf],'Display','final');
                             a_t = fito.a*(1+0.5*randn);
                             b_t = fito.b*(1+0.5*randn);
                             as = [as;fito.a];
                             bs = [bs;fito.b];
+                            cs = [cs;fito.c];
                             gofs=[gofs;gof.rmse];
                             conf = confint(fito);
                             confs = [confs; diff(conf)./coeffvalues(fito)];
@@ -130,14 +131,16 @@ for f = files
                             spt = spt(1);
                             a = as(spt);
                             b = bs(spt);
+                            c = cs(spt);
                             
+                            kr0 = lc.^2./zet./del./(L-2*lc).^2*16*3/pi;
                             kr2 = mean(diff(ss((end/2):end))./diff(tt((end/2):end)))/sig;
                             kr3 = mean(diff(ss((3*end/4):end))./diff(tt((3*end/4):end)))/sig;
                             
                             stoA = [stoA; a];
                             stoG0 = [stoG0; G0];
-                            ston = [ston; b];
-                            stoxi0 = [stoxi0; xi0];
+                            stoB = [stoB; b];
+                            stoC = [stoC; c];
 %                             stokr = [stokr; kr];
                             stokr2 = [stokr2; kr2];
                             stokr3 = [stokr3; kr3];
@@ -151,13 +154,15 @@ for f = files
                             axes('Position',[.75 .7 .12 .2])
                             title('strain plot')
                             box on
-                            plot(tt,ss,'yo');
+%                             plot(tt,ss,'yo');
+                            plot(tt((end/2):end),ss((end/2):end),'yo');
                             hold on
-%                             plot(tt,as(spt)*((1-exp(-bs(spt)*tt))+tt*cs(spt)),'m','LineWidth',2);
+                            plot(tt(1:(end/2)),ss(1:(end/2)),'go');
+                            plot(tt,a*tt.^b+c,'m','LineWidth',2);
                             set(gca,'fontsize',14)
                             h_leg=annotation('textbox', [0.75 0.2 0.12 0.45],'BackgroundColor',[1 1 1],...
                                 'String',{code{1},['zeta = ' num2str(zet)],['L/lc = ' num2str(L/lc)],['mu = ' num2str(mu)],['kap = ' num2str(kap)],...
-                                ['zet*del = ' num2str(zet*del)],['n_m/n_p = ' num2str(kr0./kr2)]});
+                                ['zet*del = ' num2str(zet*del)],['n_m/n_p = ' num2str(kr0./kr2)],['exp = ' num2str(b)]});
                             set(h_leg,'FontSize',16);
                             set(h,'PaperPositionMode','auto')
                             drawnow

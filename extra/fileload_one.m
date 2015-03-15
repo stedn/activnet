@@ -1,5 +1,5 @@
-bp = '/Users/wmcfadden/xlrelax_small100/xlrelax_small100_sparse/';
-code = 'ypbkjbgx';
+bp = '/Users/wmcfadden/pull_release/';
+code = 'txdotbnz';
 A = importdata([bp code '_out.txt']);
 fid = fopen([bp code '_scr.txt']);
 C = textscan(fid, '%s','delimiter', '\n');
@@ -31,7 +31,7 @@ trp = repmat((1:lst)'/lst,1,3);
 cc = (1-trp.^2).*(winter(lst)*0.75+0.25*spring(lst))+(trp.^2).*copper(lst);
 temp=hot(2*lst);
 cc2 = (1-trp.^2).*(winter(lst)*0.75+0.25*spring(lst))+(trp.^2).*temp(1:lst,:);
-            
+edges = {linspace(0.5,1.5,50),linspace(-90,90,50)}  ;      
 indi = 1;
 for ind = 1:100:size(zt,1)
     p = reshape(zt(ind,:),[],2);
@@ -40,8 +40,7 @@ for ind = 1:100:size(zt,1)
     set(gcf,'Color',[0 0 0])
     set(gcf,'InvertHardcopy','off')
 
-    netplot_str(p,L,lf,ls,D,cc,cc2,0.2);
-    
+    netplot_str(p,L,lf,ls,D,cc,cc2,0.25);
     mov(indi) = getframe;
     clf
     indi = indi +1;
