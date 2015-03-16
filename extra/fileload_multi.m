@@ -3,10 +3,12 @@
 %stiffness, crosslinker spacing, crosslinker friction, myosin force, myosin
 %fraction, spatial variation of ups, recycling rate, stress applied, domain
 %size, portion of domainedge deciated to applying forces, 
+
+
 r=0;
 origbp = pwd;
 %#ok<*ST2NM>
-bp = '/Users/wmcfadden/xlorient';
+bp = '/Users/wmcfadden/pull_release_nonlin';
 cd(bp);
 files = dir;
 files = {files.name};
@@ -51,12 +53,12 @@ for f = files
                 imp = importdata([code{1} '_out.txt'],' ',4);
                 A = imp.data;
                 if(~isempty(A))
-%                     if(size(A,1)==1)
-%                         imp2 = importdata([code{1} '_out.txt'],' ',9);
-%                         if(isfield(imp2,'data'))
-%                             A = [A;imp2.data];
-%                         end
-%                     end
+                    if(size(A,1)==1)
+                        imp2 = importdata([code{1} '_out.txt'],' ',9);
+                        if(isfield(imp2,'data'))
+                            A = [A;imp2.data];
+                        end
+                    end
                     t = A(:,1);
                     zt = A(:,2:end);
                     code{1}
@@ -115,7 +117,7 @@ for f = files
                         cs = [];
                         gofs= [];
                         confs = [];
-                        for i=1:10
+                        for i=1:1
                             [fito, gof] = fit(tt((end/2):end),ss((end/2):end),'a*x^b+c','StartPoint', [a_t, b_t,1],'Lower',[0 0 -Inf],'Display','final');
                             a_t = fito.a*(1+0.5*randn);
                             b_t = fito.b*(1+0.5*randn);
@@ -154,11 +156,11 @@ for f = files
                             axes('Position',[.75 .7 .12 .2])
                             title('strain plot')
                             box on
-%                             plot(tt,ss,'yo');
-                            plot(tt((end/2):end),ss((end/2):end),'yo');
-                            hold on
-                            plot(tt(1:(end/2)),ss(1:(end/2)),'go');
-                            plot(tt,a*tt.^b+c,'m','LineWidth',2);
+                            plot(tt,ss,'yo');
+%                             plot(tt((end/2):end),ss((end/2):end),'yo');
+%                             hold on
+%                             plot(tt(1:(end/2)),ss(1:(end/2)),'go');
+%                             plot(tt,a*tt.^b+c,'m','LineWidth',2);
                             set(gca,'fontsize',14)
                             h_leg=annotation('textbox', [0.75 0.2 0.12 0.45],'BackgroundColor',[1 1 1],...
                                 'String',{code{1},['zeta = ' num2str(zet)],['L/lc = ' num2str(L/lc)],['mu = ' num2str(mu)],['kap = ' num2str(kap)],...
@@ -169,6 +171,28 @@ for f = files
                             print('-dpng','-r0',[code{1} '_fig.png']);%saveas(h,['fig_' code{2} '.png'],'png');
                         end
                         close(h)
+%                         clear mov
+%                         figure('Position', [50, 100, 1200, 600]);
+%                         lst = size(zt,1);
+%                         trp = repmat((1:lst)'/lst,1,3);
+%                         cc = (1-trp.^2).*(winter(lst)*0.75+0.25*spring(lst))+(trp.^2).*copper(lst);
+%                         temp=hot(2*lst);
+%                         cc2 = (1-trp.^2).*(winter(lst)*0.75+0.25*spring(lst))+(trp.^2).*temp(1:lst,:);
+%                         indi = 1;
+%                         for ind = 1:100:size(zt,1)
+%                             p = reshape(zt(ind,:),[],2);
+%                             p = [mod(p(:,1),2*D),mod(p(:,2),D)];
+%                             whitebg('black')
+%                             set(gcf,'Color',[0 0 0])
+%                             set(gcf,'InvertHardcopy','off')
+% 
+%                             netplot_str(p,L,lf,ls,D,cc,cc2,0.25);
+%                             mov(indi) = getframe;
+%                             clf
+%                             indi = indi +1;
+%                         end
+%                         movie2avi(mov,[code{1} '_mov.avi']);
+%                         close(gcf);
                     end
                 end
             end

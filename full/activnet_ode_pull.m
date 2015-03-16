@@ -12,9 +12,10 @@ function dz = activnet_ode_pull(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
         for i=0:ncnt-2
             vb = mydiff(p(n+i,:),p(n+i+1,:),D);
             lb = sqrt(vb*vb');
-            f = mu*vb/lb*(lb-l0)/l0;
+            gam = (lb-l0)/l0;
+            f = mu*vb/lb*gam;
             if(mu<0)
-                f = -f*(1+10*(lb-l0)^100/(0.1^100+(lb-l0)^100));
+                f = -f*(1+10*gam^100/(0.1^100+gam^100));
             end
             dp(n+i,:) = dp(n+i,:) + f;
             dp(n+i+1,:) = dp(n+i+1,:) - f;

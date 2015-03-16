@@ -1,5 +1,5 @@
-bp = '/Users/wmcfadden/xlrelax_retest/';
-code = 'xnphhfcz';
+bp = '/Users/wmcfadden/pull_release_nonlin/';
+code = 'wapyjrck';
 A = importdata([bp code '_out.txt']);
 fid = fopen([bp code '_scr.txt']);
 C = textscan(fid, '%s','delimiter', '\n');
@@ -31,7 +31,7 @@ trp = repmat((1:lst)'/lst,1,3);
 cc = (1-trp.^2).*(winter(lst)*0.75+0.25*spring(lst))+(trp.^2).*copper(lst);
 temp=hot(2*lst);
 cc2 = (1-trp.^2).*(winter(lst)*0.75+0.25*spring(lst))+(trp.^2).*temp(1:lst,:);
-edges = {linspace(0.8,1.2,50),linspace(-90,90,50)}  ;      
+edges = {linspace(0.75,1.25,50),linspace(-90,90,50)}  ;      
 indi = 1;
 for ind = 1:100:size(zt,1)
     p = reshape(zt(ind,:),[],2);
@@ -53,13 +53,13 @@ for ind = 1:100:size(zt,1)
     subpR(subpR(:,2)<D/3&subpL(:,2)>2*D/3,2)=subpR(subpR(:,2)<D/3&subpL(:,2)>2*D/3,2)+D;
     subv = subpR-subpL;
     subv = subv./repmat(sqrt(subv(:,1).^2+subv(:,2).^2),1,2);
-    subpL = subpL - l0*lf/2*subv;
-    subpR = subpR + l0*lf/2*subv;
+    subpL = subpL;
+    subpR = subpR;
     XY = [subpL subpR];
     str = sqrt((XY(:,3)-XY(:,1)).^2 + (XY(:,4)-XY(:,2)).^2);
     angs = atan((XY(:,4)-XY(:,2))./(XY(:,3)-XY(:,1)));
     subind = XY(:,1)<D*(1-Df)&XY(:,3)<D*(1-Df)&XY(:,1)>D*Df&XY(:,3)>D*Df;
-    [N,C] = hist3([str(subind)/(L+2*L*lf),angs(subind)*180/pi],'Edges',edges);
+    [N,C] = hist3([str(subind)/L,angs(subind)*180/pi],'Edges',edges);
     imagesc(C{2},C{1},N)
     mov(indi) = getframe;
     clf
