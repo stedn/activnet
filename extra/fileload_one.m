@@ -1,5 +1,5 @@
 bp = '/Users/wmcfadden/xlrelax_ext/';
-code = 'zljqjtcz';
+code = 'znydvhua';
 A = importdata([bp code '_out.txt']);
 fid = fopen([bp code '_scr.txt']);
 C = textscan(fid, '%s','delimiter', '\n');
