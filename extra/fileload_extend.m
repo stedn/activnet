@@ -6,7 +6,7 @@
 r=0;
 origbp = pwd;
 %#ok<*ST2NM>
-bp = '/Users/wmcfadden/xlrelax_ext2';
+bp = '/Users/wmcfadden/xlrelax_ext';
 cd(bp);
 files = dir;
 files = {files.name};
@@ -77,7 +77,6 @@ for f = files
 
                             netplot(p,L,lf,ls,D,cc(ind,:));
                             drawnow
-%                             clf
                         end
 
 
@@ -97,7 +96,7 @@ for f = files
                         nbins = 30;
                         brng = linspace(0,2*D,nbins+1)';
                         sp = brng(1:end-1)+brng(2)/2;
-%                         sp(sp>D)=2*D-sp(sp>D);
+                        sp(sp>D)=2*D-sp(sp>D);
 
                         ss = [];
                         tt = [];
@@ -109,22 +108,17 @@ for f = files
                                 ss=[ss; nanmean(sv(subs)./sp(subs))];
                             end
                         end
-                        G0 = 3*pi/8*mu/L*(L/lc + 2*lc/L - 3);
-                        xi0 = zet*D^2/lc;
-                        kr0 = lc^2/zet/del/L^2;
-                        a_t = sig/G0;
-                        b_t = G0/xi0;
-                        c_t = G0*kr0;
+                        a_t = 1;
+                        b_t = 1;
                         as = [];
                         bs = [];
                         cs = [];
                         gofs= [];
                         confs = [];
-                        for i=1:10
-                            [fito, gof] = fit(tt,ss,'a*(1-exp(-b*x)+c*x)','StartPoint', [a_t, b_t, c_t],'Lower',[0 0 0],'Display','final');
+                        for i=1:1
+                            [fito, gof] = fit(tt((end/2):end),ss((end/2):end),'a*x^b+c','StartPoint', [a_t, b_t,1],'Lower',[0 0 -Inf],'Display','final');
                             a_t = fito.a*(1+0.5*randn);
                             b_t = fito.b*(1+0.5*randn);
-                            c_t = fito.c*(1+0.5*randn);
                             as = [as;fito.a];
                             bs = [bs;fito.b];
                             cs = [cs;fito.c];
@@ -132,46 +126,71 @@ for f = files
                             conf = confint(fito);
                             confs = [confs; diff(conf)./coeffvalues(fito)];
                         end
-                        if(~isnan(gofs))
+                        if(1)
                             spt = find(gofs==min(gofs));
                             spt = spt(1);
-                            G = sig/as(spt);
-                            xi = G/bs(spt);
-                            kr = cs(spt)/G;
+                            a = as(spt);
+                            b = bs(spt);
+                            c = cs(spt);
+                            
+                            kr0 = lc.^2./zet./del./(L-2*lc).^2*16*3/pi;
                             kr2 = mean(diff(ss((end/2):end))./diff(tt((end/2):end)))/sig;
                             kr3 = mean(diff(ss((3*end/4):end))./diff(tt((3*end/4):end)))/sig;
-
-                            stoG = [stoG; G];
+                            
+                            stoA = [stoA; a];
                             stoG0 = [stoG0; G0];
-                            stoxi = [stoxi; xi];
-                            stoxi0 = [stoxi0; xi0];
-                            stokr = [stokr; kr];
+                            stoB = [stoB; b];
+                            stoC = [stoC; c];
+%                             stokr = [stokr; kr];
                             stokr2 = [stokr2; kr2];
                             stokr3 = [stokr3; kr3];
                             stokr0 = [stokr0; kr0];
                             stoall = [stoall; zet L mu kap lc del ups phi psi r sig D Df ls lf];
-                            stoconf = [stoconf; confs(spt,:)];
-                            stogofs = [stogofs; gofs(spt)];
+%                             stoconf = [stoconf; confs(spt,:)];
+%                             stogofs = [stogofs; gofs(spt)];
                             stogams = [stogams; ss(end)/tt(end)];
                             stoname = [stoname; code{1}];
 
                             axes('Position',[.75 .7 .12 .2])
                             title('strain plot')
                             box on
-                            plot(tt,ss,'yo');
+%                             plot(tt,ss,'yo');
+                            plot(tt((end/2):end),ss((end/2):end),'yo');
                             hold on
-                            plot(tt,as(spt)*((1-exp(-bs(spt)*tt))+tt*cs(spt)),'m','LineWidth',2);
+                            plot(tt(1:(end/2)),ss(1:(end/2)),'go');
+                            plot(tt,a*tt.^b+c,'m','LineWidth',2);
                             set(gca,'fontsize',14)
                             h_leg=annotation('textbox', [0.75 0.2 0.12 0.45],'BackgroundColor',[1 1 1],...
-                                'String',{code{1},['zeta = ' num2str(zet)],['L = ' num2str(L)],['lc = ' num2str(lc)],['mu = ' num2str(mu)],['kap = ' num2str(kap)],...
-                                ['del = ' num2str(del)],['xi = ' num2str(xi)],['kr = ' num2str(kr)],...
-                                ['G = ' num2str(G)]});
+                                'String',{code{1},['zeta = ' num2str(zet)],['L/lc = ' num2str(L/lc)],['mu = ' num2str(mu)],['kap = ' num2str(kap)],...
+                                ['zet*del = ' num2str(zet*del)],['n_m/n_p = ' num2str(kr0./kr2)],['exp = ' num2str(b)]});
                             set(h_leg,'FontSize',16);
                             set(h,'PaperPositionMode','auto')
                             drawnow
                             print('-dpng','-r0',[code{1} '_fig.png']);%saveas(h,['fig_' code{2} '.png'],'png');
                         end
                         close(h)
+%                         clear mov
+%                         figure('Position', [50, 100, 1200, 600]);
+%                         lst = size(zt,1);
+%                         trp = repmat((1:lst)'/lst,1,3);
+%                         cc = (1-trp.^2).*(winter(lst)*0.75+0.25*spring(lst))+(trp.^2).*copper(lst);
+%                         temp=hot(2*lst);
+%                         cc2 = (1-trp.^2).*(winter(lst)*0.75+0.25*spring(lst))+(trp.^2).*temp(1:lst,:);
+%                         indi = 1;
+%                         for ind = 1:100:size(zt,1)
+%                             p = reshape(zt(ind,:),[],2);
+%                             p = [mod(p(:,1),2*D),mod(p(:,2),D)];
+%                             whitebg('black')
+%                             set(gcf,'Color',[0 0 0])
+%                             set(gcf,'InvertHardcopy','off')
+% 
+%                             netplot_str(p,L,lf,ls,D,cc,cc2,0.25);
+%                             mov(indi) = getframe;
+%                             clf
+%                             indi = indi +1;
+%                         end
+%                         movie2avi(mov,[code{1} '_mov.avi']);
+%                         close(gcf);
                     end
                 end
             end

@@ -3,6 +3,9 @@ function activnet_pull(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf,r,tinc,f
 
     ind = 2;
     istep = length(tt)-1;
+    if(r>0)
+        istep = 2;
+    end
     while(ind<length(tt))
         % solve for one timestep
         [~,z] = ode15s(@activnet_ode_pull,tt(ind-1:ind-1+istep),z0,options,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf);

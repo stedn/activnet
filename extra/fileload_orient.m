@@ -1,9 +1,9 @@
-bp = '/Users/wmcfadden/pull_release_nonlin/';
-code = 'wapyjrck';
+bp = '/Users/wmcfadden/xlrelax_ext/';
+code = 'zljqjtcz';
 A = importdata([bp code '_out.txt']);
 fid = fopen([bp code '_scr.txt']);
 C = textscan(fid, '%s','delimiter', '\n');
-pare = strsplit(C{1}{9}, '>');
+pare = strsplit(C{1}{10}, '>');
 paree = strsplit(pare{1}, ' ');
 paree = {paree{2:end}};
 zet=str2num(paree{2});L=str2num(paree{3});mu=str2num(paree{4});kap=str2num(paree{5});lc=str2num(paree{6}); 
