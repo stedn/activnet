@@ -29,7 +29,7 @@ function activnet_pull(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf,r,tinc,f
             p((i-1)*ncnt+1,:) = D*[2*rand(size(i)) rand(size(i))];
             thet = rand(size(i))*2*pi;
             for j = 2:ncnt
-                p((i-1)*ncnt+j,:) = p((i-1)*ncnt+j-1,:)+L/(ncnt-1.0)*repmat([cos(thet) sin(thet)],length(i),1);
+                p((i-1)*ncnt+j,:) = p((i-1)*ncnt+j-1,:)+L/(ncnt-1.0)*[cos(thet) sin(thet)];
             end
             z0 = reshape(p,1,[]);
         end
