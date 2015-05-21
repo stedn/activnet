@@ -1,14 +1,16 @@
-bp = '/Users/wmcfadden/xlrelax_ext/';
-code = 'znydvhua';
+bp = '/Users/wmcfadden/xlrelax_all/';
+code = 'tfugqkbi';
+cd(bp)
 A = importdata([bp code '_out.txt']);
 fid = fopen([bp code '_scr.txt']);
 C = textscan(fid, '%s','delimiter', '\n');
-pare = strsplit(C{1}{10}, '>');
+pare = strsplit(C{1}{9}, '>');
 paree = strsplit(pare{1}, ' ');
 paree = {paree{2:end}};
 zet=str2num(paree{2});L=str2num(paree{3});mu=str2num(paree{4});kap=str2num(paree{5});lc=str2num(paree{6}); 
 del=str2num(paree{7});ups=str2num(paree{8});phi=str2num(paree{9});psi=str2num(paree{10});
 r=str2num(paree{11});sig=str2num(paree{12});D=str2num(paree{13});Df=str2num(paree{14});ls=str2num(paree{15});lf=str2num(paree{16});
+
 % zet=str2num(paree{2});L=str2num(paree{3});mu=str2num(paree{4});kap=str2num(paree{5});lc=str2num(paree{6}); 
 % del=str2num(paree{7});ups=str2num(paree{8});phi=str2num(paree{9});psi=str2num(paree{10});
 % %         r=str2num(paree{10});sig=str2num(paree{11});D=str2num(paree{12});Df=str2num(paree{13});ls=str2num(paree{14});lf=str2num(paree{15});
@@ -33,14 +35,14 @@ temp=hot(2*lst);
 cc2 = (1-trp.^2).*(winter(lst)*0.75+0.25*spring(lst))+(trp.^2).*temp(1:lst,:);
 edges = {linspace(0.5,1.5,50),linspace(-90,90,50)}  ;      
 indi = 1;
-for ind = 1:100:size(zt,1)
+for ind = 2:5:size(zt,1)/3
     p = reshape(zt(ind,:),[],2);
     p = [mod(p(:,1),2*D),mod(p(:,2),D)];
     whitebg('black')
     set(gcf,'Color',[0 0 0])
     set(gcf,'InvertHardcopy','off')
 
-    netplot_str(p,L,lf,ls,D,cc,cc2,0.1);
+    netplot_str(p,L,lf,ls,D,cc,cc2,0.2);
     mov(indi) = getframe;
     clf
     indi = indi +1;

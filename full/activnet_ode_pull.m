@@ -49,7 +49,7 @@ function dz = activnet_ode_pull(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
     if(psi>0)
         val = sig*sin(psi*t);
     elseif(psi<0)
-        val = sig*round(cos(-psi*t));
+        val = sig*round(mod(0.5+-psi*t,1)).*(round(mod(0.55+-psi*t/2,1))-0.5)*2;
     else
         val = sig;
     end

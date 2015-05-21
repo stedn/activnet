@@ -1,28 +1,14 @@
 
 
 
-ncnt = 10;
-lf = 0.0;
 
-D = 10;
-
-L = 1;
 lcs =[];
-tms =[];
-Ns = floor([logspace(1.5,3.5,15) logspace(1.5,3.5,15) logspace(1.5,3.5,15) logspace(1.5,3.5,15) ]);
-for N=Ns
-N
-    p = zeros(N*ncnt,2);
-    for i=1:N
-        p((i-1)*ncnt+1,:) = D*[rand rand];
-        thet = rand*2*pi;
-        for j = 2:ncnt
-            p((i-1)*ncnt+j,:) = p((i-1)*ncnt+j-1,:)+L/(ncnt-1)*[cos(thet) sin(thet)];
-            thet = thet+pi/16*randn;
-        end
-
-    end
+for ind = 1:5:size(zt,1)
+    ind
+    p = reshape(zt(ind,:),[],2);
+    p = [mod(p(:,1),2*D),mod(p(:,2),D)];
     
+    ncnt = ceil(L/ls)+1;
     l0 = L/(ncnt-1);
 
     indL = 1:length(p);
@@ -51,24 +37,20 @@ N
     
     extXY = XY(subXY, :);
     
-    tsub = extXY(:,1)>2*D;
-    extXY(tsub,:)=extXY(tsub,:)-repmat([2*D 0 2*D 0],sum(tsub),1);
-    tsub = extXY(:,3)>2*D;
-    extXY(tsub,:)=extXY(tsub,:)-repmat([2*D 0 2*D 0],sum(tsub),1);
-    tsub = extXY(:,2)>D;
-    extXY(tsub,:)=extXY(tsub,:)-repmat([0 D 0 D],sum(tsub),1);
-    tsub = extXY(:,4)>D;
-    extXY(tsub,:)=extXY(tsub,:)-repmat([0 D 0 D],sum(tsub),1);
+%     tsub = extXY(:,1)>2*D;
+%     extXY(tsub,:)=extXY(tsub,:)-repmat([2*D 0 2*D 0],sum(tsub),1);
+%     tsub = extXY(:,3)>2*D;
+%     extXY(tsub,:)=extXY(tsub,:)-repmat([2*D 0 2*D 0],sum(tsub),1);
+%     tsub = extXY(:,2)>D;
+%     extXY(tsub,:)=extXY(tsub,:)-repmat([0 D 0 D],sum(tsub),1);
+%     tsub = extXY(:,4)>D;
+%     extXY(tsub,:)=extXY(tsub,:)-repmat([0 D 0 D],sum(tsub),1);
     
     XY = [XY; extXY];
     
     indL = [indL indL(subXY)];
     tic
-    g = lineSegmentWrap(indL,XY,D,l0);
-    tms = [tms toc];
+    g = lineSegmentGrid(indL,XY,D,l0);
     lcs = [lcs length(g)];
 end
-figure(5)
-plot(Ns,tms,'b.');
-figure(6)
-plot(Ns,lcs,'b.');
+

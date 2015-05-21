@@ -8,7 +8,7 @@
 r=0;
 origbp = pwd;
 %#ok<*ST2NM>
-bp = '/Users/wmcfadden/pull_release_nonlin';
+bp = '/Users/wmcfadden/pull_release_filamin';
 cd(bp);
 files = dir;
 files = {files.name};
@@ -63,7 +63,7 @@ for f = files
                     zt = A(:,2:end);
                     code{1}
                     length(t)
-                    if(length(t)>1)
+                    if(length(t)>10)
                         lst = size(zt,1);
                         trp = repmat((1:lst)'/lst,1,3);
                         cc = (1-trp.^2).*(winter(lst)*0.75+0.25*spring(lst))+(trp.^2).*copper(lst);
@@ -117,7 +117,7 @@ for f = files
                         cs = [];
                         gofs= [];
                         confs = [];
-                        for i=1:1
+                        for i=1:10
                             [fito, gof] = fit(tt((end/2):end),ss((end/2):end),'a*x^b+c','StartPoint', [a_t, b_t,1],'Lower',[0 0 -Inf],'Display','final');
                             a_t = fito.a*(1+0.5*randn);
                             b_t = fito.b*(1+0.5*randn);
@@ -125,8 +125,8 @@ for f = files
                             bs = [bs;fito.b];
                             cs = [cs;fito.c];
                             gofs=[gofs;gof.rmse];
-                            conf = confint(fito);
-                            confs = [confs; diff(conf)./coeffvalues(fito)];
+%                             conf = confint(fito);
+%                             confs = [confs; diff(conf)./coeffvalues(fito)];
                         end
                         if(1)
                             spt = find(gofs==min(gofs));
@@ -140,7 +140,7 @@ for f = files
                             kr3 = mean(diff(ss((3*end/4):end))./diff(tt((3*end/4):end)))/sig;
                             
                             stoA = [stoA; a];
-                            stoG0 = [stoG0; G0];
+%                             stoG0 = [stoG0; G0];
                             stoB = [stoB; b];
                             stoC = [stoC; c];
 %                             stokr = [stokr; kr];
@@ -209,7 +209,7 @@ end
 % stoall(minds,:)=[];
 % stoconf(minds,:)=[];
 % stogofs(minds,:)=[];
-save('fitvals','stoG','stoxi','stokr','stokr2','stoall','stoconf','stogofs','stogams','stoname');
+save('fitvals','stokr','stokr2','stoall','stoconf','stogofs','stogams','stoname');
 
 zet = stoall(:,1);
 L = stoall(:,2);
