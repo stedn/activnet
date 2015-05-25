@@ -15,11 +15,7 @@ function dz = activnet_ode_pull(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
             gam = (lb-l0)/l0;
             f = mu*vb/lb*gam;
             if(mu<0)
-                if(gam>0)
-                    f = -f*(1+9*gam^100/(0.1^100+gam^100));
-                else
-                    f = -f;
-                end
+                f = -f*(1+9*gam^100/(0.05^100+gam^100));
             end
             dp(n+i,:) = dp(n+i,:) + f;
             dp(n+i+1,:) = dp(n+i+1,:) - f;

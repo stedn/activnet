@@ -55,8 +55,8 @@ if(L/lc>=10)
             end
         end
 
-        % clear mov
-        % figure('Position', [50, 100, 600, 300]);
+        clear mov
+        figure('Position', [50, 100, 600, 300]);
         lst = size(zt,1);
         trp = repmat((1:lst)'/lst,1,3);
         cc = (1-trp.^2).*(winter(lst)*0.75+0.25*spring(lst))+(trp.^2).*copper(lst);
@@ -71,7 +71,7 @@ if(L/lc>=10)
         stoang = [];
         stot = [];
         stostd = [];
-        for ind = 1:5:size(zt,1)
+        for ind = 1:100:size(zt,1)
             p = reshape(zt(ind,:),[],2);
             p = [mod(p(:,1),2*D),mod(p(:,2),D)];
         %     whitebg('black')
@@ -131,15 +131,15 @@ if(L/lc>=10)
         %     hist3([str(subind)/L,angs(subind)],'Edges',edges);
         %     [N,C] = hist3([str(subind)/L,angs(subind)],'Edges',edges);
         %     imagesc(C{2},C{1},N)
-%             scatter(angs(subind),str(subind)/L, 5, str(subind)/L);
-%             colormap([flipud(cc2);cc])
-%             set(gca,'CLim',[0.98 1.02]);
-%             ylim([0.96,1.04]);
-%             mov(indi) = getframe;
-%             clf
-%             indi = indi +1;
+            scatter(angs(subind),str(subind)/L, 5, str(subind)/L);
+            colormap([flipud(cc2);cc])
+            set(gca,'CLim',[0.85 1.95]);
+            ylim([0.85,1.15]);
+            mov(indi) = getframe;
+            clf
+            indi = indi +1;
         end
-        % movie2avi(mov,[code '_dist_mov.avi']);
+        movie2avi(mov,[code '_dist_mov.avi']);
 
         % nbins = 30;
         % rs = linspace(0,1,nbins+1);
@@ -162,91 +162,92 @@ if(L/lc>=10)
         % xsi0 = 1;
         % gam0 = 
         % fito = fit(t,ss','(1-exp(-xsi*x))*gam','StartPoint', [xsi0, gam0]);
-        n=10;
-        subss= ss(1:5:size(zt,1));
-        substr= strs;
-        subtt=tt(1:5:size(zt,1));
-        kr = lc.^2./zet./del./(L-2*lc).^2*4*pi;
-        x = subtt;
-        y = ((stostd));
-        bin = linspace(min(x), max(x), n+1);
-        ind = sum(bsxfun(@minus, x, ones(length(x),1)*bin)>=0,2);
-        m = NaN(n,1);
-        e = NaN(n,1);
-        s = NaN(n,1);
-        for i = 1:n
-        m(i) = mean(y(ind==i));   % Mean value over the bin
-        e(i) = std(y(ind==i));    % Standard deviation
-        s(i) = sum(y(ind==i));    % Standard deviation
-        end
-        mm = m;
-        y = ((substr));
-        bin = linspace(min(x), max(x), n+1);
-        ind = sum(bsxfun(@minus, x, ones(length(x),1)*bin)>=0,2);
-        m = NaN(n,1);
-        e = NaN(n,1);
-        s = NaN(n,1);
-        for i = 1:n
-        m(i) = mean(y(ind==i));   % Mean value over the bin
-        e(i) = std(y(ind==i));    % Standard deviation
-        s(i) = sum(y(ind==i));    % Standard deviation
-        end
-        mmm = m;
-        y = ((subtt));
-        bin = linspace(min(x), max(x), n+1);
-        ind = sum(bsxfun(@minus, x, ones(length(x),1)*bin)>=0,2);
-        m = NaN(n,1);
-        e = NaN(n,1);
-        s = NaN(n,1);
-        for i = 1:n
-        m(i) = mean(y(ind==i));   % Mean value over the bin
-        e(i) = std(y(ind==i));    % Standard deviation
-        s(i) = sum(y(ind==i));    % Standard deviation
-        end
-        tt = m;
-        y = ((stostr));
-        bin = linspace(min(x), max(x), n+1);
-        ind = sum(bsxfun(@minus, x, ones(length(x),1)*bin)>=0,2);
-        m = NaN(n,1);
-        e = NaN(n,1);
-        s = NaN(n,1);
-        for i = 1:n
-        m(i) = mean(y(ind==i));   % Mean value over the bin
-        e(i) = std(y(ind==i));    % Standard deviation
-        s(i) = sum(y(ind==i));    % Standard deviation
-        end
-        mmmm = m;
-        y = ((subss));
-        bin = linspace(min(x), max(x), n+1);
-        ind = sum(bsxfun(@minus, x, ones(length(x),1)*bin)>=0,2);
-        m = NaN(n,1);
-        e = NaN(n,1);
-        s = NaN(n,1);
-        for i = 1:n
-        m(i) = mean(y(ind==i));   % Mean value over the bin
-        e(i) = std(y(ind==i));    % Standard deviation
-        s(i) = sum(y(ind==i));    % Standard deviation
-        end
-        
-        % mmmm is the total energy
-        % mmm is the stretch
-        % mm is the stretch dispersion
-        % m is the strain
-        alltt = [alltt tt];
-        allenrg = [allenrg (mmmm/max(mmm))];
-        alldisp = [alldisp (mm/max(mmm))];
-        allstrain = [allstrain log(m/mmm(end))];
-        allvisc = [allvisc kr/sig./(diff(m)./diff(tt))];
-        alltest = [alltest diff(log(m))./diff(log(tt))];
-        allangs = [allangs; stoang];
-        details = [details [zet;L;mu;kap;lc;del;sig]];
-        subplot(2,1,1)
-        loglog(subtt,subss/substr(end))
-        hold on
-        loglog(subtt,substr/substr(end),'--')
-        subplot(2,1,2)
-        semilogx(subtt,stostd/substr(end))
-        hold on
-        drawnow
+%         n=10;
+%         subss= ss(1:5:size(zt,1));
+%         substr= strs;
+%         subtt=tt(1:5:size(zt,1));
+%         kr = lc.^2./zet./del./(L-2*lc).^2*4*pi;
+%         x = subtt;
+%         y = ((stostd));
+%         bin = linspace(min(x), max(x), n+1);
+%         ind = sum(bsxfun(@minus, x, ones(length(x),1)*bin)>=0,2);
+%         m = NaN(n,1);
+%         e = NaN(n,1);
+%         s = NaN(n,1);
+%         for i = 1:n
+%         m(i) = mean(y(ind==i));   % Mean value over the bin
+%         e(i) = std(y(ind==i));    % Standard deviation
+%         s(i) = sum(y(ind==i));    % Standard deviation
+%         end
+%         mm = m;
+%         y = ((substr));
+%         bin = linspace(min(x), max(x), n+1);
+%         ind = sum(bsxfun(@minus, x, ones(length(x),1)*bin)>=0,2);
+%         m = NaN(n,1);
+%         e = NaN(n,1);
+%         s = NaN(n,1);
+%         for i = 1:n
+%         m(i) = mean(y(ind==i));   % Mean value over the bin
+%         e(i) = std(y(ind==i));    % Standard deviation
+%         s(i) = sum(y(ind==i));    % Standard deviation
+%         end
+%         mmm = m;
+%         y = ((subtt));
+%         bin = linspace(min(x), max(x), n+1);
+%         ind = sum(bsxfun(@minus, x, ones(length(x),1)*bin)>=0,2);
+%         m = NaN(n,1);
+%         e = NaN(n,1);
+%         s = NaN(n,1);
+%         for i = 1:n
+%         m(i) = mean(y(ind==i));   % Mean value over the bin
+%         e(i) = std(y(ind==i));    % Standard deviation
+%         s(i) = sum(y(ind==i));    % Standard deviation
+%         end
+%         tt = m;
+%         y = ((stostr));
+%         bin = linspace(min(x), max(x), n+1);
+%         ind = sum(bsxfun(@minus, x, ones(length(x),1)*bin)>=0,2);
+%         m = NaN(n,1);
+%         e = NaN(n,1);
+%         s = NaN(n,1);
+%         for i = 1:n
+%         m(i) = mean(y(ind==i));   % Mean value over the bin
+%         e(i) = std(y(ind==i));    % Standard deviation
+%         s(i) = sum(y(ind==i));    % Standard deviation
+%         end
+%         mmmm = m;
+%         y = ((subss));
+%         bin = linspace(min(x), max(x), n+1);
+%         ind = sum(bsxfun(@minus, x, ones(length(x),1)*bin)>=0,2);
+%         m = NaN(n,1);
+%         e = NaN(n,1);
+%         s = NaN(n,1);
+%         for i = 1:n
+%         m(i) = mean(y(ind==i));   % Mean value over the bin
+%         e(i) = std(y(ind==i));    % Standard deviation
+%         s(i) = sum(y(ind==i));    % Standard deviation
+%         end
+%         
+%         % mmmm is the total energy
+%         % mmm is the stretch
+%         % mm is the stretch dispersion
+%         % m is the strain
+%         alltt = [alltt tt];
+%         allenrg = [allenrg (mmmm/max(mmm))];
+%         alldisp = [alldisp (mm/max(mmm))];
+%         allstrain = [allstrain log(m/mmm(end))];
+%         allstrun = [allstrun m];
+%         allvisc = [allvisc kr/sig./(diff(m)./diff(tt))];
+%         alltest = [alltest diff(log(m))./diff(log(tt))];
+%         allangs = [allangs; stoang];
+%         details = [details [zet;L;mu;kap;lc;del;sig]];
+%         subplot(2,1,1)
+%         loglog(subtt,subss/substr(end))
+%         hold on
+%         loglog(subtt,substr/substr(end),'--')
+%         subplot(2,1,2)
+%         semilogx(subtt,stostd/substr(end))
+%         hold on
+%         drawnow
     end
 end

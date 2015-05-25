@@ -8,7 +8,7 @@
 r=0;
 origbp = pwd;
 %#ok<*ST2NM>
-bp = '/Users/wmcfadden/pull_release_filamin';
+bp = '/Users/wmcfadden/pull_release_fast';
 cd(bp);
 files = dir;
 files = {files.name};
