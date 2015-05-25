@@ -1,5 +1,5 @@
-% bp = '/Users/wmcfadden/xlrelax_longtear/';
-% code = 'aexaeuhg';
+% bp = '/Users/wmcfadden/pull_release_orig/';
+% code = 'fhyshlvz';
 cd(bp)
 fid = fopen([bp code '_scr.txt']);
 C = textscan(fid, '%s','delimiter', '\n');

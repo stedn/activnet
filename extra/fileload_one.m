@@ -1,5 +1,5 @@
-bp = '/Users/wmcfadden/pull_release_fast/';
-code = 'pziaaslv';
+bp = '/Users/wmcfadden/pull_release_orig/';
+code = 'nuhcjaax';
 cd(bp)
 A = importdata([bp code '_out.txt']);
 fid = fopen([bp code '_scr.txt']);
