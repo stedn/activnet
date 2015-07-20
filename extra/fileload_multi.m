@@ -8,7 +8,7 @@
 r=0;
 origbp = pwd;
 %#ok<*ST2NM>
-bp = '/Users/wmcfadden/pull_release_gentle';
+bp = '/Users/wmcfadden/xlrelax_all';
 cd(bp);
 files = dir;
 files = {files.name};
@@ -139,36 +139,36 @@ for f = files
                             kr2 = mean(diff(ss((end/2):end))./diff(tt((end/2):end)))/sig;
                             kr3 = mean(diff(ss((3*end/4):end))./diff(tt((3*end/4):end)))/sig;
                             
-                            stoA = [stoA; a];
-%                             stoG0 = [stoG0; G0];
-                            stoB = [stoB; b];
-                            stoC = [stoC; c];
-%                             stokr = [stokr; kr];
+%                             stoA = [stoA; a];
+% %                             stoG0 = [stoG0; G0];
+%                             stoB = [stoB; b];
+%                             stoC = [stoC; c];
+% %                             stokr = [stokr; kr];
                             stokr2 = [stokr2; kr2];
                             stokr3 = [stokr3; kr3];
                             stokr0 = [stokr0; kr0];
                             stoall = [stoall; zet L mu kap lc del ups phi psi r sig D Df ls lf];
-%                             stoconf = [stoconf; confs(spt,:)];
-%                             stogofs = [stogofs; gofs(spt)];
-                            stogams = [stogams; ss(end)/tt(end)];
-                            stoname = [stoname; code{1}];
+% %                             stoconf = [stoconf; confs(spt,:)];
+% %                             stogofs = [stogofs; gofs(spt)];
+%                             stogams = [stogams; ss(end)/tt(end)];
+%                             stoname = [stoname; code{1}];
 
-                            axes('Position',[.75 .7 .12 .2])
-                            title('strain plot')
-                            box on
-                            plot(tt,ss,'yo');
-%                             plot(tt((end/2):end),ss((end/2):end),'yo');
-%                             hold on
-%                             plot(tt(1:(end/2)),ss(1:(end/2)),'go');
-%                             plot(tt,a*tt.^b+c,'m','LineWidth',2);
-                            set(gca,'fontsize',14)
-                            h_leg=annotation('textbox', [0.75 0.2 0.12 0.45],'BackgroundColor',[1 1 1],...
-                                'String',{code{1},['zeta = ' num2str(zet)],['L/lc = ' num2str(L/lc)],['mu = ' num2str(mu)],['kap = ' num2str(kap)],...
-                                ['zet*del = ' num2str(zet*del)],['n_m/n_p = ' num2str(kr0./kr2)],['exp = ' num2str(b)]});
-                            set(h_leg,'FontSize',16);
-                            set(h,'PaperPositionMode','auto')
-                            drawnow
-                            print('-dpng','-r0',[code{1} '_fig.png']);%saveas(h,['fig_' code{2} '.png'],'png');
+%                             axes('Position',[.75 .7 .12 .2])
+%                             title('strain plot')
+%                             box on
+%                             plot(tt,ss,'yo');
+% %                             plot(tt((end/2):end),ss((end/2):end),'yo');
+% %                             hold on
+% %                             plot(tt(1:(end/2)),ss(1:(end/2)),'go');
+% %                             plot(tt,a*tt.^b+c,'m','LineWidth',2);
+%                             set(gca,'fontsize',14)
+%                             h_leg=annotation('textbox', [0.75 0.2 0.12 0.45],'BackgroundColor',[1 1 1],...
+%                                 'String',{code{1},['zeta = ' num2str(zet)],['L/lc = ' num2str(L/lc)],['mu = ' num2str(mu)],['kap = ' num2str(kap)],...
+%                                 ['zet*del = ' num2str(zet*del)],['n_m/n_p = ' num2str(kr0./kr2)],['exp = ' num2str(b)]});
+%                             set(h_leg,'FontSize',16);
+%                             set(h,'PaperPositionMode','auto')
+%                             drawnow
+%                             print('-dpng','-r0',[code{1} '_fig.png']);%saveas(h,['fig_' code{2} '.png'],'png');
                         end
                         close(h)
 %                         clear mov
@@ -198,6 +198,7 @@ for f = files
             end
         end
     end
+%     clearvars -except origbp bp files 
 end
 % minds = stogofs>0.1;
 % stoG(minds,:)=[];
@@ -209,8 +210,8 @@ end
 % stoall(minds,:)=[];
 % stoconf(minds,:)=[];
 % stogofs(minds,:)=[];
-save('fitvals','stokr','stokr2','stoall','stoconf','stogofs','stogams','stoname');
-
+% save('fitvals','stokr','stokr2','stoall','stoconf','stogofs','stogams','stoname');
+% 
 zet = stoall(:,1);
 L = stoall(:,2);
 mu = stoall(:,3);

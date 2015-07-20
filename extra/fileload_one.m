@@ -1,5 +1,5 @@
-bp = '/Users/wmcfadden/pull_release_orig/';
-code = 'nuhcjaax';
+bp = '/Users/wmcfadden/xlrelax_all/';
+code = 'tfugqkbi';
 cd(bp)
 A = importdata([bp code '_out.txt']);
 fid = fopen([bp code '_scr.txt']);
@@ -42,7 +42,7 @@ for ind = 2:100:size(zt,1)
     set(gcf,'Color',[0 0 0])
     set(gcf,'InvertHardcopy','off')
 
-    netplot_str(p,L,lf,ls,D,cc,cc2,0.1);
+    netplot_str(p,L,lf,ls,D,cc,cc2,0.05);
     mov(indi) = getframe;
     clf
     indi = indi +1;
