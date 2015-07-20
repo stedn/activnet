@@ -7,7 +7,6 @@ function fileload_oscil_cluster(bp)
     r=0;
     origbp = pwd;
     %#ok<*ST2NM>
-    bp = '/Users/wmcfadden/oscilate';
     cd(bp);
     files = dir;
     files = {files.name};
