@@ -52,21 +52,21 @@ function fileload_oscil_cluster(bp)
                         if(length(t)>1)
                             lst = size(zt,1);
                             trp = repmat((1:lst)'/lst,1,3);
-                            cc = (1-trp.^2).*(winter(lst)*0.75+0.25*spring(lst))+(trp.^2).*copper(lst);
-                            h = figure('Position', [50, 100, 1200, 600]);
-    %                         hold on
-                %             cc = copper(size(zt,1));
-                            whitebg('black')
-                            set(gcf,'Color',[0 0 0])
-                            set(gcf,'InvertHardcopy','off')
-                            for ind = 1:10000:size(zt,1)
-                                p = reshape(zt(ind,:),[],2);
-                                p = [mod(p(:,1),2*D),mod(p(:,2),D)];
-
-                                netplot(p,L,lf,ls,D,cc(ind,:));
-                                drawnow
-                                clf
-                            end
+%                             cc = (1-trp.^2).*(winter(lst)*0.75+0.25*spring(lst))+(trp.^2).*copper(lst);
+%                             h = figure('Position', [50, 100, 1200, 600]);
+%     %                         hold on
+%                 %             cc = copper(size(zt,1));
+%                             whitebg('black')
+%                             set(gcf,'Color',[0 0 0])
+%                             set(gcf,'InvertHardcopy','off')
+%                             for ind = 1:10000:size(zt,1)
+%                                 p = reshape(zt(ind,:),[],2);
+%                                 p = [mod(p(:,1),2*D),mod(p(:,2),D)];
+% 
+%                                 netplot(p,L,lf,ls,D,cc(ind,:));
+%                                 drawnow
+%                                 clf
+%                             end
 
 
                             xt = zt(:,1:end/2);
