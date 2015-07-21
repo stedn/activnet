@@ -150,7 +150,7 @@ function fileload_oscil_cluster(bp)
     %                             drawnow
     %                             print('-dpng','-r0',[code{1} '_fig.png']);%saveas(h,['fig_' code{2} '.png'],'png');
                             end
-                            close(h)
+%                             close(h)
                         end
                     end
                 end
