@@ -47,7 +47,7 @@ function Mz = activnet_mass(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
     
     indL = [indL indL(subXY)];
     
-    g = lineSegmentGrid_mini(indL,XY,D,l0);
+    g = lineSegmentGrid(indL,XY,D,l0);
 
     f = min(1,max(0,(g-lf/2)/(1-lf)));
     for ind=1:length(g)
