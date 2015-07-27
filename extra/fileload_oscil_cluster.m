@@ -47,7 +47,7 @@ function fileload_oscil_cluster(bp)
                         t = A(:,1);
                         zt = A(:,2:end);
                         code{1}
-                        length(t)
+%                         length(t)
                         if(length(t)>1)
                             lst = size(zt,1);
                             trp = repmat((1:lst)'/lst,1,3);
@@ -167,7 +167,14 @@ function fileload_oscil_cluster(bp)
     % stoall(minds,:)=[];
     % stoconf(minds,:)=[];
     % stogofs(minds,:)=[];
-    save('fitvals','stoGp','stoGpp','stomega','stoall','stoconf','stogofs','stogams');
+%     save('fitvals','stoGp','stoGpp','stomega','stoall','stoconf','stogofs','stogams');
+    stoGp
+    stoGpp
+    stomega
+    stoall
+    stoconf
+    stogofs
+    stogams
 end
 % zet = stoall(:,1);
 % L = stoall(:,2);
