@@ -133,7 +133,20 @@ function fileload_oscil_cluster(bp)
                                 stoconf = [stoconf; confs(spt,:)];
                                 stogofs = [stogofs; gofs(spt)];
                                 stogams = [stogams; ss(end)];
-
+fprintf('%s\n','stoGp')
+    fprintf('%f\n', stoGp)
+    fprintf('%s\n','stoGpp')
+    fprintf('%f\n', stoGpp)
+    fprintf('%s\n','stomega')
+    fprintf('%f\n', stomega)
+    fprintf('%s\n','stoall')
+    fprintf('%f\n', stoall)
+    fprintf('%s\n','stoconf')
+    fprintf('%f\n', stoconf)
+    fprintf('%s\n','stogofs')
+    fprintf('%f\n', stogofs)
+    fprintf('%s\n','stogams')
+    fprintf('%f\n', stogams)
     %                             axes('Position',[.75 .7 .12 .2])
     %                             title('strain plot')
     %                             box on
@@ -168,20 +181,7 @@ function fileload_oscil_cluster(bp)
     % stoconf(minds,:)=[];
     % stogofs(minds,:)=[];
 %     save('fitvals','stoGp','stoGpp','stomega','stoall','stoconf','stogofs','stogams');
-    fprintf('%s\n','stoGp')
-    fprintf('%f\n', stoGp)
-    fprintf('%s\n','stoGpp')
-    fprintf('%f\n', stoGpp)
-    fprintf('%s\n','stomega')
-    fprintf('%f\n', stomega)
-    fprintf('%s\n','stoall')
-    fprintf('%f\n', stoall)
-    fprintf('%s\n','stoconf')
-    fprintf('%f\n', stoconf)
-    fprintf('%s\n','stogofs')
-    fprintf('%f\n', stogofs)
-    fprintf('%s\n','stogams')
-    fprintf('%f\n', stogams)
+    
 end
 % zet = stoall(:,1);
 % L = stoall(:,2);
