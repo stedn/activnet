@@ -38,10 +38,12 @@ function netplot_str(p,L,lf,ls,D,clr,clr2,str_max)
     kn = (str-l)>=0;
     str = min(length(clr),ceil(length(clr)*abs(str-l)/l/str_max));
     for i =1:length(XY)
-        if(kn(i))
-            line([XY(i,1)';XY(i,3)'],[XY(i,2)';XY(i,4)'],'Color',clr(str(i),:),'LineWidth',1);
-        else
-            line([XY(i,1)';XY(i,3)'],[XY(i,2)';XY(i,4)'],'Color',clr2(str(i),:),'LineWidth',1);
+        if(norm([XY(i,1)'-XY(i,3)';XY(i,2)'-XY(i,4)'])<1.5*L)
+            if(kn(i))
+                line([XY(i,1)';XY(i,3)'],[XY(i,2)';XY(i,4)'],'Color',clr(str(i),:),'LineWidth',1);
+            else
+                line([XY(i,1)';XY(i,3)'],[XY(i,2)';XY(i,4)'],'Color',clr2(str(i),:),'LineWidth',1);
+            end
         end
     end
     xlim([0 2*D]);

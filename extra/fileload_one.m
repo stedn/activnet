@@ -1,5 +1,5 @@
-bp = '/Users/wmcfadden/xlrelax_all/';
-code = 'tfugqkbi';
+bp = '/Users/wmcfadden/activ_begin/';
+code = 'qrzaabds';% txveifsg
 cd(bp)
 A = importdata([bp code '_out.txt']);
 fid = fopen([bp code '_scr.txt']);
@@ -35,14 +35,14 @@ temp=hot(2*lst);
 cc2 = (1-trp.^2).*(winter(lst)*0.75+0.25*spring(lst))+(trp.^2).*temp(1:lst,:);
 edges = {linspace(0.5,1.5,50),linspace(-90,90,50)}  ;      
 indi = 1;
-for ind = 2:100:size(zt,1)
+for ind = 1:1:size(zt,1)
     p = reshape(zt(ind,:),[],2);
     p = [mod(p(:,1),2*D),mod(p(:,2),D)];
     whitebg('black')
     set(gcf,'Color',[0 0 0])
     set(gcf,'InvertHardcopy','off')
 
-    netplot_str(p,L,lf,ls,D,cc,cc2,0.05);
+    netplot_str(p,L,lf,ls,D,cc,cc2,0.5);
     mov(indi) = getframe;
     clf
     indi = indi +1;

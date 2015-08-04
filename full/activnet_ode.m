@@ -13,6 +13,9 @@ function dz = activnet_ode(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
             vb = mydiff(p(n+i,:),p(n+i+1,:),D);
             lb = sqrt(vb*vb');
             f = mu*vb/lb*(lb-l0)/l0;
+            if(mu<0)
+                f = -f*(1+99*double(gam>0));
+            end
             dp(n+i,:) = dp(n+i,:) + f;
             dp(n+i+1,:) = dp(n+i+1,:) - f;
             vb_orth = [-vb(2) vb(1)];

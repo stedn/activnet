@@ -8,7 +8,7 @@
 r=0;
 origbp = pwd;
 %#ok<*ST2NM>
-bp = '/Users/wmcfadden/xlrelax_all';
+bp = '/Users/wmcfadden/activ_begin';
 cd(bp);
 files = dir;
 files = {files.name};
@@ -100,54 +100,54 @@ for f = files
                         sp = brng(1:end-1)+brng(2)/2;
                         sp(sp>D)=2*D-sp(sp>D);
 
-                        ss = [];
-                        tt = [];
-                        for k=1:size(xt,1)
-                            if(sum(isnan(xt(k,:)))==0)
-                                sv = bindata(dy(k,:),xt(k,:),brng);
-                                subs = sp>Df*D&sp<D*(1-Df);
-                                tt=[tt; t(k)];
-                                ss=[ss; -nanmean(sv(subs)./sp(subs))];
-                            end
-                        end
-                        a_t = 1;
-                        b_t = 1;
-                        as = [];
-                        bs = [];
-                        cs = [];
-                        gofs= [];
-                        confs = [];
-                        for i=1:10
-                            [fito, gof] = fit(tt((end/2):end),ss((end/2):end),'a*x^b+c','StartPoint', [a_t, b_t,1],'Lower',[0 0 -Inf],'Display','final');
-                            a_t = fito.a*(1+0.5*randn);
-                            b_t = fito.b*(1+0.5*randn);
-                            as = [as;fito.a];
-                            bs = [bs;fito.b];
-                            cs = [cs;fito.c];
-                            gofs=[gofs;gof.rmse];
-%                             conf = confint(fito);
-%                             confs = [confs; diff(conf)./coeffvalues(fito)];
-                        end
+%                         ss = [];
+%                         tt = [];
+%                         for k=1:size(xt,1)
+%                             if(sum(isnan(xt(k,:)))==0)
+%                                 sv = bindata(dy(k,:),xt(k,:),brng);
+%                                 subs = sp>Df*D&sp<D*(1-Df);
+%                                 tt=[tt; t(k)];
+%                                 ss=[ss; -nanmean(sv(subs)./sp(subs))];
+%                             end
+%                         end
+%                         a_t = 1;
+%                         b_t = 1;
+%                         as = [];
+%                         bs = [];
+%                         cs = [];
+%                         gofs= [];
+%                         confs = [];
+%                         for i=1:10
+%                             [fito, gof] = fit(tt((end/2):end),ss((end/2):end),'a*x^b+c','StartPoint', [a_t, b_t,1],'Lower',[0 0 -Inf],'Display','final');
+%                             a_t = fito.a*(1+0.5*randn);
+%                             b_t = fito.b*(1+0.5*randn);
+%                             as = [as;fito.a];
+%                             bs = [bs;fito.b];
+%                             cs = [cs;fito.c];
+%                             gofs=[gofs;gof.rmse];
+% %                             conf = confint(fito);
+% %                             confs = [confs; diff(conf)./coeffvalues(fito)];
+%                         end
                         if(1)
-                            spt = find(gofs==min(gofs));
-                            spt = spt(1);
-                            a = as(spt);
-                            b = bs(spt);
-                            c = cs(spt);
-                            
-                            kr0 = lc.^2./zet./del./(L-2*lc).^2*16*3/pi;
-                            kr2 = mean(diff(ss((end/2):end))./diff(tt((end/2):end)))/sig;
-                            kr3 = mean(diff(ss((3*end/4):end))./diff(tt((3*end/4):end)))/sig;
-                            
-%                             stoA = [stoA; a];
-% %                             stoG0 = [stoG0; G0];
-%                             stoB = [stoB; b];
-%                             stoC = [stoC; c];
-% %                             stokr = [stokr; kr];
-                            stokr2 = [stokr2; kr2];
-                            stokr3 = [stokr3; kr3];
-                            stokr0 = [stokr0; kr0];
-                            stoall = [stoall; zet L mu kap lc del ups phi psi r sig D Df ls lf];
+%                             spt = find(gofs==min(gofs));
+%                             spt = spt(1);
+%                             a = as(spt);
+%                             b = bs(spt);
+%                             c = cs(spt);
+%                             
+%                             kr0 = lc.^2./zet./del./(L-2*lc).^2*16*3/pi;
+%                             kr2 = mean(diff(ss((end/2):end))./diff(tt((end/2):end)))/sig;
+%                             kr3 = mean(diff(ss((3*end/4):end))./diff(tt((3*end/4):end)))/sig;
+%                             
+% %                             stoA = [stoA; a];
+% % %                             stoG0 = [stoG0; G0];
+% %                             stoB = [stoB; b];
+% %                             stoC = [stoC; c];
+% % %                             stokr = [stokr; kr];
+%                             stokr2 = [stokr2; kr2];
+%                             stokr3 = [stokr3; kr3];
+%                             stokr0 = [stokr0; kr0];
+%                             stoall = [stoall; zet L mu kap lc del ups phi psi r sig D Df ls lf];
 % %                             stoconf = [stoconf; confs(spt,:)];
 % %                             stogofs = [stogofs; gofs(spt)];
 %                             stogams = [stogams; ss(end)/tt(end)];
@@ -162,13 +162,14 @@ for f = files
 % %                             plot(tt(1:(end/2)),ss(1:(end/2)),'go');
 % %                             plot(tt,a*tt.^b+c,'m','LineWidth',2);
 %                             set(gca,'fontsize',14)
-%                             h_leg=annotation('textbox', [0.75 0.2 0.12 0.45],'BackgroundColor',[1 1 1],...
-%                                 'String',{code{1},['zeta = ' num2str(zet)],['L/lc = ' num2str(L/lc)],['mu = ' num2str(mu)],['kap = ' num2str(kap)],...
-%                                 ['zet*del = ' num2str(zet*del)],['n_m/n_p = ' num2str(kr0./kr2)],['exp = ' num2str(b)]});
-%                             set(h_leg,'FontSize',16);
-%                             set(h,'PaperPositionMode','auto')
-%                             drawnow
-%                             print('-dpng','-r0',[code{1} '_fig.png']);%saveas(h,['fig_' code{2} '.png'],'png');
+                            h_leg=annotation('textbox', [0.75 0.2 0.12 0.45],'BackgroundColor',[1 1 1],...
+                                'String',{code{1},['zeta = ' num2str(zet)],['L/lc = ' num2str(L/lc)],['mu = ' num2str(mu)],['kap = ' num2str(kap)],...
+                                ['zet*del = ' num2str(zet*del)]});
+%                             ['zet*del = ' num2str(zet*del)],['n_m/n_p = ' num2str(kr0./kr2)],['exp = ' num2str(b)]});
+                            set(h_leg,'FontSize',16);
+                            set(h,'PaperPositionMode','auto')
+                            drawnow
+                            print('-dpng','-r0',[code{1} '_fig.png']);%saveas(h,['fig_' code{2} '.png'],'png');
                         end
                         close(h)
 %                         clear mov
