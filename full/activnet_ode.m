@@ -12,7 +12,8 @@ function dz = activnet_ode(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
         for i=0:ncnt-2
             vb = mydiff(p(n+i,:),p(n+i+1,:),D);
             lb = sqrt(vb*vb');
-            f = mu*vb/lb*(lb-l0)/l0;
+            gam = (lb-l0)/l0;
+            f = mu*vb/lb*gam;
             if(mu<0)
                 f = -f*(1+99*double(gam>0));
             end
