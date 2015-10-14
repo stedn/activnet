@@ -21,9 +21,7 @@ function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,Dx,Dy,Df,Dw,ls,l
     if(ischar(tinc)); tinc = str2num(tinc); end;
     if(ischar(tfin)); tfin = str2num(tfin); end;
     if(ischar(seed)); seed = str2num(seed); end;
-    
-    ext = sig<0;
-    
+        
     rng(seed);
     
     %% use inputs to calculate number of filaments to add
@@ -66,7 +64,7 @@ function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,Dx,Dy,Df,Dw,ls,l
     end
     fprintf(fileID,'\n');
     
-    activnet(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,Dx,Dy,Df,Dw,ncnt,lf,ext,r,tinc,fileID);
+    activnet(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,Dx,Dy,Df,Dw,ncnt,lf,r,tinc,fileID);
     
 
 end
