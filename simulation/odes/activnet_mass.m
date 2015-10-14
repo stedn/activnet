@@ -1,4 +1,4 @@
-function Mz = activnet_mass(t,z,zet,L,mu,kap,del,nu,psi,sig,Dx,Dy,Df,Dw,ncnt,lf,ext)
+function Mz = activnet_mass(t,z,zet,L,mu,kap,xi,nu,psi,sig,Dx,Dy,Df,Dw,ncnt,lf,ext)
 
     %% create velocity coupling matrix    
     l0 = L/(ncnt-1);
@@ -50,7 +50,7 @@ function Mz = activnet_mass(t,z,zet,L,mu,kap,del,nu,psi,sig,Dx,Dy,Df,Dw,ncnt,lf,
     g = lineSegmentGrid(indL,XY,Dx,Dy,l0);
 
     f = min(1,max(0,(g-lf/2)/(1-lf)));
-    for ind=1:length(g)
+    for ind=1:size(g,1)
         i = g(ind,3);
         j = g(ind,4);
             
@@ -68,8 +68,8 @@ function Mz = activnet_mass(t,z,zet,L,mu,kap,del,nu,psi,sig,Dx,Dy,Df,Dw,ncnt,lf,
             edg = edg*(1-g(ind,2))/lf;
         end
         
-        Mo(i:i+1,i:i+1) = Mo(i:i+1,i:i+1) + edg*del*zet*[[1-f(ind,1) f(ind,1)]*(1-f(ind,1)); [1-f(ind,1) f(ind,1)]*f(ind,1)]; 
-        Mo(i:i+1,j:j+1) = Mo(i:i+1,j:j+1) - edg*del*zet*[[1-f(ind,2) f(ind,2)]*(1-f(ind,1)); [1-f(ind,2) f(ind,2)]*f(ind,1)]; 
+        Mo(i:i+1,i:i+1) = Mo(i:i+1,i:i+1) + edg*xi*[[1-f(ind,1) f(ind,1)]*(1-f(ind,1)); [1-f(ind,1) f(ind,1)]*f(ind,1)]; 
+        Mo(i:i+1,j:j+1) = Mo(i:i+1,j:j+1) - edg*xi*[[1-f(ind,2) f(ind,2)]*(1-f(ind,1)); [1-f(ind,2) f(ind,2)]*f(ind,1)]; 
         
     end
     

@@ -1,4 +1,4 @@
-function activnet(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,Dx,Dy,Df,Dw,ncnt,lf,r,tinc,fileID)
+function activnet(N,tt,z0,zet,L,mu,kap,xi,nu,psi,sig,Dx,Dy,Df,Dw,ncnt,lf,r,tinc,fileID)
     pull = (isempty(nu)&&sig~=0);
     if(pull)
         options = odeset('Mass',@activnet_mass_sp,'AbsTol',0.001,'RelTol',0.001);
@@ -14,9 +14,9 @@ function activnet(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,Dx,Dy,Df,Dw,ncnt,lf,r,tinc
     while(ind<length(tt))
         % solve for one timestep
         if(pull)
-            [~,z] = ode15s(@activnet_pull_ode,tt(ind-1:ind-1+istep),z0,options,zet,L,mu,kap,del,nu,psi,sig,Dx,Dy,Df,Dw,ncnt,lf);
+            [~,z] = ode15s(@activnet_pull_ode,tt(ind-1:ind-1+istep),z0,options,zet,L,mu,kap,xi,nu,psi,sig,Dx,Dy,Df,Dw,ncnt,lf);
         else
-            [~,z] = ode23(@activnet_act_ode,[tt(ind-1) tt(ind) tt(ind+1)],z0,options,zet,L,mu,kap,del,nu,psi,sig,Dx,Dy,Df,Dw,ncnt,lf);
+            [~,z] = ode23(@activnet_act_ode,tt(ind-1:ind-1+istep),z0,options,zet,L,mu,kap,xi,nu,psi,sig,Dx,Dy,Df,Dw,ncnt,lf);
         end
         
         % output to file
