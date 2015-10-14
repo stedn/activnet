@@ -1,10 +1,10 @@
-function Mz = activnet_mass_sp(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
+function Mz = activnet_mass_sp(t,z,zet,L,mu,kap,del,nu,psi,sig,Dx,Dy,Df,Dw,ncnt,lf,ext)
 
     %% create velocity coupling matrix    
     l0 = L/(ncnt-1);
 
     p = reshape(z,[],2);
-    p = [mod(p(:,1),2*D),mod(p(:,2),D)];
+    p = [mod(p(:,1),Dx),mod(p(:,2),Dy)];
     
     Mo = sparse(length(p),length(p));
     
@@ -17,10 +17,10 @@ function Mz = activnet_mass_sp(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
     subpL=subpL(mod(1:length(subpL),ncnt)~=0,:);
     subpR=subpR(mod(1:length(subpR),ncnt)~=1,:);
 
-    subpL(subpL(:,1)<D/2&subpR(:,1)>3*D/2,1)=subpL(subpL(:,1)<D/2&subpR(:,1)>3*D/2,1)+2*D;
-    subpL(subpL(:,2)<D/3&subpR(:,2)>2*D/3,2)=subpL(subpL(:,2)<D/3&subpR(:,2)>2*D/3,2)+D;
-    subpR(subpR(:,1)<D/2&subpL(:,1)>3*D/2,1)=subpR(subpR(:,1)<D/2&subpL(:,1)>3*D/2,1)+2*D;
-    subpR(subpR(:,2)<D/3&subpL(:,2)>2*D/3,2)=subpR(subpR(:,2)<D/3&subpL(:,2)>2*D/3,2)+D;
+    subpL(subpL(:,1)<Dx/4&subpR(:,1)>3*Dx/4,1)=subpL(subpL(:,1)<Dx/4&subpR(:,1)>3*Dx/4,1)+Dx;
+    subpL(subpL(:,2)<Dy/4&subpR(:,2)>3*Dy/4,2)=subpL(subpL(:,2)<Dy/4&subpR(:,2)>3*Dy/4,2)+Dy;
+    subpR(subpR(:,1)<Dx/4&subpL(:,1)>3*Dx/4,1)=subpR(subpR(:,1)<Dx/4&subpL(:,1)>3*Dx/4,1)+Dx;
+    subpR(subpR(:,2)<Dy/4&subpL(:,2)>3*Dy/4,2)=subpR(subpR(:,2)<Dy/4&subpL(:,2)>3*Dy/4,2)+Dy;
     
     % extend ends slightly for smooth falloff
     subv = subpR-subpL;
@@ -31,24 +31,24 @@ function Mz = activnet_mass_sp(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
     
     XY = [subpL subpR];
     
-    subXY = XY(:,1)>2*D|XY(:,2)>D|XY(:,3)>2*D|XY(:,4)>D;
+    subXY = XY(:,1)>Dx|XY(:,2)>Dy|XY(:,3)>Dx|XY(:,4)>Dy;
     
     extXY = XY(subXY, :);
     
-    tsub = extXY(:,1)>2*D;
-    extXY(tsub,:)=extXY(tsub,:)-repmat([2*D 0 2*D 0],sum(tsub),1);
-    tsub = extXY(:,3)>2*D;
-    extXY(tsub,:)=extXY(tsub,:)-repmat([2*D 0 2*D 0],sum(tsub),1);
-    tsub = extXY(:,2)>D;
-    extXY(tsub,:)=extXY(tsub,:)-repmat([0 D 0 D],sum(tsub),1);
-    tsub = extXY(:,4)>D;
-    extXY(tsub,:)=extXY(tsub,:)-repmat([0 D 0 D],sum(tsub),1);
+    tsub = extXY(:,1)>Dx;
+    extXY(tsub,:)=extXY(tsub,:)-repmat([Dx 0 Dx 0],sum(tsub),1);
+    tsub = extXY(:,3)>Dx;
+    extXY(tsub,:)=extXY(tsub,:)-repmat([Dx 0 Dx 0],sum(tsub),1);
+    tsub = extXY(:,2)>Dy;
+    extXY(tsub,:)=extXY(tsub,:)-repmat([0 Dy 0 Dy],sum(tsub),1);
+    tsub = extXY(:,4)>Dy;
+    extXY(tsub,:)=extXY(tsub,:)-repmat([0 Dy 0 Dy],sum(tsub),1);
     
     XY = [XY; extXY];
     
     indL = [indL indL(subXY)];
     
-    g = lineSegmentGrid(indL,XY,D,l0);
+    g = lineSegmentGrid(indL,XY,Dx,Dy,l0);
 
     f = min(1,max(0,(g-lf/2)/(1-lf)));
     for ind=1:size(g,1)
@@ -79,21 +79,21 @@ function Mz = activnet_mass_sp(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
     if(sig~=0)
         sz = size(Mo,2);
 
-        subp = p(:,1)<Df*D;
-        multi = repmat(2*p(subp,1)/Df/D-1,1,sz);
+        subp = p(:,1)<Dw*Dx;
+        multi = repmat(4*p(subp,1)/Dw/Dx-3,1,sz);
         Mo(subp,:)=Mo(subp,:).*multi;
 
-        subp = p(:,1)>2*D-Df*D;
-        multi = repmat(2*abs(p(subp,1)-2*D)/Df/D-1,1,sz);
+        subp = p(:,1)>Dx*(1-Dw);
+        multi = repmat(4*abs(p(subp,1)-Dx)/Dw/Dx-3,1,sz);
         Mo(subp,:)=Mo(subp,:).*multi;
 
-        subp = p(:,1)<Df*D/2|p(:,1)>2*D-Df*D/2;
+        subp = p(:,1)<3*Dx/4*Dw|p(:,1)>Dx-3*Dx/4*Dw;
         Mo(subp,:)=zeros(sum(subp),size(Mo,2));
     end
     
     %% generate medium viscosity with assymetry for filament orientation
     
-    vt = mydiff(p(2:end,:),p(1:end-1,:),D);
+    vt = mydiff(p(2:end,:),p(1:end-1,:),Dx,Dy);
     v = [0 0; (vt(1:end-1,:)+vt(2:end,:))/2; 0 0];
     v(1:ncnt:end,:)=vt(1:ncnt:end,:);
     v(ncnt:ncnt:end,:)=vt(ncnt-1:ncnt:end,:);

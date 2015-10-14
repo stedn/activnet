@@ -1,16 +1,16 @@
-function dz = activnet_act_ode(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
+function dz = activnet_act_ode(t,z,zet,L,mu,kap,del,nu,psi,sig,Dx,Dy,Df,Dw,ncnt,lf)
     
     %% compute intrafilament forces    
     l0 = L/(ncnt-1);
     p = reshape(z,[],2);
-    p = [mod(p(:,1),2*D),mod(p(:,2),D)];
+    p = [mod(p(:,1),Dx),mod(p(:,2),Dy)];
     dp = zeros(size(p));
     for n=1:ncnt:length(p)
         va_orth=[0 0];
         va = [0 0];
         la = 0;
         for i=0:ncnt-2
-            vb = mydiff(p(n+i,:),p(n+i+1,:),D);
+            vb = mydiff(p(n+i,:),p(n+i+1,:),Dx,Dy);
             lb = sqrt(vb*vb');
             gam = (lb-l0)/l0;
             f = mu*vb/lb*gam;
@@ -50,10 +50,10 @@ function dz = activnet_act_ode(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
         subpL=subpL(mod(1:length(subpL),ncnt)~=0,:);
         subpR=subpR(mod(1:length(subpR),ncnt)~=1,:);
 
-        subpL(subpL(:,1)<D/2&subpR(:,1)>3*D/2,1)=subpL(subpL(:,1)<D/2&subpR(:,1)>3*D/2,1)+2*D;
-        subpL(subpL(:,2)<D/4&subpR(:,2)>3*D/4,2)=subpL(subpL(:,2)<D/4&subpR(:,2)>3*D/4,2)+D;
-        subpR(subpR(:,1)<D/2&subpL(:,1)>3*D/2,1)=subpR(subpR(:,1)<D/2&subpL(:,1)>3*D/2,1)+2*D;
-        subpR(subpR(:,2)<D/4&subpL(:,2)>3*D/4,2)=subpR(subpR(:,2)<D/4&subpL(:,2)>3*D/4,2)+D;
+        subpL(subpL(:,1)<Dx/4&subpR(:,1)>3*Dx/4,1)=subpL(subpL(:,1)<Dx/4&subpR(:,1)>3*Dx/4,1)+Dx;
+        subpL(subpL(:,2)<Dy/4&subpR(:,2)>3*Dy/4,2)=subpL(subpL(:,2)<Dy/4&subpR(:,2)>3*Dy/4,2)+Dy;
+        subpR(subpR(:,1)<Dx/4&subpL(:,1)>3*Dx/4,1)=subpR(subpR(:,1)<Dx/4&subpL(:,1)>3*Dx/4,1)+Dx;
+        subpR(subpR(:,2)<Dy/4&subpL(:,2)>3*Dy/4,2)=subpR(subpR(:,2)<Dy/4&subpL(:,2)>3*Dy/4,2)+Dy;
 
         subv = subpR-subpL;
         subv = subv./repmat(sqrt(subv(:,1).^2+subv(:,2).^2),1,2);
@@ -62,31 +62,31 @@ function dz = activnet_act_ode(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
 
         XY = [subpL subpR];
 
-        subXY = XY(:,1)>2*D|XY(:,2)>D|XY(:,3)>2*D|XY(:,4)>D;
+        subXY = XY(:,1)>Dx|XY(:,2)>Dy|XY(:,3)>Dx|XY(:,4)>Dy;
 
         extXY = XY(subXY, :);
 
-        tsub = extXY(:,1)>2*D;
-        extXY(tsub,:)=extXY(tsub,:)-repmat([2*D 0 2*D 0],sum(tsub),1);
-        tsub = extXY(:,3)>2*D;
-        extXY(tsub,:)=extXY(tsub,:)-repmat([2*D 0 2*D 0],sum(tsub),1);
-        tsub = extXY(:,2)>D;
-        extXY(tsub,:)=extXY(tsub,:)-repmat([0 D 0 D],sum(tsub),1);
-        tsub = extXY(:,4)>D;
-        extXY(tsub,:)=extXY(tsub,:)-repmat([0 D 0 D],sum(tsub),1);
+        tsub = extXY(:,1)>Dx;
+        extXY(tsub,:)=extXY(tsub,:)-repmat([Dx 0 Dx 0],sum(tsub),1);
+        tsub = extXY(:,3)>Dx;
+        extXY(tsub,:)=extXY(tsub,:)-repmat([Dx 0 Dx 0],sum(tsub),1);
+        tsub = extXY(:,2)>Dy;
+        extXY(tsub,:)=extXY(tsub,:)-repmat([0 Dy 0 Dy],sum(tsub),1);
+        tsub = extXY(:,4)>Dy;
+        extXY(tsub,:)=extXY(tsub,:)-repmat([0 Dy 0 Dy],sum(tsub),1);
 
         XY = [XY; extXY];
 
         indL = [indL indL(subXY)];
 
-        g = lineSegmentGrid(indL,XY,D,l0);
+        g = lineSegmentGrid(indL,XY,Dx,Dy,l0);
 
         f = min(1,max(0,(g-lf/2)/(1-lf)));
         for ind=1:size(g,1)
             i = g(ind,3);
             j = g(ind,4);
             
-            vm = mydiff(p(j,:),p(j+1,:),D);
+            vm = mydiff(p(j,:),p(j+1,:),Dx,Dy);
             lm = sqrt(vm*vm');
             
             edg = 1;
@@ -103,7 +103,7 @@ function dz = activnet_act_ode(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
                 edg = edg*(1-g(ind,2))/lf;
             end
             
-            tnu = nu(ceil(i/ncnt),ceil(j/ncnt))*(1-psi*abs(g(ind,5)-D)/D);
+            tnu = nu(ceil(i/ncnt),ceil(j/ncnt))*(1-psi*abs(g(ind,5)-Dx*Df)/Dx/Df);
             dp(i:i+1,:) = dp(i:i+1,:) + edg*tnu/lm*[vm*(1-f(ind,1));vm*f(ind,1)];
             dp(j:j+1,:) = dp(j:j+1,:) - edg*tnu/lm*[vm*(1-f(ind,2));vm*f(ind,2)];
             

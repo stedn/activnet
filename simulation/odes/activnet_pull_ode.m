@@ -1,16 +1,16 @@
-function dz = activnet_pull_ode(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf,ext)
+function dz = activnet_pull_ode(t,z,zet,L,mu,kap,del,nu,psi,sig,Dx,Dy,Df,Dw,ncnt,lf,ext)
     
     %% compute intrafilament forces    
     l0 = L/(ncnt-1);
     p = reshape(z,[],2);
-    p = [mod(p(:,1),2*D),mod(p(:,2),D)];
+    p = [mod(p(:,1),Dx),mod(p(:,2),Dy)];
     dp = zeros(size(p));
     for n=1:ncnt:length(p)
         va_orth=[0 0];
         va = [0 0];
         la = 0;
         for i=0:ncnt-2
-            vb = mydiff(p(n+i,:),p(n+i+1,:),D);
+            vb = mydiff(p(n+i,:),p(n+i+1,:),Dx,Dy);
             lb = sqrt(vb*vb');
             gam = (lb-l0)/l0;
             f = mu*vb/lb*gam;
@@ -50,21 +50,21 @@ function dz = activnet_pull_ode(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf,ext
         val = sig;
     end
     
-    subp = p(:,1)>D-Df*D&p(:,1)<D+Df*D;
-    ff = D-abs(p(subp,1)-D)/(1-Df);
-    if(ext)
-        dp(subp,1)=dp(subp,1) - D*val.*ff/sum(ff);
+    subp = p(:,1)>(Df-Dw)*Dx&p(:,1)<(Df+Dw)*Dx;
+    ff = 1-abs(p(subp,1)-Df*Dx)/Dw/Dx;
+    if(sig<0)
+        dp(subp,1)=dp(subp,1) - Dy*val.*ff/sum(ff);
     else
-        dp(subp,2)=dp(subp,2) - D*val.*ff/sum(ff);
+        dp(subp,2)=dp(subp,2) - Dy*val.*ff/sum(ff);
     end
     
-    subp = p(:,1)<Df*D;
-    dp(subp,:)=dp(subp,:).*repmat(2*p(subp,1)/Df/D-1,1,2);
+    subp = p(:,1)<Dw*Dx;
+    dp(subp,:)=dp(subp,:).*repmat(4*p(subp,1)/Dw/Dx-3,1,2);
 
-    subp = p(:,1)>2*D-Df*D;
-    dp(subp,:)=dp(subp,:).*repmat(2*abs(p(subp,1)-2*D)/Df/D-1,1,2);
+    subp = p(:,1)>Dx*(1-Dw);
+    dp(subp,:)=dp(subp,:).*repmat(4*abs(p(subp,1)-Dx)/Dw/Dx-3,1,2);
 
-    subp = p(:,1)<Df*D/2|p(:,1)>2*D-Df*D/2;
+    subp = p(:,1)<3*Dx/4*Dw|p(:,1)>Dx-3*Dx/4*Dw;
     dp(subp,:)=0;
 
     %% and bring it all home
