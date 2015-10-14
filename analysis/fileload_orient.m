@@ -178,9 +178,9 @@ if(L/lc>6)
         e = NaN(n,1);
         s = NaN(n,1);
         for i = 1:n
-        m(i) = mean(y(ind==i));   % Mean value over the bin
-        e(i) = std(y(ind==i));    % Standard deviation
-        s(i) = sum(y(ind==i));    % Standard deviation
+            m(i) = mean(y(ind==i));   % Mean value over the bin
+            e(i) = std(y(ind==i));    % Standard deviation
+            s(i) = sum(y(ind==i));    % Standard deviation
         end
         mm = m;
         y = ((substr));
@@ -190,9 +190,9 @@ if(L/lc>6)
         e = NaN(n,1);
         s = NaN(n,1);
         for i = 1:n
-        m(i) = mean(y(ind==i));   % Mean value over the bin
-        e(i) = std(y(ind==i));    % Standard deviation
-        s(i) = sum(y(ind==i));    % Standard deviation
+            m(i) = mean(y(ind==i));   % Mean value over the bin
+            e(i) = std(y(ind==i));    % Standard deviation
+            s(i) = sum(y(ind==i));    % Standard deviation
         end
         mmm = m;
         y = ((subtt));
@@ -202,9 +202,9 @@ if(L/lc>6)
         e = NaN(n,1);
         s = NaN(n,1);
         for i = 1:n
-        m(i) = mean(y(ind==i));   % Mean value over the bin
-        e(i) = std(y(ind==i));    % Standard deviation
-        s(i) = sum(y(ind==i));    % Standard deviation
+            m(i) = mean(y(ind==i));   % Mean value over the bin
+            e(i) = std(y(ind==i));    % Standard deviation
+            s(i) = sum(y(ind==i));    % Standard deviation
         end
         tt = m;
         y = ((stostr));
@@ -214,9 +214,9 @@ if(L/lc>6)
         e = NaN(n,1);
         s = NaN(n,1);
         for i = 1:n
-        m(i) = mean(y(ind==i));   % Mean value over the bin
-        e(i) = std(y(ind==i));    % Standard deviation
-        s(i) = sum(y(ind==i));    % Standard deviation
+            m(i) = mean(y(ind==i));   % Mean value over the bin
+            e(i) = std(y(ind==i));    % Standard deviation
+            s(i) = sum(y(ind==i));    % Standard deviation
         end
         mmmm = m;
         y = ((subss));
@@ -226,9 +226,9 @@ if(L/lc>6)
         e = NaN(n,1);
         s = NaN(n,1);
         for i = 1:n
-        m(i) = mean(y(ind==i));   % Mean value over the bin
-        e(i) = std(y(ind==i));    % Standard deviation
-        s(i) = sum(y(ind==i));    % Standard deviation
+            m(i) = mean(y(ind==i));   % Mean value over the bin
+            e(i) = std(y(ind==i));    % Standard deviation
+            s(i) = sum(y(ind==i));    % Standard deviation
         end
         
 %         mmmm is the total energy
