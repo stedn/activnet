@@ -36,9 +36,11 @@ function netplot_str(p,L,lf,ls,D,clr,clr2,str_max)
     l = l0 + l0*lf;
     str = sqrt((XY(:,3)-XY(:,1)).^2 + (XY(:,4)-XY(:,2)).^2);
     kn = (str-l)>=0;
-    str = min(length(clr),ceil(length(clr)*abs(str-l)/l/str_max));
+    str = max(min(length(clr),ceil(length(clr)*abs(str-l)/l/str_max)),1);
+%     plot(XY(:,1),XY(:,2),'.');
+    
     for i =1:length(XY)
-        if(norm([XY(i,1)'-XY(i,3)';XY(i,2)'-XY(i,4)'])<1.5*L)
+        if(norm([XY(i,1)'-XY(i,3)';XY(i,2)'-XY(i,4)'])<2*L)
             if(kn(i))
                 line([XY(i,1)';XY(i,3)'],[XY(i,2)';XY(i,4)'],'Color',clr(str(i),:),'LineWidth',1);
             else

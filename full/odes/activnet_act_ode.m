@@ -1,4 +1,4 @@
-function dz = activnet_ode(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
+function dz = activnet_act_ode(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
     
     %% compute intrafilament forces    
     l0 = L/(ncnt-1);

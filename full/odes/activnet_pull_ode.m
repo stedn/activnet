@@ -1,4 +1,4 @@
-function dz = activnet_ode_pullext(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
+function dz = activnet_pull_ode(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf,ext)
     
     %% compute intrafilament forces    
     l0 = L/(ncnt-1);
@@ -12,7 +12,11 @@ function dz = activnet_ode_pullext(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
         for i=0:ncnt-2
             vb = mydiff(p(n+i,:),p(n+i+1,:),D);
             lb = sqrt(vb*vb');
-            f = mu*vb/lb*(lb-l0)/l0;
+            gam = (lb-l0)/l0;
+            f = mu*vb/lb*gam;
+            if(mu<0)
+                f = -f*(1+99*gam^100/(0.05^100+gam^100));
+            end
             dp(n+i,:) = dp(n+i,:) + f;
             dp(n+i+1,:) = dp(n+i+1,:) - f;
             vb_orth = [-vb(2) vb(1)];
@@ -40,13 +44,20 @@ function dz = activnet_ode_pullext(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
     %% add external force at centerline and constrain edges
     if(psi>0)
         val = sig*sin(psi*t);
+    elseif(psi<0)
+        val = sig*round(mod(0.5+-psi*t,1)).*(round(mod(0.55+-psi*t/2,1))-0.5)*2;
     else
         val = sig;
     end
+    
     subp = p(:,1)>D-Df*D&p(:,1)<D+Df*D;
     ff = D-abs(p(subp,1)-D)/(1-Df);
-    dp(subp,1)=dp(subp,1) - D*val.*ff/sum(ff);
-
+    if(ext)
+        dp(subp,1)=dp(subp,1) - D*val.*ff/sum(ff);
+    else
+        dp(subp,2)=dp(subp,2) - D*val.*ff/sum(ff);
+    end
+    
     subp = p(:,1)<Df*D;
     dp(subp,:)=dp(subp,:).*repmat(2*p(subp,1)/Df/D-1,1,2);
 

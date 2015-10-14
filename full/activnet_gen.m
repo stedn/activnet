@@ -1,5 +1,6 @@
-%% setup initiation params  0.0005 9 1 0 0.25 100000 0 0 0 0 1.296 54 0.05 9 0.05 0.1 1000 1
-function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,D,Df,ls,lf,tinc,tfin,seed)
+function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,Dx,Dy,Df,ls,lf,tinc,tfin,seed)
+    
+%% this mess just ensures that any string input is converted to numbers
     if(ischar(zet))
         zet = str2num(zet);
     end
@@ -33,8 +34,11 @@ function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,D,Df,ls,lf,tinc,
     if(ischar(sig))
         sig = str2num(sig);
     end
-    if(ischar(D))
-        D = str2num(D);
+    if(ischar(Dx))
+        Dx = str2num(Dx);
+    end
+    if(ischar(Dy))
+        Dy = str2num(Dy);
     end
     if(ischar(Df))
         Df = str2num(Df);
@@ -61,9 +65,9 @@ function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,D,Df,ls,lf,tinc,
     
     rng(seed);
     
-    %% convert inputs
+    %% use inputs to calculate number of filaments to add
     ncnt = ceil(L/ls)+1;
-    N = floor(4*D^2/lc/L);
+    N = floor(2*Dx*Dy/lc/L);
     
     nu=[];
     if(ups>0)
@@ -76,7 +80,7 @@ function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,D,Df,ls,lf,tinc,
         N = floor(N/2);
         p = zeros(N*ncnt,2);
         for i=1:N
-            p((i-1)*ncnt+1,:) = D*[rand rand];
+            p((i-1)*ncnt+1,:) = [Dx/2*rand Dy*rand];
             thet = rand*2*pi;
             for j = 2:ncnt
                 p((i-1)*ncnt+j,:) = p((i-1)*ncnt+j-1,:)+L/(ncnt-1.0)*[cos(thet) sin(thet)];
@@ -85,7 +89,7 @@ function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,D,Df,ls,lf,tinc,
     else
         p = zeros(N*ncnt,2);
         for i=1:N
-            p((i-1)*ncnt+1,:) = D*[2*rand rand];
+            p((i-1)*ncnt+1,:) = [Dx*rand Dy*rand];
             thet = rand*2*pi;
             for j = 2:ncnt
                 p((i-1)*ncnt+j,:) = p((i-1)*ncnt+j-1,:)+L/(ncnt-1.0)*[cos(thet) sin(thet)];
@@ -94,7 +98,7 @@ function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,D,Df,ls,lf,tinc,
     end
     
     
-    p = [mod(p(:,1),2*D),mod(p(:,2),D)];
+    p = [mod(p(:,1),Dx),mod(p(:,2),Dy)];
 
     
     fileID = 1;
@@ -113,12 +117,8 @@ function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,D,Df,ls,lf,tinc,
     fprintf(fileID,'\n');
     
     if(ups==0&&sig~=0)
-        if(ext)
-            activnet_pullext(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf,r,tinc,fileID);
-        else
-            activnet_pull(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf,r,tinc,fileID);
-        end
-    else
+        activnet_pull(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf,r,tinc,ext,fileID);
+    elseif(ups~=0)
         activnet_act(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf,r,tinc,fileID);
     end
 

@@ -1,4 +1,4 @@
-function Mz = sp_activnet_mass(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
+function Mz = activnet_mass_sp(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
 
     %% create velocity coupling matrix    
     l0 = L/(ncnt-1);
@@ -6,7 +6,7 @@ function Mz = sp_activnet_mass(t,z,zet,L,mu,kap,del,nu,psi,sig,D,Df,ncnt,lf)
     p = reshape(z,[],2);
     p = [mod(p(:,1),2*D),mod(p(:,2),D)];
     
-    Mo = zeros(length(p),length(p));
+    Mo = sparse(length(p),length(p));
     
     
     indL = 1:length(p);
