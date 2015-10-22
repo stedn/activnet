@@ -2,14 +2,12 @@ function netplot_str(p,L,lf,ls,Dx,Dy,clr,clr2,str_max)
     ncnt = ceil(L/ls)+1;
     l0 = L/(ncnt-1);
 
-    subpL = p;
-    subpR = p;
-    subpL=subpL(mod(1:length(subpL),ncnt)~=0,:);
-    subpR=subpR(mod(1:length(subpR),ncnt)~=1,:);
-    subpL(subpL(:,1)<Dx/4&subpR(:,1)>3*Dx/4,1)=subpL(subpL(:,1)<Dx/4&subpR(:,1)>3*Dx/4,1)+Dx;
-    subpL(subpL(:,2)<Dy/4&subpR(:,2)>2*Dy/4,2)=subpL(subpL(:,2)<Dy/4&subpR(:,2)>2*Dy/4,2)+Dy;
-    subpR(subpR(:,1)<Dx/4&subpL(:,1)>3*Dx/4,1)=subpR(subpR(:,1)<Dx/4&subpL(:,1)>3*Dx/4,1)+Dx;
-    subpR(subpR(:,2)<Dy/4&subpL(:,2)>2*Dy/4,2)=subpR(subpR(:,2)<Dy/4&subpL(:,2)>2*Dy/4,2)+Dy;
+    subpL=p(mod(1:length(p),ncnt)~=0,:);
+    subpR=p(mod(1:length(p),ncnt)~=1,:);
+    subpL(subpL(:,1)<Dx/3&subpR(:,1)>2*Dx/3,1)=subpL(subpL(:,1)<Dx/3&subpR(:,1)>2*Dx/3,1)+Dx;
+    subpL(subpL(:,2)<Dy/3&subpR(:,2)>2*Dy/3,2)=subpL(subpL(:,2)<Dy/3&subpR(:,2)>2*Dy/3,2)+Dy;
+    subpR(subpR(:,1)<Dx/3&subpL(:,1)>2*Dx/3,1)=subpR(subpR(:,1)<Dx/3&subpL(:,1)>2*Dx/3,1)+Dx;
+    subpR(subpR(:,2)<Dy/3&subpL(:,2)>2*Dy/3,2)=subpR(subpR(:,2)<Dy/3&subpL(:,2)>2*Dy/3,2)+Dy;
     
     subv = subpR-subpL;
     subv = subv./repmat(sqrt(subv(:,1).^2+subv(:,2).^2),1,2);
@@ -39,12 +37,10 @@ function netplot_str(p,L,lf,ls,Dx,Dy,clr,clr2,str_max)
 %     plot(XY(:,1),XY(:,2),'.');
     
     for i =1:length(XY)
-        if(norm([XY(i,1)'-XY(i,3)';XY(i,2)'-XY(i,4)'])<2*L)
-            if(kn(i))
-                line([XY(i,1)';XY(i,3)'],[XY(i,2)';XY(i,4)'],'Color',clr(str(i),:),'LineWidth',1);
-            else
-                line([XY(i,1)';XY(i,3)'],[XY(i,2)';XY(i,4)'],'Color',clr2(str(i),:),'LineWidth',1);
-            end
+        if(kn(i))
+            line([XY(i,1)';XY(i,3)'],[XY(i,2)';XY(i,4)'],'Color',clr(str(i),:),'LineWidth',1);
+        else
+            line([XY(i,1)';XY(i,3)'],[XY(i,2)';XY(i,4)'],'Color',clr2(str(i),:),'LineWidth',1);
         end
     end
     xlim([0 Dx]);

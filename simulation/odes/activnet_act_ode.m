@@ -45,16 +45,14 @@ function dz = activnet_act_ode(t,z,zet,L,mu,kap,xi,nu,psi,sig,Dx,Dy,Df,Dw,ncnt,l
         indL = 1:length(p);
         indL = indL(mod(indL,ncnt)~=0);
 
-        subpL = p;
-        subpR = p;
-        subpL=subpL(mod(1:length(subpL),ncnt)~=0,:);
-        subpR=subpR(mod(1:length(subpR),ncnt)~=1,:);
-
-        subpL(subpL(:,1)<Dx/4&subpR(:,1)>3*Dx/4,1)=subpL(subpL(:,1)<Dx/4&subpR(:,1)>3*Dx/4,1)+Dx;
-        subpL(subpL(:,2)<Dy/4&subpR(:,2)>3*Dy/4,2)=subpL(subpL(:,2)<Dy/4&subpR(:,2)>3*Dy/4,2)+Dy;
-        subpR(subpR(:,1)<Dx/4&subpL(:,1)>3*Dx/4,1)=subpR(subpR(:,1)<Dx/4&subpL(:,1)>3*Dx/4,1)+Dx;
-        subpR(subpR(:,2)<Dy/4&subpL(:,2)>3*Dy/4,2)=subpR(subpR(:,2)<Dy/4&subpL(:,2)>3*Dy/4,2)+Dy;
-
+        subpL=p(mod(1:length(p),ncnt)~=0,:);
+        subpR=p(mod(1:length(p),ncnt)~=1,:);
+        
+        subpL(subpL(:,1)<Dx/3&subpR(:,1)>2*Dx/3,1)=subpL(subpL(:,1)<Dx/3&subpR(:,1)>2*Dx/3,1)+Dx;
+        subpL(subpL(:,2)<Dy/3&subpR(:,2)>2*Dy/3,2)=subpL(subpL(:,2)<Dy/3&subpR(:,2)>2*Dy/3,2)+Dy;
+        subpR(subpR(:,1)<Dx/3&subpL(:,1)>2*Dx/3,1)=subpR(subpR(:,1)<Dx/3&subpL(:,1)>2*Dx/3,1)+Dx;
+        subpR(subpR(:,2)<Dy/3&subpL(:,2)>2*Dy/3,2)=subpR(subpR(:,2)<Dy/3&subpL(:,2)>2*Dy/3,2)+Dy;
+    
         subv = subpR-subpL;
         subv = subv./repmat(sqrt(subv(:,1).^2+subv(:,2).^2),1,2);
         subpL = subpL - l0*lf/2*subv;
