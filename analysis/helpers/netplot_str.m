@@ -36,7 +36,7 @@ function netplot_str(p,L,lf,ls,Dx,Dy,clr,clr2,str_max)
     str = max(min(length(clr),ceil(length(clr)*abs(str-l)/l/str_max)),1);
 %     plot(XY(:,1),XY(:,2),'.');
     
-    for i =1:length(XY)
+    for i =1:size(XY,1)
         if(kn(i))
             line([XY(i,1)';XY(i,3)'],[XY(i,2)';XY(i,4)'],'Color',clr(str(i),:),'LineWidth',1);
         else

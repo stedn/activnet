@@ -22,7 +22,7 @@ function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,Dx,Dy,Df,Dw,ls,l
     if(ischar(tfin)); tfin = str2num(tfin); end;
     if(ischar(seed)); seed = str2num(seed); end;
         
-    rng(seed);
+    rng(abs(seed));
     
     %% use inputs to calculate number of filaments to add
     ncnt = ceil(L/ls)+1;
@@ -44,7 +44,16 @@ function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,Dx,Dy,Df,Dw,ls,l
             p((i-1)*ncnt+j,:) = p((i-1)*ncnt+j-1,:)+L/(ncnt-1.0)*[cos(thet) sin(thet)];
         end
     end
-    
+    if(seed<0)
+        p = zeros(N*ncnt,2);
+        for i=1:N
+            p((i-1)*ncnt+1,:) = [Dx*(0.1+0.8*rand) Dy*(0.1+0.8*rand)];
+            thet = rand*2*pi;
+            for j = 2:ncnt
+                p((i-1)*ncnt+j,:) = p((i-1)*ncnt+j-1,:)+L/(ncnt-1.0)*[cos(thet) sin(thet)];
+            end
+        end
+    end
     
     p = [mod(p(:,1),Dx),mod(p(:,2),Dy)];
 

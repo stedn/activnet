@@ -2,7 +2,7 @@
 %% this mess just ensures that any string input is converted to numbers
 zet = 0.005;
 L = 4;
-mu = 1;
+mu = 0.1;
 kap = 0;
 xi = 1;
 ups = 1;
@@ -16,7 +16,7 @@ Df = 0.5;
 Dw = 0.1;
 ls = 4;
 lf = 0.05;
-tinc = 0.1;
+tinc = 0.01;
 tfin = 10;
 seed = 100;
 
