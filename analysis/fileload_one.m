@@ -1,5 +1,5 @@
-% bp = '/Users/wmcfadden/activ_final/';
-% code = 'wpcxcbhr';
+% bp = '/Users/wmcfadden/activ_free/';
+% code = 'yzxfbrhp';
 cd(bp)
 fid = fopen([bp code '_scr.txt']);
 C = textscan(fid, '%s','delimiter', '\n');
@@ -42,7 +42,7 @@ tl=0;
 stof = [];
 stoa = [];
 stot = [];
-inds = 2:floor(size(zt,1)/100):size(zt,1);
+inds = 2:floor(size(zt,1)/100):size(zt,1);%2:10:min(1000,size(zt,1));
 for ind = inds
     stot = [stot t(ind)];
     p = reshape(zt(ind,:),[],2);
@@ -90,7 +90,7 @@ for ind = inds
     stof = [stof sum(fx)];
     stoa = [stoa sum(abs(fx))];
 %     
-    yex = 2*abs(ups)/xi ;
+    yex = 4*abs(sig)/xi*Dx/(L/lc)^2 ;
     plot(bpos,bb.*nb/max(bc.*nc)*yex/2,'b','LineWidth',3);
     plot(bpos,bc.*nc/max(bc.*nc)*yex/2,'g','LineWidth',3);
     plot(bpos,nc/max(nc)*yex/2,'p','LineWidth',3);
@@ -100,8 +100,8 @@ for ind = inds
     set(gca,'fontsize',14)
         h_leg=annotation('textbox', [0.75 0.2 0.12 0.45],'BackgroundColor',[1 1 1],...
             'String',{code,['xi = ' num2str(xi)],['L = ' num2str(L)],['lc = ' num2str(lc)],...
-            ['mu = ' num2str(mu)],['ups = ' num2str(ups)],['phi = ' num2str(phi)],...
-            ['forcex = ' num2str(sum(fx))],['abs(forcex) = ' num2str(sum(abs(fx)))],['forcey = ' num2str(sum(fy))]});
+            ['mu = ' num2str(mu)],['sig = ' num2str(sig)],['phi = ' num2str(phi)],...
+            ['r = ' num2str(r)],['stress = ' num2str(sum(abs(fx)))]});
         set(h_leg,'FontSize',16);
         set(h,'PaperPositionMode','auto')
 
@@ -112,7 +112,6 @@ for ind = inds
 end
 if(exist('mov'))
     movie2avi(mov,[bp code '_mov.avi']);
-    close(h);
     h2 = figure;
     plot(stot,stof)
     hold on
@@ -120,3 +119,4 @@ if(exist('mov'))
     print('-dpng','-r0',[code '_fig.png']);
     close(h2)
 end
+close(h);

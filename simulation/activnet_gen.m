@@ -21,7 +21,8 @@ function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,Dx,Dy,Df,Dw,ls,l
     if(ischar(tinc)); tinc = str2num(tinc); end;
     if(ischar(tfin)); tfin = str2num(tfin); end;
     if(ischar(seed)); seed = str2num(seed); end;
-        
+    Dp = 1;
+    if(Df<0);Df=abs(Df);Dp = Df; end;
     rng(abs(seed));
     
     %% use inputs to calculate number of filaments to add
@@ -38,7 +39,7 @@ function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,Dx,Dy,Df,Dw,ls,l
     
     p = zeros(N*ncnt,2);
     for i=1:N
-        p((i-1)*ncnt+1,:) = [Dx*rand Dy*rand];
+        p((i-1)*ncnt+1,:) = [Dp*Dx*rand Dy*rand];
         thet = rand*2*pi;
         for j = 2:ncnt
             p((i-1)*ncnt+j,:) = p((i-1)*ncnt+j-1,:)+L/(ncnt-1.0)*[cos(thet) sin(thet)];
@@ -56,7 +57,6 @@ function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,Dx,Dy,Df,Dw,ls,l
     end
     
     p = [mod(p(:,1),Dx),mod(p(:,2),Dy)];
-
     
     fileID = 1;
     %% solve ode
@@ -73,7 +73,7 @@ function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,Dx,Dy,Df,Dw,ls,l
     end
     fprintf(fileID,'\n');
     
-    activnet(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,Dx,Dy,Df,Dw,ncnt,lf,r,tinc,fileID);
+    activnet(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,Dx,Dy,Df,Dw,Dp,ncnt,lf,r,tinc,fileID);
     
 
 end
