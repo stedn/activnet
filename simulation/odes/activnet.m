@@ -34,7 +34,7 @@ function activnet(N,tt,z0,zet,L,mu,kap,xi,nu,psi,sig,Dx,Dy,Df,Dw,Dp,ncnt,lf,r,ti
             p = reshape(z0,[],2);
             p = [mod(p(:,1),Dx),mod(p(:,2),Dy)];
 
-            i = randi(N,floor(r*2*tinc*N)+(rand<mod(r*2*tinc*N,1)),1);
+            i = randi(N,floor(r*istep*tinc*N)+(rand<mod(r*istep*tinc*N,1)),1);
             p((i-1)*ncnt+1,:) = [Dp*Dx*rand(size(i)) Dy*rand(size(i))];
             thet = rand(size(i))*2*pi;
             for j = 2:ncnt

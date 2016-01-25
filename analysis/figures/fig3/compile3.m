@@ -1,13 +1,20 @@
-bp = '/Users/wmcfadden/activ_rec/';
+bp = '/Users/wmcfadden/ext_gap_llcxi/';
 cd(bp);
 files = dir;
 files = {files.name};
+allt = [];
+allp = [];
+allg = [];
+allf = [];
+alln = {};
 for f = files
     if(strfind(f{1},'_scr') )
         code = strsplit(f{1},'_');
         if(exist([code{1} '_out.txt'],'file'))
             code = code{1}
-            fileload_one
+            measure3
+            alln = {alln{:} code};
         end
     end
 end
+save('allmeas','allt','allp','allg','allf','alla','alln')

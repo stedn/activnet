@@ -1,5 +1,5 @@
-% bp = '/Users/wmcfadden/activ_free/';
-% code = 'yzxfbrhp';
+bp = '/Users/wmcfadden/activ_please/';
+code = 'yybisthr';%gcqbbcyr
 cd(bp)
 fid = fopen([bp code '_scr.txt']);
 C = textscan(fid, '%s','delimiter', '\n');
@@ -39,9 +39,14 @@ indi = 1;
 dp = 0;
 op = reshape(zt(1,:),[],2);
 tl=0;
-inds = 1:floor(size(zt,1)/100):size(zt,1);%2:10:min(1000,size(zt,1));
+stof = [0];
+stog = [0];
+stoa = [0];
+stot = [0];
+inds = 1:floor(size(zt,1)/200):size(zt,1);%2:10:min(1000,size(zt,1));
 inds = inds(2:end);
 for ind = inds
+    stot = [stot t(ind)];
     p = reshape(zt(ind,:),[],2);
     p = [mod(p(:,1),Dx),mod(p(:,2),Dy)];
     
@@ -71,43 +76,32 @@ for ind = inds
     [bc,nc,s]=bindata_line(XY,abs(fx),bpos);
     [bb,nb,s]=bindata2((XY(:,1)+XY(:,3))/2,fx,bpos);
     [bc,nc,s]=bindata2((XY(:,1)+XY(:,3))/2,abs(fx),bpos);
-    
+
     whitebg('black')
     set(gcf,'Color',[0 0 0])
     set(gcf,'InvertHardcopy','off')
     netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,0.1);
 
-
-    axes('Position',[.75 .7 .12 .2])
-    title('vel plot')
-    box on
-    plot(p(:,1),v(:,1),'y.');
-    hold on;
-    plot(bpos,b,'r','LineWidth',4);
     
+    subind = p(:,1)<Dx*abs(Df)&p(:,1)>Dx*abs(Df)/2;
+    stog = [stog mean(v(subind,1)./(p(subind,1)-Dx*Dw))];
+    stof = [stof sum(fx)];
+    stoa = [stoa sum(abs(fx))];
     
-    
-    yex = 4*abs(sig+ups)/xi*Dx/(L/lc)^2 ;
-    plot(bpos,bb.*nb/max(bc.*nc)*yex/2,'b','LineWidth',3);
-    plot(bpos,bc.*nc/max(bc.*nc)*yex/2,'g','LineWidth',3);
-    plot(bpos,nc/max(nc)*yex/2,'p','LineWidth',3);
-    ylim(yex*[-1 1])
-    xlim([0,Dx])
-    ylabel('velocity/stress/density')
-    set(gca,'fontsize',14)
-        h_leg=annotation('textbox', [0.75 0.2 0.12 0.45],'BackgroundColor',[1 1 1],...
-            'String',{code,['xi = ' num2str(xi)],['L = ' num2str(L)],['lc = ' num2str(lc)],...
-            ['mu = ' num2str(mu)],['sig = ' num2str(sig)],['ups = ' num2str(ups)],['phi = ' num2str(phi)],...
-            ['r = ' num2str(r)],['stress = ' num2str(sum(abs(fx)))]});
-        set(h_leg,'FontSize',16);
-        set(h,'PaperPositionMode','auto')
-
     drawnow
     mov(indi) = getframe(h);
     clf
     indi = indi +1;
 end
-if(indi>2)
-    movie2avi(mov,[bp code '_mov.avi']);
+if(length(stof)>2)
+    movie2avi(mov,[bp code '_mov_ex.avi']);
+    h2 = figure;
+    [ax,p1,p2] = plotyy(stot,stof/Dy/abs(Dx*Df),stot,cumtrapz(stot,stog));
+    xlabel(ax(1),'Time') % label x-axis
+    ylabel(ax(1),'Stress') % label left y-axis
+    ylabel(ax(2),'Strain') % label right y-axis
+    set(h_leg,'FontSize',12);
+    print('-dpng','-r0',[code '_fig_ex.png']);
+    close(h2)
 end
 close(h);
