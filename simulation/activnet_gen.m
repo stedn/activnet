@@ -1,4 +1,4 @@
-function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,Dx,Dy,Df,Dw,ls,lf,tinc,tfin,seed)
+function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,Dx,Dy,Df,Dw,ls,lf,tinc,tfin,nonlin)
     
 %% this mess just ensures that any string input is converted to numbers
     if(ischar(zet)); zet = str2num(zet); end;
@@ -20,10 +20,10 @@ function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,Dx,Dy,Df,Dw,ls,l
     if(ischar(lf)); lf = str2num(lf); end;
     if(ischar(tinc)); tinc = str2num(tinc); end;
     if(ischar(tfin)); tfin = str2num(tfin); end;
-    if(ischar(seed)); seed = str2num(seed); end;
+    if(ischar(nonlin)); nonlin = str2num(nonlin); end;
     Dp = 1;
     if(Df<0);Df=abs(Df);Dp = Df; end;
-    rng(abs(seed));
+%     rng(abs(nonlin));
     
     %% use inputs to calculate number of filaments to add
     ncnt = ceil(L/ls)+1;
@@ -45,7 +45,7 @@ function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,Dx,Dy,Df,Dw,ls,l
             p((i-1)*ncnt+j,:) = p((i-1)*ncnt+j-1,:)+L/(ncnt-1.0)*[cos(thet) sin(thet)];
         end
     end
-    if(seed<0)
+    if(nonlin<0)
         p = zeros(N*ncnt,2);
         for i=1:N
             p((i-1)*ncnt+1,:) = [Dx*(0.2+0.6*rand) Dy*(0.2+0.6*rand)];
@@ -73,7 +73,7 @@ function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,Dx,Dy,Df,Dw,ls,l
     end
     fprintf(fileID,'\n');
     
-    activnet(N,tt,z0,zet,L,mu,kap,del,nu,psi,sig,Dx,Dy,Df,Dw,Dp,ncnt,lf,r,tinc,fileID);
+    activnet(N,tt,z0,zet,L,mu,muN,kap,del,nu,psi,sig,Dx,Dy,Df,Dw,Dp,ncnt,lf,r,tinc,fileID);
     
 
 end

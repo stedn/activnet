@@ -1,4 +1,4 @@
-function Mz = activnet_mass_sp(t,z,zet,L,mu,kap,xi,nu,psi,sig,Dx,Dy,Df,Dw,ncnt,lf,ext)
+function Mz = activnet_mass_sp(t,z,zet,L,mu,muN,kap,xi,nu,psi,sig,Dx,Dy,Df,Dw,ncnt,lf,ext)
 
     %% create velocity coupling matrix    
     l0 = L/(ncnt-1);

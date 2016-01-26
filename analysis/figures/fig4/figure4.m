@@ -6,6 +6,9 @@ load('allmeas')
 
 % figure
 alltau = [];
+alltaux=[];
+allsig=[];
+allsigx=[];
 go=[];
 for ind=1:size(allt,1)
     mu = abs(allp(ind,3));
@@ -17,6 +20,11 @@ for ind=1:size(allt,1)
     t = allt(ind,:);
     sl = allf(ind,:);
     if(allp(ind,8)~=1&&allp(ind,3)<0)
+        allsig = [allsig; max(sl)];
+        alltau = [alltau; t(find(sl==max(sl),1))];
+        allsigx= [allsigx; sscale];
+        alltaux= [alltaux; tscale];
+        
 %         subplot(2,1,1)
 %         if(allp(ind,5)==0.3)
 %             subplot(2,1,2)
@@ -30,9 +38,8 @@ for ind=1:size(allt,1)
         hold on
     end
 end
-% subind = allp(:,8)~=1&allp(:,3)>0;
-% sc1=allp(subind,6)./abs(allp(subind,3));
-% sc2=allp(subind,7).*allp(subind,5);
-% sc3=
-% 
+figure
+plot(allsigx,allsig,'.');
+figure
+plot(alltaux,alltau,'.');
 % plot(sc2./sc3,mean(alla(subind,end-10:end),2),'.')
