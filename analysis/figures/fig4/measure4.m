@@ -85,7 +85,7 @@ if(length(stof)>2)
     h2 = figure;
     plot(stot,stof/Dy),
     hold on
-%     plot(stot,stoa/Dy);
+    plot(stot,stoa/Dy);
     xlabel('Time') % label x-axis
     ylabel('Stress') % label left y-axis
     h_leg=annotation('textbox', [0.7 0.15 0.2 0.25],'BackgroundColor',[1 1 1],...
@@ -94,10 +94,10 @@ if(length(stof)>2)
     set(h_leg,'FontSize',12);
     print('-dpng','-r0',[code '_fig.png']);
     close(h2)
-%     allg = [allg; stog];
-%     alla = [alla; stoa];
-%     allf = [allf; stof];
-%     allt = [allt; stot];
-%     allp = [allp; zet L mu kap lc xi ups phi psi r sig Dx Dy Df Dw];
+    allg = [allg; stog];
+    alla = [alla; stoa];
+    allf = [allf; stof];
+    allt = [allt; stot];
+    allp = [allp; zet L mu kap lc xi ups phi psi r sig Dx Dy Df Dw];
 end
 % close(h);

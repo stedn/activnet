@@ -1,4 +1,4 @@
-function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,Dx,Dy,Df,Dw,ls,lf,tinc,tfin,nonlin)
+function p = activnet_gen(zet,L,mu,kap,lc,xi,ups,phi,psi,r,sig,Dx,Dy,Df,Dw,ls,lf,tinc,tfin,nonlin)
     
 %% this mess just ensures that any string input is converted to numbers
     if(ischar(zet)); zet = str2num(zet); end;
@@ -6,7 +6,7 @@ function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,Dx,Dy,Df,Dw,ls,l
     if(ischar(mu)); mu = str2num(mu); end;
     if(ischar(kap)); kap = str2num(kap); end;
     if(ischar(lc)); lc = str2num(lc); end;
-    if(ischar(del)); del = str2num(del); end;
+    if(ischar(xi)); xi = str2num(xi); end;
     if(ischar(ups)); ups = str2num(ups); end;
     if(ischar(phi)); phi = str2num(phi); end;
     if(ischar(psi)); psi = str2num(psi); end;
@@ -54,7 +54,10 @@ function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,Dx,Dy,Df,Dw,ls,l
                 p((i-1)*ncnt+j,:) = p((i-1)*ncnt+j-1,:)+L/(ncnt-1.0)*[cos(thet) sin(thet)];
             end
         end
+        nonlin=-nonlin;
     end
+    
+    muN = nonlin;
     
     p = [mod(p(:,1),Dx),mod(p(:,2),Dy)];
     
@@ -73,7 +76,7 @@ function p = activnet_gen(zet,L,mu,kap,lc,del,ups,phi,psi,r,sig,Dx,Dy,Df,Dw,ls,l
     end
     fprintf(fileID,'\n');
     
-    activnet(N,tt,z0,zet,L,mu,muN,kap,del,nu,psi,sig,Dx,Dy,Df,Dw,Dp,ncnt,lf,r,tinc,fileID);
+    activnet(N,tt,z0,zet,L,mu,muN,kap,xi,nu,psi,sig,Dx,Dy,Df,Dw,Dp,ncnt,lf,r,tinc,fileID);
     
 
 end

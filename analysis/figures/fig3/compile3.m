@@ -1,4 +1,4 @@
-bp = '/Users/wmcfadden/ext_gap_llcxi/';
+bp = '/Users/wmcfadden/ext_gap_llc/';
 cd(bp);
 files = dir;
 files = {files.name};
@@ -17,4 +17,4 @@ for f = files
         end
     end
 end
-save('allmeas','allt','allp','allg','allf','alla','alln')
+save('allmeas','allt','allp','allg','allf','alln')

@@ -1,4 +1,4 @@
-bp = '/Users/wmcfadden/activ_rec/';
+bp = '/Users/wmcfadden/activ_free/';
 cd(bp);
 files = dir;
 files = {files.name};
@@ -6,6 +6,8 @@ allt = [];
 allp = [];
 allg = [];
 alla = [];
+allc = [];
+alle = [];
 allf = [];
 alln = {};
 for f = files
@@ -13,9 +15,10 @@ for f = files
         code = strsplit(f{1},'_');
         if(exist([code{1} '_out.txt'],'file'))
             code = code{1}
-            measure4
-            alln = {alln{:} code};
+            measure4a
         end
     end
 end
-save('allmeas','allt','allp','allg','alla','allf','alln')
+if(size(allt)>0)
+    save('allmeas','allt','allp','allg','alla','allf','alle','allc','alln')
+end

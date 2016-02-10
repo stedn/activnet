@@ -39,9 +39,10 @@ indi = 1;
 dp = 0;
 op = reshape(zt(1,:),[],2);
 tl=0;
-inds = 1:floor(size(zt,1)/100):size(zt,1);%2:10:min(1000,size(zt,1));
+inds = 1:floor(size(zt,1)/10):size(zt,1);%2:10:min(1000,size(zt,1));
 inds = inds(2:end);
 for ind = inds
+    clf
     p = reshape(zt(ind,:),[],2);
     p = [mod(p(:,1),Dx),mod(p(:,2),Dy)];
     
@@ -98,16 +99,23 @@ for ind = inds
         h_leg=annotation('textbox', [0.75 0.2 0.12 0.45],'BackgroundColor',[1 1 1],...
             'String',{code,['xi = ' num2str(xi)],['L = ' num2str(L)],['lc = ' num2str(lc)],...
             ['mu = ' num2str(mu)],['sig = ' num2str(sig)],['ups = ' num2str(ups)],['phi = ' num2str(phi)],...
-            ['r = ' num2str(r)],['stress = ' num2str(sum(abs(fx)))]});
+            ['r = ' num2str(r)],['stress = ' num2str(sum(abs(fx)))],['t = ' num2str(tl)]});
         set(h_leg,'FontSize',16);
         set(h,'PaperPositionMode','auto')
 
     drawnow
     mov(indi) = getframe(h);
-    clf
+    
     indi = indi +1;
 end
 if(indi>2)
+    xlabel('Time') % label x-axis
+    ylabel('Stress') % label left y-axis
+%     h_leg=annotation('textbox', [0.7 0.15 0.2 0.25],'BackgroundColor',[1 1 1],...
+%             'String',{code,['xi = ' num2str(xi)],['L = ' num2str(L)],['lc = ' num2str(lc)],...
+%             ['mu = ' num2str(mu)],['ups = ' num2str(ups)],['phi = ' num2str(phi)],['r = ' num2str(r)]});
+%     set(h_leg,'FontSize',12);
+    print('-dpng','-r0',[code '_fig.png']);
     movie2avi(mov,[bp code '_mov.avi']);
 end
 close(h);

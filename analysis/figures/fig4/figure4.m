@@ -1,4 +1,4 @@
-bp = '/Users/wmcfadden/activ_please/';
+bp = '/Users/wmcfadden/activ_free/';
 cd(bp);
 load('allmeas')
 
@@ -32,7 +32,7 @@ for ind=1:size(allt,1)
     %     modelFun =  @(p,x) 1-p(1)*exp(-x/p(2));
     %     [coefEsts,R,J,CovB,MSE,ErrorModelInfo] = nlinfit(t(cutoff:end-1), sl(cutoff:end), modelFun, [1 scale]);
     %     if(allp(ind,7)==0.1)    
-            plot(t/tscale,sl/sscale,'DisplayName',[num2str(allp(ind,2)) ' ' num2str(abs(allp(ind,3))) ' ' num2str(allp(ind,5)) ' ' num2str(allp(ind,6)) ' ' num2str(abs(allp(ind,7))) ' ' num2str(abs(allp(ind,8)))])
+            plot(t/tscale,sl/sscale,'DisplayName',[alln{ind-1} num2str(allp(ind,2)) ' ' num2str(abs(allp(ind,3))) ' ' num2str(allp(ind,5)) ' ' num2str(allp(ind,6)) ' ' num2str(abs(allp(ind,7))) ' ' num2str(abs(allp(ind,8)))])
     %     end
         %     plot(t(1:end-1)/scale,sl,'.','DisplayName',[num2str(allp(ind,2)) ' ' num2str(abs(allp(ind,3))) ' ' num2str(allp(ind,5)) ' ' num2str(allp(ind,6)) ' ' num2str(abs(allp(ind,11)/allp(ind,6)))])
         hold on

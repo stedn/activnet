@@ -29,19 +29,25 @@ stof = [0];
 stog = [0];
 stoa = [0];
 stot = [0];
-inds = 1:floor(size(zt,1)/1000):size(zt,1);%2:10:min(1000,size(zt,1));
+inds = 1:ceil(size(zt,1)/1000):size(zt,1);%2:10:min(1000,size(zt,1));
 inds = inds(2:end);
 h1 = figure;
     
 for ind = inds
-    stot = [stot t(ind)];
     p = reshape(zt(ind,:),[],2);
     p = [mod(p(:,1),Dx),mod(p(:,2),Dy)];
     
     dp = (p-op);
-    op = p;
     dp(dp(:,1)>Dx/4,1)=dp(dp(:,1)>Dx/4,1)-Dx;
     dp(dp(:,1)<-Dx/4,1)=dp(dp(:,1)<-Dx/4,1)+Dx;
+    subind = dp(1:2:end,1)>5;
+    
+    op = p;
+    
+    dp(subind,:)=[];
+    p(subind,:)=[];
+    
+    stot = [stot t(ind)];
     v = dp/(t(ind)-tl);
     tl = t(ind);
     bpos = linspace(0,Dx,11);
@@ -49,17 +55,17 @@ for ind = inds
     [b,n,s]=bindata2(p(:,1),v(:,1),bpos);
 
     [XY,sx,sy]=get_str(p,L,lf,ls,Dx,Dy);   
-    
+
     fx = mu*sx;
     if(mu<0)
         fx = -fx.*(1+99*double(sx>0));
     end
-    
+
     fy = mu*sy;
     if(mu<0)
         fy = -fy.*(1+99*double(sy>0));
     end
-    
+
     [bb,nb,s]=bindata_line(XY,fx,bpos);
     [bc,nc,s]=bindata_line(XY,abs(fx),bpos);
     [bb,nb,s]=bindata2((XY(:,1)+XY(:,3))/2,fx,bpos);
@@ -76,6 +82,7 @@ for ind = inds
     stoa = [stoa sum(abs(fx))];
     indi = indi +1;
     
+    
 end
 close(h1)
 if(length(stof)>2)
@@ -83,10 +90,10 @@ if(length(stof)>2)
     [ax,p1,p2] = plotyy(stot,stof/Dy/abs(Dx*Df),stot,cumtrapz(stot,stog),'loglog','loglog');
     xlabel(ax(1),'Time') % label x-axis
     ylabel(ax(1),'Stress/Length') % label left y-axis
-    ylabel(ax(2),'Strain') % label right y-axis
+    ylabel(ax(2),'Strain') % label rigdat = [ht y-axis
     h_leg=annotation('textbox', [0.15 0.7 0.2 0.2],'BackgroundColor',[1 1 1],...
             'String',{code,['xi = ' num2str(xi)],['L = ' num2str(L)],['lc = ' num2str(lc)],...
-            ['mu = ' num2str(mu)],['sig = ' num2str(sig)]});
+            ['mu = ' num2str(mu)],['sig = ' num2str(sig)],['r = ' num2str(r)]});
     set(h_leg,'FontSize',12);
     print('-dpng','-r0',[code '_fig.png']);
     close(h2)
