@@ -100,11 +100,10 @@ function dz = activnet_act_ode(t,z,zet,L,mu,kap,xi,nu,psi,sig,Dx,Dy,Df,Dw,ncnt,l
             elseif((1-g(ind,2))<lf)
                 edg = edg*(1-g(ind,2))/lf;
             end
-            mul = 1;
+            
             if(psi>0)
-                mul = double(g(ind,5)>=psi*abs(-Dx*Df));
-            end
-            tnu = nu(ceil(i/ncnt),ceil(j/ncnt))*mul;
+            double(g(ind,5)>=psi*abs(-Dx*Df))
+            tnu = nu(ceil(i/ncnt),ceil(j/ncnt))*;
             dp(i:i+1,:) = dp(i:i+1,:) + edg*tnu/lm*[vm*(1-f(ind,1));vm*f(ind,1)];
             dp(j:j+1,:) = dp(j:j+1,:) - edg*tnu/lm*[vm*(1-f(ind,2));vm*f(ind,2)];
             

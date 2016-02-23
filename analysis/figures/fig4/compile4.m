@@ -1,4 +1,4 @@
-bp = '/Users/wmcfadden/activ_free/';
+bp = '/Users/wmcfadden/activ_please/';
 cd(bp);
 files = dir;
 files = {files.name};
@@ -15,7 +15,7 @@ for f = files
         code = strsplit(f{1},'_');
         if(exist([code{1} '_out.txt'],'file'))
             code = code{1}
-            measure4a
+            measure4b
         end
     end
 end

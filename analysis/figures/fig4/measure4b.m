@@ -106,6 +106,20 @@ if(length(stof)>2)
     set(h_leg,'FontSize',12);
     print('-dpng','-r0',[code '_fig.png']);
     close(h2)
+    if(~isempty(allg))
+        stog = [stog zeros(1,size(allg,2)-length(stog))];
+        stof = [stof zeros(1,size(allf,2)-length(stof))];
+        stot = [stot zeros(1,size(allt,2)-length(stot))];
+        stoc = [stoc zeros(1,size(allc,2)-length(stoc))];
+        stoe = [stoe zeros(1,size(alle,2)-length(stoe))];
+        stoa = [stoa zeros(1,size(alla,2)-length(stoa))];
+        allg = [allg zeros(size(allg,1),length(stog)-size(allg,2))];
+        allf = [allf zeros(size(allf,1),length(stof)-size(allf,2))];
+        allt = [allt zeros(size(allt,1),length(stot)-size(allt,2))];
+        allc = [allc zeros(size(allc,1),length(stoc)-size(allc,2))];
+        alle = [alle zeros(size(alle,1),length(stoe)-size(alle,2))];
+        alla = [alla zeros(size(alla,1),length(stoa)-size(alla,2))];
+    end
     allg = [allg; stog];
     alla = [alla; stoa];
     allf = [allf; stof];

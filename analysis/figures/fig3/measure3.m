@@ -40,7 +40,12 @@ for ind = inds
     dp = (p-op);
     dp(dp(:,1)>Dx/4,1)=dp(dp(:,1)>Dx/4,1)-Dx;
     dp(dp(:,1)<-Dx/4,1)=dp(dp(:,1)<-Dx/4,1)+Dx;
-    subind = dp(1:2:end,1)>5;
+    
+    jumpcut = 0.1;
+    
+    subind = abs(dp(1:2:end-1,2))>jumpcut|abs(dp(2:2:end,2))>jumpcut|abs(dp(1:2:end-1,1))>jumpcut|abs(dp(2:2:end,1))>jumpcut;
+    subind = [subind subind]';
+    subind = subind(:);
     
     op = p;
     
@@ -97,8 +102,16 @@ if(length(stof)>2)
     set(h_leg,'FontSize',12);
     print('-dpng','-r0',[code '_fig.png']);
     close(h2)
+    if(~isempty(allg))
+        stog = [stog zeros(1,size(allg,2)-length(stog))];
+        stof = [stof zeros(1,size(allg,2)-length(stof))];
+        stot = [stot zeros(1,size(allg,2)-length(stot))];
+        allg = [allg zeros(size(allg,1),length(stog)-size(allg,2))];
+        allf = [allf zeros(size(allf,1),length(stof)-size(allf,2))];
+        allt = [allt zeros(size(allt,1),length(stot)-size(allt,2))];
+    end
     allg = [allg; stog];
-    allf = [allg; stof];
+    allf = [allf; stof];
     allt = [allt; stot];
     allp = [allp; zet L mu kap lc xi ups phi psi r sig Dx Dy Df Dw];
 end

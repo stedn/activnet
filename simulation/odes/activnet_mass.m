@@ -20,7 +20,9 @@ function Mz = activnet_mass(t,z,zet,L,mu,muN,kap,xi,nu,psi,sig,Dx,Dy,Df,Dw,ncnt,
     subpR(subpR(:,1)<Dx/3&subpL(:,1)>2*Dx/3,1)=subpR(subpR(:,1)<Dx/3&subpL(:,1)>2*Dx/3,1)+Dx;
     subpR(subpR(:,2)<Dy/3&subpL(:,2)>2*Dy/3,2)=subpR(subpR(:,2)<Dy/3&subpL(:,2)>2*Dy/3,2)+Dy;
     
-    % extend ends slightly for smooth falloff
+    % extend ends slightly for smooth force falloff
+    % this entire block is just to ensure that our diffeq is continuous
+    % as segments move past each other
     subv = subpR-subpL;
     subv = subv./repmat(sqrt(subv(:,1).^2+subv(:,2).^2),1,2);
     subpL = subpL - l0*lf/2*subv;

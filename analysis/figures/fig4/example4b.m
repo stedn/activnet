@@ -1,5 +1,5 @@
-bp = '/Users/wmcfadden/activ_please/';
-code = 'owhxcrye';%gcqbbcyr
+bp = '/Users/wmcfadden/activ_rec_examples/';
+code = 'ashwxvvj';%gcqbbcyr
 cd(bp)
 fid = fopen([bp code '_scr.txt']);
 C = textscan(fid, '%s','delimiter', '\n');

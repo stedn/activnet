@@ -1,4 +1,4 @@
-bp = '/Users/wmcfadden/ext_gap_llc/';
+bp = '/Users/wmcfadden/extend_rec_sweep/';
 cd(bp);
 files = dir;
 files = {files.name};

@@ -4,7 +4,6 @@ function [XY, sx, sy, str] = get_str(p,L,lf,ls,Dx,Dy)
 
     subpL=p(mod(1:length(p),ncnt)==1,:);
     subpR=p(mod(1:length(p),ncnt)==0,:);
-    
     subpL(subpL(:,1)<Dx/3&subpR(:,1)>2*Dx/3,1)=subpL(subpL(:,1)<Dx/3&subpR(:,1)>2*Dx/3,1)+Dx;
     subpL(subpL(:,2)<Dy/3&subpR(:,2)>2*Dy/3,2)=subpL(subpL(:,2)<Dy/3&subpR(:,2)>2*Dy/3,2)+Dy;
     subpR(subpR(:,1)<Dx/3&subpL(:,1)>2*Dx/3,1)=subpR(subpR(:,1)<Dx/3&subpL(:,1)>2*Dx/3,1)+Dx;
