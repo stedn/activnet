@@ -1,4 +1,4 @@
-bp = '/Users/wmcfadden/activ_please/';
+bp = '/Users/wmcfadden/activ_rec_sweep/';
 cd(bp);
 files = dir;
 files = {files.name};

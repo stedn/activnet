@@ -33,7 +33,7 @@ stoa = [0];
 stot = [0];
 stoe = [0];
 stoc = [0];
-inds = 1:floor(size(zt,1)/100):size(zt,1);%2:10:min(1000,size(zt,1));
+inds = 1:floor(size(zt,1)/200):size(zt,1);%2:10:min(1000,size(zt,1));
 inds = inds(2:end);
 h1 = figure;
 

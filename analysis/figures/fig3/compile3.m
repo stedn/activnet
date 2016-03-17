@@ -1,4 +1,4 @@
-bp = '/Users/wmcfadden/extend_rec_sweep/';
+bp = '/Users/wmcfadden/extend_instatear/';
 cd(bp);
 files = dir;
 files = {files.name};

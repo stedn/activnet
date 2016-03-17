@@ -39,7 +39,7 @@ indi = 1;
 dp = 0;
 op = reshape(zt(1,:),[],2);
 tl=0;
-inds = 1:floor(size(zt,1)/20):size(zt,1);%2:10:min(1000,size(zt,1));
+inds = 1:floor(size(zt,1)/200):size(zt,1);%2:10:min(1000,size(zt,1));
 inds = inds(2:end);
 for ind = inds
     clf
