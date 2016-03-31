@@ -1,5 +1,5 @@
-% bp = '/Users/wmcfadden/activ_free/';
-% code = 'yzxfbrhp';
+ bp = '/Users/wmcfadden/extend_llc_ver/';
+code = 'wkwzgrte';
 cd(bp)
 fid = fopen([bp code '_scr.txt']);
 C = textscan(fid, '%s','delimiter', '\n');
@@ -39,7 +39,7 @@ indi = 1;
 dp = 0;
 op = reshape(zt(1,:),[],2);
 tl=0;
-inds = 1:floor(size(zt,1)/200):size(zt,1);%2:10:min(1000,size(zt,1));
+inds = 1:ceil(size(zt,1)/200):size(zt,1);%2:10:min(1000,size(zt,1));
 inds = inds(2:end);
 for ind = inds
     clf
@@ -76,7 +76,7 @@ for ind = inds
     whitebg('black')
     set(gcf,'Color',[0 0 0])
     set(gcf,'InvertHardcopy','off')
-    netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,0.1);
+    netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,0.02);
 
 
     axes('Position',[.75 .7 .12 .2])

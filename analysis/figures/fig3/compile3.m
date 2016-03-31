@@ -1,4 +1,4 @@
-bp = '/Users/wmcfadden/extend_instatear/';
+bp = '/Users/wmcfadden/extend_llc_ver/';
 cd(bp);
 files = dir;
 files = {files.name};
@@ -13,7 +13,6 @@ for f = files
         if(exist([code{1} '_out.txt'],'file'))
             code = code{1}
             measure3
-            alln = {alln{:} code};
         end
     end
 end

@@ -29,9 +29,9 @@ for ind=1:size(allt,1)
     [coefEsts,R,J,CovB,MSE,ErrorModelInfo] = nlinfit(t(1:ct), st(1:ct), modelFun, [0.5 100]);
     stogam = [stogam coefEsts(1)];
     stotau = [stotau coefEsts(2)];
-    if(allp(ind,8)==0.33)
-    plot(t(1:ct)/allp(ind,6).*sqrt(allp(ind,7)),st(1:ct)*abs(allp(ind,3))^(1/10)./sqrt(allp(ind,7)),'DisplayName',[num2str(allp(ind,3)), ' ',  num2str(allp(ind,6)), ' ',  num2str(allp(ind,7)), ' ',  num2str(allp(ind,8))]);
-    hold on;
+    if(allp(ind,3)==-0.01)
+        plot(t(1:ct)/allp(ind,6).*sqrt(allp(ind,7)),st(1:ct)./sqrt(allp(ind,7)),'DisplayName',[num2str(allp(ind,3)), ' ',  num2str(allp(ind,6)), ' ',  num2str(allp(ind,7)), ' ',  num2str(allp(ind,8))]);
+        hold on;
     end
 end
 

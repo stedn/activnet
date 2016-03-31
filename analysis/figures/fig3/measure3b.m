@@ -101,5 +101,6 @@ if(length(stof)>2)
     allf = [allg; stof];
     allt = [allt; stot];
     allp = [allp; zet L mu kap lc xi ups phi psi r sig Dx Dy Df Dw];
+    alln = {alln{:} code};
 end
 % close(h);
