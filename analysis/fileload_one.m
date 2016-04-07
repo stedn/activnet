@@ -1,5 +1,5 @@
- bp = '/Users/wmcfadden/extend_llc_ver/';
-code = 'wkwzgrte';
+%  bp = '/Users/wmcfadden/extend_llc_ver/';
+% code = 'wkwzgrte';
 cd(bp)
 fid = fopen([bp code '_scr.txt']);
 C = textscan(fid, '%s','delimiter', '\n');
@@ -39,7 +39,7 @@ indi = 1;
 dp = 0;
 op = reshape(zt(1,:),[],2);
 tl=0;
-inds = 1:ceil(size(zt,1)/200):size(zt,1);%2:10:min(1000,size(zt,1));
+inds = 1:ceil(size(zt,1)/20):size(zt,1);%2:10:min(1000,size(zt,1));
 inds = inds(2:end);
 for ind = inds
     clf
