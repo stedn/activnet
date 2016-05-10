@@ -1,5 +1,3 @@
-bp = '/Users/wmcfadden/extend_llc_ver/';
-code = 'mtazskxf';%gcqbbcyr
 cd(bp)
 
 %% load param file and decipher params
@@ -30,47 +28,29 @@ zt = A(:,2:end);
 %% store initial positions and initial measurements (all 0)
 op = reshape(zt(1,:),[],2);
 tl=0;
-stof = 0;
-stog = 0;
-stoa = 0;
-stot = 0;
+stof = [];
+stog = [];
+stoa = [];
+stot = [];
+stoe = [];
+stoc = [];
+stow = [];
 
    
 %% setup timepoints and space points to measure
-inds = 1:ceil(size(zt,1)/200):size(zt,1);
+inds = 1:ceil(size(zt,1)/1000):size(zt,1);
 inds = inds(2:end);
 bpos = linspace(0,Dx,51);
 bpos = bpos(1:end-1)+bpos(2)/2;
 ll = 4;
 rl = 16;
 
-%% for loop over timepoints to display
+%% for loop over timepoints to measure
 
-h1 = figure; 
-clear mov mov2
-h = figure('Position', [50, 100, 100+600*Dx/Dy, 600]);
-
-lst = size(zt,1);
-trp = repmat((1:lst)'/lst,1,3);
-temp=flipud(winter(lst));
-temp2 = bone(2*lst);
-cc = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
-temp=hot(2*lst);
-cc2 = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
-indi = 1;
-
+h1 = figure;  
 for ind = inds
     p = reshape(zt(ind,:),[],2);
     p = [mod(p(:,1),Dx),mod(p(:,2),Dy)];
-    
-    figure(h)
-    clf
-    netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,0.05);
-
-    colormap([flipud(cc2);cc])
-    colorbar('westoutside')
-    drawnow
-    mov(indi) = getframe(h);
     
     dp = (p-op);
     op = p;
@@ -89,60 +69,50 @@ for ind = inds
     tl = t(ind);
     
     % compute filament strain
-    [XY,sx,sy]=get_str(p,L,lf,ls,Dx,Dy);   
-
+    [XY,sx,sy,str]=get_str(p,L,lf,ls,Dx,Dy);   
+    cpx = (XY(:,1)+XY(:,3))/2;
+    
     % compute filament tension
+    fstr = mu*str;
     fx = mu*sx;
     fy = mu*sy;
     if(mu<0)
         fx = -fx.*(1+99*double(sx>0));
         fy = -fy.*(1+99*double(sy>0));
+        fstr = -fstr.*(1+99*double(str>0));
     end
 
     %bin tension data
     [bb,nb,sb]=bindata_line(XY,fx,bpos);
     [bc,nc,sc]=bindata_line(XY,abs(fx),bpos);
     
-    
     subind = p(:,1)<=bpos(rl)&p(:,1)>=bpos(ll);
-    
     % store data
     stot = [stot t(ind)];
     stog = [stog nanmean(v(subind,1)./(p(subind,1)-Dx*Dw))];
+    stow = [stow (prctile(cpx,95)-prctile(cpx,5))];
     stof = [stof nanmean(bb(ll:rl).*nb(ll:rl))/Dy];
     stoa = [stoa nanmean(bc(ll:rl).*nc(ll:rl))/Dy];
+    stoe = [stoe sum(fstr(str>0))];
+    stoc = [stoc sum(fstr(str<0))];
     
     % plot spatially resolved data 
-    figure(h1)
-    subplot(2,1,1)
-    plot(p(~subind,1),v(~subind,1),'.')
-    hold on
-    plot(p(subind,1),v(subind,1),'.')
-    hold off
-    xlim([0,Dx/2])
-    ylim([0,0.5*10^-3])
-    subplot(2,1,2)
-    plot(bpos,bb.*nb/Dy)
-    hold on
-    plot(bpos(ll:rl),bb(ll:rl).*nb(ll:rl)/Dy)
-    hold off
-    xlim([0,Dx/2])
-    ylim([0,-1.1*sig])
-    
-    
-    drawnow
-    mov2(indi) = getframe(h1);
-    
-    indi=indi+1;
-    
+%     subplot(2,1,1)
+%     plot(p(~subind,1),v(~subind,1),'.')
+%     hold on
+%     plot(p(subind,1),v(subind,1),'.')
+%     hold off
+%     subplot(2,1,2)
+%     plot(bpos,bb.*nb/Dy)
+%     hold on
+%     plot(bpos(ll:rl),bb(ll:rl).*nb(ll:rl)/Dy)
+%     hold off
+%     drawnow
 end
+close(h1)
 
 %% if there was any data to store we will now display it and save it
 if(length(stof)>2)
-    movie2avi(mov,[bp code '_mov_ex.avi']);
-    close(h);
-    movie2avi(mov2,[bp code '_data_ex.avi']);
-    close(h1);
     
     h2 = figure;
     [ax,p1,p2] = plotyy(stot/10,stof,stot/10,cumtrapz(stot,stog));
@@ -152,11 +122,34 @@ if(length(stof)>2)
     h_leg=annotation('textbox', [0.65 0.15 0.15 0.2],...
             'String',{['\xi = ' num2str(xi)],['L = ' num2str(L)],['l_c = ' num2str(lc)],...
             ['\mu = ' num2str(mu)],['\sigma = ' num2str(sig)]});
-    print('-dpdf','-r0',[code '_ex.pdf']);
+    print('-dpdf','-r0',[code '_fig.pdf']);
     close(h2)
     
-    
+    % saving data, must extend sto data to fit with all data
+    if(~isempty(allg))
+        stog = [stog zeros(1,size(allg,2)-length(stog))];
+        stof = [stof zeros(1,size(allg,2)-length(stof))];
+        stot = [stot zeros(1,size(allg,2)-length(stot))];
+        stoc = [stoc zeros(1,size(allc,2)-length(stoc))];
+        stoe = [stoe zeros(1,size(alle,2)-length(stoe))];
+        stoa = [stoa zeros(1,size(alla,2)-length(stoa))];
+        stow = [stow zeros(1,size(allw,2)-length(stow))];
+        allg = [allg zeros(size(allg,1),length(stog)-size(allg,2))];
+        allf = [allf zeros(size(allf,1),length(stof)-size(allf,2))];
+        allt = [allt zeros(size(allt,1),length(stot)-size(allt,2))];
+        allc = [allc zeros(size(allc,1),length(stoc)-size(allc,2))];
+        alle = [alle zeros(size(alle,1),length(stoe)-size(alle,2))];
+        alla = [alla zeros(size(alla,1),length(stoa)-size(alla,2))];
+        allw = [allw zeros(size(allw,1),length(stow)-size(allw,2))];
+    end
+    % concatenate data with all matrices
+    allg = [allg; stog];
+    allf = [allf; stof];
+    allt = [allt; stot];
+    allc = [allc; stoc];
+    alle = [alle; stoe];
+    alla = [alla; stoa];
+    allw = [allw; stow];
+    allp = [allp; zet L mu kap lc xi ups phi psi r sig Dx Dy Df Dw];
+    alln = {alln{:} code};
 end
-
-
-

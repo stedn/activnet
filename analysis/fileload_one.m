@@ -73,7 +73,7 @@ for ind = inds
     [bb,nb,s]=bindata2((XY(:,1)+XY(:,3))/2,fx,bpos);
     [bc,nc,s]=bindata2((XY(:,1)+XY(:,3))/2,abs(fx),bpos);
     
-    whitebg('black')
+%     whitebg('black')
     set(gcf,'Color',[0 0 0])
     set(gcf,'InvertHardcopy','off')
     netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,0.02);

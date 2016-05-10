@@ -31,9 +31,9 @@ stof = [0];
 stog = [0];
 stoa = [0];
 stot = [0];
-stoc = [0];
 stoe = [0];
-inds = 1:floor(size(zt,1)/100):size(zt,1);%2:10:min(1000,size(zt,1));
+stoc = [0];
+inds = 1:size(zt,1);%2:10:min(1000,size(zt,1));
 inds = inds(2:end);
 h1 = figure;
 
@@ -46,14 +46,27 @@ for ind = inds
     op = p;
     dp(dp(:,1)>Dx/4,1)=dp(dp(:,1)>Dx/4,1)-Dx;
     dp(dp(:,1)<-Dx/4,1)=dp(dp(:,1)<-Dx/4,1)+Dx;
+    
+    jumpcut = 0.1;
+    
+    subind = abs(dp(1:2:end-1,2))>jumpcut|abs(dp(2:2:end,2))>jumpcut|abs(dp(1:2:end-1,1))>jumpcut|abs(dp(2:2:end,1))>jumpcut;
+    subind = [subind subind]';
+    subind = subind(:);
+    
+    op = p;
+    
+    dp(subind,:)=[];
+    p(subind,:)=[];
+    
+    
     v = dp/(t(ind)-tl);
     tl = t(ind);
     bpos = linspace(0,Dx,16);
-    bpos = bpos(5:end-5)+bpos(2)/2;
+    bpos = bpos(1:end-1)+bpos(2)/2;
     [b,n,s]=bindata2(p(:,1),v(:,1),bpos);
 
     [XY,sx,sy,str]=get_str(p,L,lf,ls,Dx,Dy);   
-    
+        
     fx = mu*sx;
     if(mu<0)
         fx = -fx.*(1+99*double(sx>0));
@@ -64,48 +77,64 @@ for ind = inds
         fy = -fy.*(1+99*double(sy>0));
     end
     
-    [bb,nb,s]=bindata_line(XY,fx,bpos);
-    [bc,nc,s]=bindata_line(XY,abs(fx),bpos);
+    fstr = mu*str;
+    if(mu<0)
+        fstr = -fstr.*(1+99*double(str>0));
+    end
     
-    cpx = (XY(:,1)+XY(:,3))/2;
-    cpy = (XY(:,2)+XY(:,4))/2;
+%     [bb,nb,s]=bindata_line(XY,fx,bpos);
+%     [bc,nc,s]=bindata_line(XY,abs(fx),bpos);
     
+    [bb,nb,s]=bindata2((XY(:,1)+XY(:,3))/2,fx,bpos);
+    [bc,nc,s]=bindata2((XY(:,1)+XY(:,3))/2,abs(fx),bpos);
     
     subind = p(:,1)<Dx*abs(Df)&p(:,1)>Dx*abs(Df)/2;
+    stog = [stog mean(v(subind,1)./(p(subind,1)-Dx*Dw))];
+    sc = 0.01*ups/sig;
     subplot(2,1,1)
-    plot(bpos,nb)
-    hold on
-    plot([prctile(cpx,5) prctile(cpx,5)],[0 max(nb)])
-    plot([prctile(cpx,95) prctile(cpx,95)],[0 max(nb)])
-    hold off
+    plot(p(:,1)-Dx*Dw,v(:,1),'.')
+    ylim([-sc sc])
     subplot(2,1,2)
     plot(bpos,bb)
     hold on 
     plot(bpos,bc)
     hold off
     drawnow
-    stof = [stof mean(bb)];
-    stoa = [stoa mean(bc)];
-    stoe = [stoe mean(str(str>0))];
-    stoc = [stoc mean(str(str<0))];
-    stog = [stog (prctile(cpx,95)-prctile(cpx,5))];
-    indi = indi +1;
+    stof = [stof sum(fx)];
+    stoa = [stoa sum(abs(fx))];
+    stoe = [stoe sum(fstr(str>0))];
+    stoc = [stoc sum(fstr(str<0))];
+    indi = indi + 1;
     
 end
 close(h1)
 if(length(stof)>2)
     h2 = figure;
-    [ax,p1,p2] = plotyy(stot,stof,stot(2:end),stog(2:end));
+    plot(stot,stof/Dy),
     hold on
-    xlabel(ax(1),'Time') % label x-axis
-    ylabel(ax(1),'Stress') % label left y-axis
-    ylabel(ax(2),'Area') % label right y-axis
-    h_leg=annotation('textbox', [0.7 0.6 0.2 0.25],'BackgroundColor',[1 1 1],...
+    plot(stot,stoa/Dy);
+    xlabel('Time') % label x-axis
+    ylabel('Stress') % label left y-axis
+    h_leg=annotation('textbox', [0.7 0.15 0.2 0.25],'BackgroundColor',[1 1 1],...
             'String',{code,['xi = ' num2str(xi)],['L = ' num2str(L)],['lc = ' num2str(lc)],...
             ['mu = ' num2str(mu)],['ups = ' num2str(ups)],['phi = ' num2str(phi)],['r = ' num2str(r)]});
     set(h_leg,'FontSize',12);
     print('-dpng','-r0',[code '_fig.png']);
     close(h2)
+    if(~isempty(allg))
+        stog = [stog zeros(1,size(allg,2)-length(stog))];
+        stof = [stof zeros(1,size(allf,2)-length(stof))];
+        stot = [stot zeros(1,size(allt,2)-length(stot))];
+        stoc = [stoc zeros(1,size(allc,2)-length(stoc))];
+        stoe = [stoe zeros(1,size(alle,2)-length(stoe))];
+        stoa = [stoa zeros(1,size(alla,2)-length(stoa))];
+        allg = [allg zeros(size(allg,1),length(stog)-size(allg,2))];
+        allf = [allf zeros(size(allf,1),length(stof)-size(allf,2))];
+        allt = [allt zeros(size(allt,1),length(stot)-size(allt,2))];
+        allc = [allc zeros(size(allc,1),length(stoc)-size(allc,2))];
+        alle = [alle zeros(size(alle,1),length(stoe)-size(alle,2))];
+        alla = [alla zeros(size(alla,1),length(stoa)-size(alla,2))];
+    end
     allg = [allg; stog];
     alla = [alla; stoa];
     allf = [allf; stof];
@@ -113,5 +142,6 @@ if(length(stof)>2)
     alle = [alle; stoe];
     allt = [allt; stot];
     allp = [allp; zet L mu kap lc xi ups phi psi r sig Dx Dy Df Dw];
+    alln = {alln{:} code};
 end
 % close(h);

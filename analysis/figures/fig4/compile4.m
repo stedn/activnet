@@ -1,4 +1,4 @@
-bp = '/Users/wmcfadden/activ_rec_sweep_2/';
+bp = '/Users/wmcfadden/activ_free_sweep_nonl/';
 cd(bp);
 files = dir;
 files = {files.name};
@@ -15,7 +15,7 @@ for f = files
         code = strsplit(f{1},'_');
         if(exist([code{1} '_out.txt'],'file'))
             code = code{1}
-            measure4b
+            measureall
         end
     end
 end

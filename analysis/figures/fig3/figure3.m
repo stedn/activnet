@@ -65,3 +65,6 @@ plot(myx,pi/4*(myx).^2)
 
 figure
 plot(allp(go,2).^2./allp(go,5)./abs(allp(go,3)).*allp(go,6)/4,alltau(:,1),'.')
+
+figure
+plot(-allp(:,11),max(allf,[],2),'.')

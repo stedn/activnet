@@ -11,7 +11,7 @@ function [XY, sx, sy, str] = get_str(p,L,lf,ls,Dx,Dy)
     
     XY = [subpL subpR];
     
-    ang = atan2((XY(:,3)-XY(:,1)),(XY(:,4)-XY(:,2)));
+    ang = atan2((XY(:,4)-XY(:,2)),(XY(:,3)-XY(:,1)));
     str = (sqrt((XY(:,3)-XY(:,1)).^2 + (XY(:,4)-XY(:,2)).^2)-l0)/l0;
     sx = str.*abs(cos(ang));
     sy = str.*abs(sin(ang));
