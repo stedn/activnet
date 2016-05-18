@@ -1,6 +1,8 @@
 bp = '/Users/wmcfadden/extend_llc_ver/';
-code = 'mtazskxf';%gcqbbcyr
+code = 'zkyqjony';%gcqbbcyr
 cd(bp)
+
+makemovs = 0;
 
 %% load param file and decipher params
 fid = fopen([bp code '_scr.txt']);
@@ -37,19 +39,21 @@ stot = 0;
 
    
 %% setup timepoints and space points to measure
-inds = 1:ceil(size(zt,1)/200):size(zt,1);
+inds = 1:ceil(size(zt,1)/500):size(zt,1);
 inds = inds(2:end);
+ex_indis = [1 80 400];
 bpos = linspace(0,Dx,51);
 bpos = bpos(1:end-1)+bpos(2)/2;
 ll = 4;
 rl = 16;
 
 %% for loop over timepoints to display
-
-h1 = figure; 
-clear mov mov2
-h = figure('Position', [50, 100, 100+600*Dx/Dy, 600]);
-
+h2 = figure;
+if(makemovs)
+    clear mov mov2
+    h1 = figure; 
+    h = figure('Position', [50, 100, 100+600*Dx/Dy, 600]);
+end
 lst = size(zt,1);
 trp = repmat((1:lst)'/lst,1,3);
 temp=flipud(winter(lst));
@@ -58,19 +62,49 @@ cc = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
 temp=hot(2*lst);
 cc2 = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
 indi = 1;
+Dx_ = 0.58*Dx;
 
 for ind = inds
     p = reshape(zt(ind,:),[],2);
     p = [mod(p(:,1),Dx),mod(p(:,2),Dy)];
-    
-    figure(h)
-    clf
-    netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,0.05);
+    if(makemovs)
+        figure(h)
+        clf
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,0.05);
+        xlim([0 Dx_])
+        set(gca,'xtick',[],'ytick',[],'box','on')
 
-    colormap([flipud(cc2);cc])
-    colorbar('westoutside')
-    drawnow
-    mov(indi) = getframe(h);
+        colormap([flipud(cc2);cc])
+        colorbar('westoutside')
+        drawnow
+        mov(indi) = getframe(h);
+    end
+    figure(h2)
+    if(indi==ex_indis(1))
+        subplot('Position',[0.05 0.95-0.4*Dy/Dx_ 0.4 0.4*Dy/Dx_])
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,0.05);
+        ylabel(['t = ' num2str(t(ind)/10) ' s'])
+        xlim([0 Dx_])
+        set(gca,'xtick',[],'ytick',[],'box','on')
+        
+        colormap([flipud(cc2);cc])
+        cb=colorbar('Location','east','box','on','Ticks',[0 0.5 1],'TickLabels',{'-0.05', '0.00', '0.05'},'TickDirection','out');
+        pos = cb.Position;
+        cb.Position = [pos(1) pos(2)+pos(4)/3 pos(3)/2 pos(4)*2/3];
+    elseif(indi==ex_indis(2))
+        subplot('Position',[0.05 0.925-0.4*Dy/Dx_*2 0.4 0.4*Dy/Dx_])
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,0.05);
+        ylabel(['t = ' num2str(t(ind)/10) ' s'])
+        xlim([0 Dx_])
+        set(gca,'xtick',[],'ytick',[],'box','on')
+    elseif(indi==ex_indis(3))
+        subplot('Position',[0.05 0.9-0.4*Dy/Dx_*3 0.4 0.4*Dy/Dx_])
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,0.05);
+        ylabel(['t = ' num2str(t(ind)/10) ' s'])
+        xlim([0 Dx_])
+        xlabel('Position (\mum)')
+        set(gca,'ytick',[],'box','on')
+    end
     
     dp = (p-op);
     op = p;
@@ -102,9 +136,12 @@ for ind = inds
     %bin tension data
     [bb,nb,sb]=bindata_line(XY,fx,bpos);
     [bc,nc,sc]=bindata_line(XY,abs(fx),bpos);
+    bv=bindata(v(:,1),p(:,1),bpos);
     
     
     subind = p(:,1)<=bpos(rl)&p(:,1)>=bpos(ll);
+    cp = (XY(:,1)+XY(:,3))/2;
+    subindc = cp(:,1)<=bpos(rl)&cp(:,1)>=bpos(ll);
     
     % store data
     stot = [stot t(ind)];
@@ -112,51 +149,76 @@ for ind = inds
     stof = [stof nanmean(bb(ll:rl).*nb(ll:rl))/Dy];
     stoa = [stoa nanmean(bc(ll:rl).*nc(ll:rl))/Dy];
     
+    if(indi==ex_indis(2))
+        subplot('Position',[0.55 0.95-0.4*Dy/Dx_*1.25 0.35 0.4*Dy/Dx_*1.25])
+        ax=plotyy(bpos,bb.*nb/Dy,bpos(1:end-1),bv*10);
+        colorOrder = get(gca, 'ColorOrder');
+        set(ax(1),'xlim',[0 Dx/2])
+        set(ax(2),'xlim',[0 Dx/2])
+        xlabel(ax(1),'Position (\mum)') % label x-axis
+        ylabel(ax(1),'Stress (nN)') % label left y-axis
+        ax(1).YLabel.Color=colorOrder(1,:);
+        ylabel(ax(2),'Velocity (\mum/s)') % label rigdat = [ht y-axis
+    end
+    
     % plot spatially resolved data 
-    figure(h1)
-    subplot(2,1,1)
-    plot(p(~subind,1),v(~subind,1),'.')
-    hold on
-    plot(p(subind,1),v(subind,1),'.')
-    hold off
-    xlim([0,Dx/2])
-    ylim([0,0.5*10^-3])
-    subplot(2,1,2)
-    plot(bpos,bb.*nb/Dy)
-    hold on
-    plot(bpos(ll:rl),bb(ll:rl).*nb(ll:rl)/Dy)
-    hold off
-    xlim([0,Dx/2])
-    ylim([0,-1.1*sig])
-    
-    
-    drawnow
-    mov2(indi) = getframe(h1);
-    
+    if(makemovs)
+        figure(h1)
+        subplot(2,1,1)
+        plot(p(~subind,1),v(~subind,1),'.')
+        hold on
+        plot(p(subind,1),v(subind,1),'.')
+        plot(bpos(1:end-1),bv)
+        hold off
+        xlim([0,Dx_])
+        ylim([-0.1*10^-3,0.75*10^-3])
+        xlabel('x position (\mum)')
+        ylabel('velocity_x (\mum/s)')
+        subplot(2,1,2)
+        plot(cp(~subindc,1),fx(~subindc),'.')
+        hold on
+        plot(cp(subindc,1),fx(subindc),'.')
+        plot(bpos,bb)
+        hold off
+        xlim([0,Dx_])
+        ylim([-0.1*10^-3,0.75*10^-3])
+        ylabel('tension_x (nN)')
+        xlabel('x position (\mum)')
+
+        drawnow
+        mov2(indi) = getframe(h1);
+    end
     indi=indi+1;
     
 end
 
 %% if there was any data to store we will now display it and save it
-if(length(stof)>2)
+if(makemovs)
     movie2avi(mov,[bp code '_mov_ex.avi']);
     close(h);
     movie2avi(mov2,[bp code '_data_ex.avi']);
     close(h1);
-    
-    h2 = figure;
-    [ax,p1,p2] = plotyy(stot/10,stof,stot/10,cumtrapz(stot,stog));
-    xlabel(ax(1),'Time (s)') % label x-axis
-    ylabel(ax(1),'Stress (nN)') % label left y-axis
-    ylabel(ax(2),'Strain') % label rigdat = [ht y-axis
-    h_leg=annotation('textbox', [0.65 0.15 0.15 0.2],...
-            'String',{['\xi = ' num2str(xi)],['L = ' num2str(L)],['l_c = ' num2str(lc)],...
-            ['\mu = ' num2str(mu)],['\sigma = ' num2str(sig)]});
-    print('-dpdf','-r0',[code '_ex.pdf']);
-    close(h2)
-    
-    
 end
 
+sbind = stot<=800;
+figure(h2);
+axx=subplot('Position',[0.55 0.95-0.4*Dy/Dx_*3.35 0.35 0.4*Dy/Dx_*1.5]);
+myy = cumtrapz(stot,stog);
+[ax,p1,p2] = plotyy(stot(sbind)/10,stof(sbind),stot(sbind)/10,myy(sbind));
+xlabel(ax(1),'Time (s)') % label x-axis
+ylabel(ax(1),'Stress (nN)') % label left y-axis
+ax(1).YLabel.Color=colorOrder(1,:);
+ylabel(ax(2),'Strain') % label rigdat = [ht y-axis
+% set(ax(2),'ylim',[0 0.08])
+% set(ax(2),'Box','off')
+pos = axx.Position;
+axes('Position',[pos(1)+pos(3)*0.55 pos(2)+0.18*pos(4) pos(3)/3 pos(4)/3])
+box on
+plot(stot/10,cumtrapz(stot,stog),'Color',colorOrder(2,:))
+xlim([0 500])
+print('-depsc','-r0',[code '_ex.eps']);
+    
+% close(h2)
+    
 
 

@@ -1,11 +1,11 @@
-bp = '/Users/wmcfadden/activ_domain_ed/';
+bp = '/Users/wmcfadden/activ_free_sweep_nonl/';
 cd(bp);
 files = dir;
 files = {files.name};
 
 bns = 51;
-ll = 4;
-rl = 19;
+ll = 10;
+rl = 40;
 
 allt = [];
 allp = [];
@@ -23,10 +23,8 @@ for f = files
         code = strsplit(f{1},'_');
         if(exist([code{1} '_out.txt'],'file'))
             code = code{1}
-            measure5
+            measureall
         end
     end
 end
-if(size(allt)>0)
-    save('allmeas','allt','allp','allg','alla','allf','alle','allc','alln')
-end
+save('allmeas','allt','allp','allg','alla','allf','alle','allc','allw','alln')

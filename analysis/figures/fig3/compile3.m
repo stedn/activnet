@@ -2,12 +2,19 @@ bp = '/Users/wmcfadden/extend_llc_ver/';
 cd(bp);
 files = dir;
 files = {files.name};
+
+bns = 51;
+ll = 4;
+rl = 16;
+
 allt = [];
 allp = [];
 allg = [];
 allf = [];
 alle = [];
 allc = [];
+allfe = [];
+allfc = [];
 alla = [];
 allw = [];
 alln = {};

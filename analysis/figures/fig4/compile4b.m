@@ -1,14 +1,22 @@
-bp = '/Users/wmcfadden/activ_free_sweep_nonl/';
+bp = '/Users/wmcfadden/activ_phi_sweep_b/';
 cd(bp);
 files = dir;
 files = {files.name};
+
+bns = 51;
+ll = 10;
+rl = 50;
+
 allt = [];
 allp = [];
 allg = [];
-alla = [];
-allc = [];
-alle = [];
 allf = [];
+alle = [];
+allc = [];
+allfe = [];
+allfc = [];
+alla = [];
+allw = [];
 alln = {};
 for f = files
     if(strfind(f{1},'_scr') )
@@ -19,6 +27,4 @@ for f = files
         end
     end
 end
-if(size(allt)>0)
-    save('allmeas','allt','allp','allg','alla','allf','alle','allc','alln')
-end
+save('allmeas','allt','allp','allg','alla','allf','alle','allc','allw','alln')

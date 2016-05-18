@@ -7,25 +7,34 @@ fclose(fid);
 pare = strsplit(C{1}{9}, '>');
 paree = strsplit(pare{1}, ' ');
 paree = {paree{2:end}};
-zet=str2num(paree{2});L=str2num(paree{3});mu=-str2num(paree{4});kap=str2num(paree{5});lc=str2num(paree{6}); 
+zet=str2num(paree{2});L=str2num(paree{3});mu=str2num(paree{4});kap=str2num(paree{5});lc=str2num(paree{6}); 
 xi=str2num(paree{7});ups=str2num(paree{8});phi=str2num(paree{9});psi=str2num(paree{10});
 r=str2num(paree{11});sig=str2num(paree{12});Dx=str2num(paree{13});Dy=str2num(paree{14});Df=str2num(paree{15});
-Dw=str2num(paree{16});ls=str2num(paree{17});lf=str2num(paree{18});
+Dw=str2num(paree{16});ls=str2num(paree{17});lf=str2num(paree{18});nonl=str2num(paree{21});
 
 
 %% load simulation data
-A = importdata([bp code '_out.txt']);
-A = A.data;
-if(size(A,1)==1)
-    imp2 = importdata([bp code '_out.txt'],' ',9);
-    if(isfield(imp2,'data'))
-        A = [A;imp2.data];
-    end
+t = [];
+A = [];
+if(mu<0)
+    A = importdata([bp code '_out.txt']);
+    if(isstruct(A))
+        A = A.data;
+        if(size(A,1)==1)
+            imp2 = importdata([bp code '_out.txt'],' ',9);
+            if(isfield(imp2,'data'))
+                A = [A;imp2.data];
+            end
+        end
+        t = A(:,1);
+        zt = A(:,2:end);
+   end
 end
-t = A(:,1);
-zt = A(:,2:end);
-
-%% store initial positions and initial measurements (all 0)
+if(isempty(t))
+    t=0;
+    zt = [0 0 1 1];
+end
+%% store initial positions and initialize measurements
 op = reshape(zt(1,:),[],2);
 tl=0;
 stof = [];
@@ -34,20 +43,22 @@ stoa = [];
 stot = [];
 stoe = [];
 stoc = [];
+stofe = [];
+stofc = [];
 stow = [];
 
    
 %% setup timepoints and space points to measure
-inds = 1:ceil(size(zt,1)/1000):size(zt,1);
+inds = 1:floor(size(zt,1)/10000):size(zt,1);
 inds = inds(2:end);
-bpos = linspace(0,Dx,51);
+bpos = linspace(0,Dx,bns);
 bpos = bpos(1:end-1)+bpos(2)/2;
-ll = 4;
-rl = 16;
+lpr = 10;
+rpr = 90;
 
 %% for loop over timepoints to measure
 
-h1 = figure;  
+h1 = figure('Position', [50, 100, 800, 600]);  
 for ind = inds
     p = reshape(zt(ind,:),[],2);
     p = [mod(p(:,1),Dx),mod(p(:,2),Dy)];
@@ -57,7 +68,7 @@ for ind = inds
     
     % remove data if has moved farther than realistically possible 
     % these events are due to crossing domain boundary or recycling
-    jumpcut = 50*median(abs(dp(1:1:end,1)));
+    jumpcut = 10*median(abs(dp(1:1:end,1)));
     subind = abs(dp(1:2:end-1,2))>jumpcut|abs(dp(2:2:end,2))>jumpcut|abs(dp(1:2:end-1,1))>jumpcut|abs(dp(2:2:end,1))>jumpcut;
     subind = [subind subind]';
     subind = subind(:);
@@ -90,24 +101,30 @@ for ind = inds
     % store data
     stot = [stot t(ind)];
     stog = [stog nanmean(v(subind,1)./(p(subind,1)-Dx*Dw))];
-    stow = [stow (prctile(cpx,95)-prctile(cpx,5))];
+    stow = [stow (prctile(cpx,rpr)-prctile(cpx,lpr))];
     stof = [stof nanmean(bb(ll:rl).*nb(ll:rl))/Dy];
     stoa = [stoa nanmean(bc(ll:rl).*nc(ll:rl))/Dy];
-    stoe = [stoe sum(fstr(str>0))];
-    stoc = [stoc sum(fstr(str<0))];
-    
-    % plot spatially resolved data 
-%     subplot(2,1,1)
-%     plot(p(~subind,1),v(~subind,1),'.')
-%     hold on
-%     plot(p(subind,1),v(subind,1),'.')
-%     hold off
-%     subplot(2,1,2)
-%     plot(bpos,bb.*nb/Dy)
-%     hold on
-%     plot(bpos(ll:rl),bb(ll:rl).*nb(ll:rl)/Dy)
-%     hold off
-%     drawnow
+    stoe = [stoe mean(str(str>0))];
+    stoc = [stoc mean(str(str<0))];
+    stofe = [stoe sum(fstr(str>0))];
+    stofc = [stoc sum(fstr(str<0))];
+    if(0)
+        subplot(2,1,1)
+        plot(p(~subind,1),v(~subind,1),'.')
+        hold on
+        plot(p(subind,1),v(subind,1),'.')
+        hold off
+        xlim([0,Dx])
+        subplot(2,1,2)
+        plot(bpos,bb.*nb)
+        hold on
+        plot(bpos(ll:rl),bb(ll:rl).*nb(ll:rl))
+        plot(bpos,nb*max(bb))
+        plot(bpos,nb*max(bb))
+        hold off
+        xlim([0,Dx])
+        drawnow
+    end
 end
 close(h1)
 
@@ -115,14 +132,46 @@ close(h1)
 if(length(stof)>2)
     
     h2 = figure;
-    [ax,p1,p2] = plotyy(stot/10,stof,stot/10,cumtrapz(stot,stog));
-    xlabel(ax(1),'Time (s)') % label x-axis
-    ylabel(ax(1),'Stress (nN)') % label left y-axis
-    ylabel(ax(2),'Strain') % label rigdat = [ht y-axis
+    if(0)
+        [ax,p1,p2] = plotyy(stot/10,stof,stot/10,cumtrapz(stot,stog));
+        xlabel(ax(1),'Time (s)') % label x-axis
+        ylabel(ax(1),'Stress (nN)') % label left y-axis
+        ylabel(ax(2),'Strain') % label rigdat = [ht y-axis
+    end
+    
+    if(1)
+        subplot(2,1,1)
+        w = -(stow-stow(1))/stow(1);
+%         spt = min(length(w),floor(1.5*find(w==max(w))));
+        spt = length(w);
+        plot(stot(1:spt)/10,abs(stoe(1:spt)));
+        hold on
+        plot(stot(1:spt)/10,abs(stoc(1:spt)));
+%         plot(stot(1:spt)/10,w(1:spt),'Color','k');
+        xlabel('Time (s)') % label x-axis
+        ylabel('Strain') % label rigdat = [ht y-axis
+        
+        subplot(2,1,2)
+        [ax, hh1, hh2]=plotyy(stot(1:spt)/10,stof(1:spt),stot(1:spt)/10,abs(stofc(1:spt)));
+        set(ax,{'ycolor'},{'k';'k'})
+        set(hh1, 'Color', 'black');
+        axes(ax(1))
+        hold on
+        plot(stot(1:spt)/10,stoa(1:spt),'k:');
+        ylim([0,max(stoa)])
+        ylabel('net stress') % label rigdat = [ht y-axisaxes(ax(2))
+        axes(ax(2))
+        hold on
+        set(ax(2),'ColorOrderIndex',1)
+        plot(stot(1:spt)/10,stofe(1:spt));
+        ylim([0 max(abs(stofc(1:spt)))])
+        xlabel('Time (s)') % label x-axis
+        ylabel('filament') % label rigdat = [ht y-axis
+    end
     h_leg=annotation('textbox', [0.65 0.15 0.15 0.2],...
             'String',{['\xi = ' num2str(xi)],['L = ' num2str(L)],['l_c = ' num2str(lc)],...
-            ['\mu = ' num2str(mu)],['\sigma = ' num2str(sig)]});
-    print('-dpdf','-r0',[code '_fig.pdf']);
+            ['\mu = ' num2str(mu)],['\sigma = ' num2str(sig)],['\upsilon = ' num2str(ups)],['\phi = ' num2str(phi)]});
+    print('-dpng','-r0',[code '_fig.png']);
     close(h2)
     
     % saving data, must extend sto data to fit with all data
@@ -132,6 +181,8 @@ if(length(stof)>2)
         stot = [stot zeros(1,size(allg,2)-length(stot))];
         stoc = [stoc zeros(1,size(allc,2)-length(stoc))];
         stoe = [stoe zeros(1,size(alle,2)-length(stoe))];
+        stofc = [stofc zeros(1,size(allfc,2)-length(stofc))];
+        stofe = [stofe zeros(1,size(allfe,2)-length(stofe))];
         stoa = [stoa zeros(1,size(alla,2)-length(stoa))];
         stow = [stow zeros(1,size(allw,2)-length(stow))];
         allg = [allg zeros(size(allg,1),length(stog)-size(allg,2))];
@@ -139,6 +190,8 @@ if(length(stof)>2)
         allt = [allt zeros(size(allt,1),length(stot)-size(allt,2))];
         allc = [allc zeros(size(allc,1),length(stoc)-size(allc,2))];
         alle = [alle zeros(size(alle,1),length(stoe)-size(alle,2))];
+        allfc = [allfc zeros(size(allfc,1),length(stofc)-size(allfc,2))];
+        allfe = [allfe zeros(size(allfe,1),length(stofe)-size(allfe,2))];
         alla = [alla zeros(size(alla,1),length(stoa)-size(alla,2))];
         allw = [allw zeros(size(allw,1),length(stow)-size(allw,2))];
     end
@@ -150,6 +203,6 @@ if(length(stof)>2)
     alle = [alle; stoe];
     alla = [alla; stoa];
     allw = [allw; stow];
-    allp = [allp; zet L mu kap lc xi ups phi psi r sig Dx Dy Df Dw];
+    allp = [allp; zet L mu kap lc xi ups phi psi r sig Dx Dy Df Dw nonl];
     alln = {alln{:} code};
 end

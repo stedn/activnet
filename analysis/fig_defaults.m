@@ -3,12 +3,12 @@
 close all;
 
 % Defaults for activnet figures
-width = 6;     % Width in inches
-height = width/1.62;    % Height in inches
+width = 7.5;     % Width in inches
+height = 8.75;    % Height in inches
 alw = 0.75;    % AxesLineWidth
-fsz = 11;      % Fontsize
+fsz = 10;      % Fontsize
 lw = 1.5;      % LineWidth
-msz = 8;       % MarkerSize
+msz = 16;       % MarkerSize
 
 ac=[0.25 0.25 0.25];
 
@@ -17,7 +17,8 @@ set(0,'defaultLineLineWidth',lw);   % set the default line width to lw
 set(0,'defaultLineMarkerSize',msz); % set the default line marker size to msz
 set(0,'defaultLineLineWidth',lw);   % set the default line width to lw
 set(0,'defaultLineMarkerSize',msz); % set the default line marker size to msz
-set(0, 'DefaultAxesFontName', 'CMU Serif')
+set(0,'DefaultAxesFontSize',fsz)
+set(0, 'DefaultAxesFontName', 'Times')
 set(0, 'DefaultFigureRenderer', 'painters',...
 'DefaultAxesXcolor', ac, ...
 'DefaultAxesYcolor', ac, ...

@@ -1,5 +1,5 @@
-%  bp = '/Users/wmcfadden/extend_llc_ver/';
-% code = 'wkwzgrte';
+ bp = '/Users/wmcfadden/activ_phi_sweep_b/';
+code = 'bewrzbbz';
 cd(bp)
 fid = fopen([bp code '_scr.txt']);
 C = textscan(fid, '%s','delimiter', '\n');
@@ -31,10 +31,11 @@ clear mov
 h = figure('Position', [50, 100, 100+600*Dx/Dy, 600]);
 lst = size(zt,1);
 trp = repmat((1:lst)'/lst,1,3);
-cc = (1-trp.^2).*(winter(lst)*0.75+0.25*spring(lst))+(trp.^2).*copper(lst);
+temp=flipud(winter(lst));
+temp2 = bone(2*lst);
+cc = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
 temp=hot(2*lst);
-cc2 = (1-trp.^2).*(winter(lst)*0.75+0.25*spring(lst))+(trp.^2).*temp(1:lst,:);
-edges = {linspace(0.5,1.5,50),linspace(-90,90,50)}  ;      
+cc2 = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);edges = {linspace(0.5,1.5,50),linspace(-90,90,50)}  ;      
 indi = 1;
 dp = 0;
 op = reshape(zt(1,:),[],2);
@@ -76,7 +77,7 @@ for ind = inds
 %     whitebg('black')
     set(gcf,'Color',[0 0 0])
     set(gcf,'InvertHardcopy','off')
-    netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,0.02);
+    netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,0.001);
 
 
     axes('Position',[.75 .7 .12 .2])
