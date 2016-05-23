@@ -1,4 +1,4 @@
-bp = '/Users/wmcfadden/extend_llc_ver/';
+bp = '~/Documents/MATLAB/activnet/data/fig3/examples/';
 code = 'zkyqjony';%gcqbbcyr
 cd(bp)
 
@@ -153,8 +153,8 @@ for ind = inds
         subplot('Position',[0.55 0.95-0.4*Dy/Dx_*1.25 0.35 0.4*Dy/Dx_*1.25])
         ax=plotyy(bpos,bb.*nb/Dy,bpos(1:end-1),bv*10);
         colorOrder = get(gca, 'ColorOrder');
-        set(ax(1),'xlim',[0 Dx/2])
-        set(ax(2),'xlim',[0 Dx/2])
+        set(ax(1),'xlim',[0 8])
+        set(ax(2),'xlim',[0 8])
         xlabel(ax(1),'Position (\mum)') % label x-axis
         ylabel(ax(1),'Stress (nN)') % label left y-axis
         ax(1).YLabel.Color=colorOrder(1,:);

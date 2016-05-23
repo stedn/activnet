@@ -1,4 +1,4 @@
-bp = '/Users/wmcfadden/activ_free_sweep_nonl/';
+bp = '~/Documents/MATLAB/activnet/data/examples/fig4/';
 code = 'ueusrfzf';%gcqbbcyr
 cd(bp)
 
@@ -109,7 +109,7 @@ for ind = inds
         colormap([flipud(cc2);cc])
         cb=colorbar('Location','north','box','on','Ticks',[0 0.5 1],'TickLabels',{num2str(-cdmn), '0.00', num2str(cdmn)});
         pos = cb.Position;
-        cb.Position = [pos(1)+pos(3)/4 pos(2)+pos(4)/2 pos(3)*2/3 pos(4)/3];
+        cb.Position = [pos(1)+pos(3)/4 pos(2)+pos(4)*2/3 pos(3)*2/3 pos(4)/3];
     end
     
     dp = (p-op);

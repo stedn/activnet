@@ -1,4 +1,4 @@
-function [ym] = bindata(y,x,xrg)
+function [ym] = bindata(x,y,xrg)
     %function [ym,yb] = bindata(y,x,xrg)
     %Computes ym(ii) = mean(y(x>=xrg(ii) & x < xrg(ii+1)) for every ii
     %using a fast algorithm which uses no looping

@@ -1,10 +1,10 @@
-bp = '/Users/wmcfadden/activ_llc/';
-code = 'ueusrfzf';%gcqbbcyr
+bp = '~/Documents/MATLAB/activnet/data/examples/fig4/';
+code = 'syphjzab';%gcqbbcyr
 cd(bp)
 
 makemovs = 0;
 
-topp = 0.95;
+topp = 0.45;
 leftt = 0.05;
 
 %% load param file and decipher params
@@ -14,7 +14,7 @@ fclose(fid);
 pare = strsplit(C{1}{9}, '>');
 paree = strsplit(pare{1}, ' ');
 paree = {paree{2:end}};
-zet=str2num(paree{2});L=str2num(paree{3});mu=-str2num(paree{4});kap=str2num(paree{5});lc=str2num(paree{6}); 
+zet=str2num(paree{2});L=str2num(paree{3});mu=str2num(paree{4});kap=str2num(paree{5});lc=str2num(paree{6}); 
 xi=str2num(paree{7});ups=str2num(paree{8});phi=str2num(paree{9});psi=str2num(paree{10});
 r=str2num(paree{11});sig=str2num(paree{12});Dx=str2num(paree{13});Dy=str2num(paree{14});Df=str2num(paree{15});
 Dw=str2num(paree{16});ls=str2num(paree{17});lf=str2num(paree{18});
@@ -35,22 +35,21 @@ zt = A(:,2:end);
 %% store initial positions and initial measurements (all 0)
 op = reshape(zt(1,:),[],2);
 tl=0;
-stot = [];
-stow = [];
-stoe = [];
-stoc = [];
+stot = 0;
+stof = 0;
+stofe = 0;
+stofc = 0;
 
 %% setup timepoints and space points to measure
-inds = 1:1500;
+inds = 1:10:10000;
 inds = inds(2:end);
-ex_indis = [1 650 1300];
+ex_indis = [1 100 500];
 bpos = linspace(0,Dx,51);
 bpos = bpos(1:end-1)+bpos(2)/2;
 ll = 10;
 rl = 40;
 
 %% for loop over timepoints to display
-h2 = figure;
 if(makemovs)
     clear mov mov2
     h1 = figure; 
@@ -66,7 +65,7 @@ cc2 = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
 indi = 1;
 Dx_ = Dx;
 exw = 0.15;
-cdmn = 0.4;
+cdmn = 0.1;
 lpr = 10;
 rpr = 90;
 
@@ -93,7 +92,11 @@ for ind = inds
         xlim([0 Dx_])
         axis equal
         set(gca,'xtick',[],'ytick',[],'box','on')
+        colormap([flipud(cc2);cc])
         
+        cb=colorbar('Location','west','box','on','Ticks',[0 0.5 1],'TickLabels',{num2str(-cdmn), '0.00', num2str(cdmn)});
+        pos = cb.Position;
+        cb.Position = [pos(1)-6*pos(3)/4 pos(2)+pos(4)/2 pos(3)/2 pos(4)/2];
     elseif(indi==ex_indis(2))
         subplot('Position',[0.075+exw topp-exw*Dy/Dx_ exw exw*Dy/Dx_])
         netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,cdmn);
@@ -109,10 +112,7 @@ for ind = inds
         axis equal
         set(gca,'xtick',[],'ytick',[],'box','on')
         
-        colormap([flipud(cc2);cc])
-        cb=colorbar('Location','north','box','on','Ticks',[0 0.5 1],'TickLabels',{num2str(-cdmn), '0.00', num2str(cdmn)});
-        pos = cb.Position;
-        cb.Position = [pos(1)+pos(3)/4 pos(2)+pos(4)/2 pos(3)*2/3 pos(4)/3];
+        
     end
     
     dp = (p-op);
@@ -135,11 +135,13 @@ for ind = inds
     [XY,sx,sy,str]=get_str(p,L,lf,ls,Dx,Dy);   
 
     % compute filament tension
+    fstr = mu*str;
     fx = mu*sx;
     fy = mu*sy;
     if(mu<0)
         fx = -fx.*(1+99*double(sx>0));
         fy = -fy.*(1+99*double(sy>0));
+        fstr = -fstr.*(1+99*double(str>0));
     end
 
     %bin tension data
@@ -154,9 +156,9 @@ for ind = inds
     
     % store data
     stot = [stot t(ind)];
-    stow = [stow (prctile(cpx,rpr)-prctile(cpx,lpr))];
-    stoe = [stoe mean(str(str>0))];
-    stoc = [stoc mean(str(str<0))];
+    stof = [stof nanmean(bb(ll:rl).*nb(ll:rl))/Dy];
+    stofe = [stofe sum(fstr(str>0))];
+    stofc = [stofc sum(fstr(str<0))];
    
 %     if(indi==ex_indis(2))
 %         subplot('Position',[0.05 0.925-exw*Dy/Dx_-0.2 0.2 0.2])
@@ -209,19 +211,26 @@ if(makemovs)
     close(h1);
 end
 
-sbind = stot<=800;
 figure(h2);
-axx=subplot('Position',[0.1 topp-0.025-exw*Dy/Dx_-0.2 0.4 0.2]);
-plot(stot/10,stofe,'DisplayName','Filament Extension');
+subplot('Position',[0.1 topp-0.025-exw*Dy/Dx_-0.2 0.4 0.2]);
+[ax, hh1, hh2]=plotyy(stot/10,stof,stot/10,abs(stofc));
+set(ax,{'ycolor'},{'k';'k'})
+set(hh1, 'Color', 'black');
+ylabel('Stress (nN/\mum)') % label rigdat = [ht y-axisaxes(ax(2))
+ylim([0 max(stof)])
+axes(ax(2))
 hold on
-plot(stot/10,stofc,'DisplayName','Filament Compression');
-plot(stot/10,(stof,'Color','k','DisplayName','Network Strain');
-ylabel('Strain')
-xlabel('Time (s)')
-legend('show')
-print('-depsc','-r0',[code '_ex.eps']);
+set(ax(2),'ColorOrderIndex',1)
+plot(stot/10,stofe);
+plot(stot/10,0*stot,'k');
+ylim([0 max(abs(stofe))])
+tks = linspace(0, max(stofe),7);
+set(ax(2),'YTick',[])
+set(ax(2),'YTickLabel', []);
+xlabel('Time (s)') % label x-axis
+legend('Compressional','Extensional','Net Stress')
+
+
 
 % close(h2)
     
-
-

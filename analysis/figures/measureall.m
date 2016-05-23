@@ -49,7 +49,7 @@ stow = [];
 
    
 %% setup timepoints and space points to measure
-inds = 1:floor(size(zt,1)/10000):size(zt,1);
+inds = 1:10:size(zt,1);
 inds = inds(2:end);
 bpos = linspace(0,Dx,bns);
 bpos = bpos(1:end-1)+bpos(2)/2;
@@ -68,7 +68,7 @@ for ind = inds
     
     % remove data if has moved farther than realistically possible 
     % these events are due to crossing domain boundary or recycling
-    jumpcut = 10*median(abs(dp(1:1:end,1)));
+    jumpcut = max(10*median(abs(dp(1:1:end,1))),0.0005);
     subind = abs(dp(1:2:end-1,2))>jumpcut|abs(dp(2:2:end,2))>jumpcut|abs(dp(1:2:end-1,1))>jumpcut|abs(dp(2:2:end,1))>jumpcut;
     subind = [subind subind]';
     subind = subind(:);
@@ -106,8 +106,8 @@ for ind = inds
     stoa = [stoa nanmean(bc(ll:rl).*nc(ll:rl))/Dy];
     stoe = [stoe mean(str(str>0))];
     stoc = [stoc mean(str(str<0))];
-    stofe = [stoe sum(fstr(str>0))];
-    stofc = [stoc sum(fstr(str<0))];
+    stofe = [stofe sum(fstr(str>0))];
+    stofc = [stofc sum(fstr(str<0))];
     if(0)
         subplot(2,1,1)
         plot(p(~subind,1),v(~subind,1),'.')
@@ -132,14 +132,14 @@ close(h1)
 if(length(stof)>2)
     
     h2 = figure;
-    if(0)
+    if(1)
         [ax,p1,p2] = plotyy(stot/10,stof,stot/10,cumtrapz(stot,stog));
         xlabel(ax(1),'Time (s)') % label x-axis
         ylabel(ax(1),'Stress (nN)') % label left y-axis
         ylabel(ax(2),'Strain') % label rigdat = [ht y-axis
     end
     
-    if(1)
+    if(0)
         subplot(2,1,1)
         w = -(stow-stow(1))/stow(1);
 %         spt = min(length(w),floor(1.5*find(w==max(w))));
@@ -164,13 +164,13 @@ if(length(stof)>2)
         hold on
         set(ax(2),'ColorOrderIndex',1)
         plot(stot(1:spt)/10,stofe(1:spt));
-        ylim([0 max(abs(stofc(1:spt)))])
+        ylim([0 max(abs(stofe(1:spt)))])
         xlabel('Time (s)') % label x-axis
         ylabel('filament') % label rigdat = [ht y-axis
     end
-    h_leg=annotation('textbox', [0.65 0.15 0.15 0.2],...
+    h_leg=annotation('textbox', [0.55 0.45 0.15 0.1],...
             'String',{['\xi = ' num2str(xi)],['L = ' num2str(L)],['l_c = ' num2str(lc)],...
-            ['\mu = ' num2str(mu)],['\sigma = ' num2str(sig)],['\upsilon = ' num2str(ups)],['\phi = ' num2str(phi)]});
+            ['\mu = ' num2str(mu)],['\sigma = ' num2str(sig)],['\upsilon = ' num2str(ups)],['r = ' num2str(r)]});
     print('-dpng','-r0',[code '_fig.png']);
     close(h2)
     
