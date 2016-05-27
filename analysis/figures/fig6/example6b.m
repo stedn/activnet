@@ -1,7 +1,6 @@
 bp = '~/Documents/MATLAB/activnet/data/examples/fig6/';
-code = 'hhagixzm';%gcqbbcyr
+code = 'halaykqq';%gcqbbcyr
 cd(bp)
-
 
 %% load param file and decipher params
 fid = fopen([bp code '_scr.txt']);
@@ -31,20 +30,19 @@ zt = A(:,2:end);
 %% store initial positions and initial measurements (all 0)
 op = reshape(zt(1,:),[],2);
 tl=0;
-stot2 = [];
-stog2 = [];
+stot3 = [];
+stog3 = [];
 stoe = [];
 stoc = [];
 
 %% setup timepoints and space points to measure
 inds = 1:10:size(zt,1);
 inds = inds(2:end);
-ex_indis = [1 50 500];
+ex_indis = [1 50 400];
 bpos = linspace(0,Dx,51);
 bpos = bpos(1:end-1)+bpos(2)/2;
 
 %% for loop over timepoints to display
-h2 = figure;
 if(makemovs)
     clear mov mov2
     h1 = figure; 
@@ -59,7 +57,7 @@ temp=hot(2*lst);
 cc2 = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
 indi = 1;
 
-topp = 0.925-exw*Dy/Dx_;
+topp = 0.915-exw*Dy/Dx_;
 
 for ind = inds
     p = reshape(zt(ind,:),[],2);
@@ -67,7 +65,7 @@ for ind = inds
     if(makemovs)
         figure(h)
         clf
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,cdmn);
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
         xlim([0 Dx_])
         set(gca,'xtick',[],'ytick',[],'box','on')
 
@@ -78,17 +76,14 @@ for ind = inds
     end
     figure(h2)
     if(indi==ex_indis(3))
-        subplot('Position',[0.1 topp-exw*Dy/Dx_ exw exw*Dy/Dx_])
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,cdmn);
-        title(['t = ' num2str(t(ind)/10) ' s'])
+        subplot('Position',[0.075 topp-exw*Dy/Dx_ exw exw*Dy/Dx_])
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
+        ylabel(['\tau_r = ' num2str(1/r/10) ' s'])
         xlim([0 Dx_])
         axis equal
         set(gca,'xtick',[],'ytick',[],'box','on')
         
-        colormap([flipud(cc2);cc])
-        cb=colorbar('Location','north','box','on','Ticks',[0 0.5 1],'TickLabels',{num2str(-cdmn), '0.00', num2str(cdmn)});
-        pos = cb.Position;
-        cb.Position = [pos(1)+pos(3)/4 pos(2)+pos(4)*2/3 pos(3)*2/3 pos(4)/3];
+        
     end
     
     dp = (p-op);
@@ -129,8 +124,8 @@ for ind = inds
     subindc = cpx(:,1)<=bpos(rl)&cpx(:,1)>=bpos(ll);
     
     % store data
-    stot2 = [stot2 t(ind)];
-    stog2 = [stog2 nanmean(diff(bv(ll:rl)')./diff(bpos(ll:rl)))];
+    stot3 = [stot3 t(ind)];
+    stog3 = [stog3 nanmean(diff(bv(ll:rl)')./diff(bpos(ll:rl)))];
     stoe = [stoe mean(str(str>0))];
     stoc = [stoc mean(str(str<0))];
    

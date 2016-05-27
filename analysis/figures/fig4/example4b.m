@@ -4,8 +4,8 @@ cd(bp)
 
 makemovs = 0;
 
-topp = 0.45;
-leftt = 0.05;
+topp = 0.95;
+leftt = 0.525;
 
 %% load param file and decipher params
 fid = fopen([bp code '_scr.txt']);
@@ -41,15 +41,16 @@ stofe = 0;
 stofc = 0;
 
 %% setup timepoints and space points to measure
-inds = 1:10:10000;
+inds = 1:10:10001;
 inds = inds(2:end);
-ex_indis = [1 100 500];
+ex_indis = [1 100 500 1000];
 bpos = linspace(0,Dx,51);
 bpos = bpos(1:end-1)+bpos(2)/2;
 ll = 10;
 rl = 40;
 
 %% for loop over timepoints to display
+h2=figure;
 if(makemovs)
     clear mov mov2
     h1 = figure; 
@@ -64,8 +65,9 @@ temp=hot(2*lst);
 cc2 = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
 indi = 1;
 Dx_ = Dx;
-exw = 0.15;
-cdmn = 0.1;
+exw = 0.2;
+cdmn = 0.2;
+edmn = 0.02;
 lpr = 10;
 rpr = 90;
 
@@ -75,7 +77,7 @@ for ind = inds
     if(makemovs)
         figure(h)
         clf
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,cdmn);
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
         xlim([0 Dx_])
         set(gca,'xtick',[],'ytick',[],'box','on')
 
@@ -86,33 +88,43 @@ for ind = inds
     end
     figure(h2)
     if(indi==ex_indis(1))
-        subplot('Position',[0.05 topp-exw*Dy/Dx_ exw exw*Dy/Dx_])
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,cdmn);
-        title(['t = ' num2str(t(ind)/10) ' s'])
-        xlim([0 Dx_])
+        subplot('Position',[0.05 0.95-exw*Dy/Dx_ exw exw*Dy/Dx_*0.9])
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
+        xlabel(['t = ' num2str(t(ind)/10) ' s'])
+        xlim([0.1 0.9]*Dx_)
+        ylim([0.1 0.9]*Dy)
         axis equal
         set(gca,'xtick',[],'ytick',[],'box','on')
-        colormap([flipud(cc2);cc])
         
-        cb=colorbar('Location','west','box','on','Ticks',[0 0.5 1],'TickLabels',{num2str(-cdmn), '0.00', num2str(cdmn)});
-        pos = cb.Position;
-        cb.Position = [pos(1)-6*pos(3)/4 pos(2)+pos(4)/2 pos(3)/2 pos(4)/2];
     elseif(indi==ex_indis(2))
-        subplot('Position',[0.075+exw topp-exw*Dy/Dx_ exw exw*Dy/Dx_])
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,cdmn);
-        title(['t = ' num2str(t(ind)/10) ' s'])
-        xlim([0 Dx_])
+        subplot('Position',[0.075+exw 0.95-exw*Dy/Dx_ exw exw*Dy/Dx_*0.9])
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
+        xlabel(['t = ' num2str(t(ind)/10) ' s'])
+        xlim([0.1 0.9]*Dx_)
+        ylim([0.1 0.9]*Dy)
         axis equal
         set(gca,'xtick',[],'ytick',[],'box','on')
     elseif(indi==ex_indis(3))
-        subplot('Position',[0.1+2*exw topp-exw*Dy/Dx_ exw exw*Dy/Dx_])
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,cdmn);
-        title(['t = ' num2str(t(ind)/10) ' s'])
-        xlim([0 Dx_])
+        subplot('Position',[0.1+2*exw 0.95-exw*Dy/Dx_ exw exw*Dy/Dx_*0.9])
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
+        xlabel(['t = ' num2str(t(ind)/10) ' s'])
+        xlim([0.1 0.9]*Dx_)
+        ylim([0.1 0.9]*Dy)
+        axis equal
+        set(gca,'xtick',[],'ytick',[],'box','on')
+    elseif(indi==ex_indis(4))
+        subplot('Position',[0.125+3*exw 0.95-exw*Dy/Dx_ exw exw*Dy/Dx_*0.9])
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
+        xlabel(['t = ' num2str(t(ind)/10) ' s'])
+        xlim([0.1 0.9]*Dx_)
+        ylim([0.1 0.9]*Dy)
         axis equal
         set(gca,'xtick',[],'ytick',[],'box','on')
         
-        
+        colormap([flipud(cc2);cc])
+        cb=colorbar('Location','east','box','on','Ticks',[0 0.5 1],'TickLabels',{num2str(-cdmn), '0.00', num2str(edmn)});
+        pos = cb.Position;
+        cb.Position = [pos(1)+pos(3)*3 pos(2)+pos(4)/2 pos(3)/3 pos(4)/2];
     end
     
     dp = (p-op);
@@ -212,12 +224,13 @@ if(makemovs)
 end
 
 figure(h2);
-subplot('Position',[0.1 topp-0.025-exw*Dy/Dx_-0.2 0.4 0.2]);
+subplot('Position',[0.08 0.915-exw*Dy/Dx_-0.225 0.4 0.215]);
 [ax, hh1, hh2]=plotyy(stot/10,stof,stot/10,abs(stofc));
 set(ax,{'ycolor'},{'k';'k'})
 set(hh1, 'Color', 'black');
 ylabel('Stress (nN/\mum)') % label rigdat = [ht y-axisaxes(ax(2))
 ylim([0 max(stof)])
+xlabel('Time (s)') % label x-axis
 axes(ax(2))
 hold on
 set(ax(2),'ColorOrderIndex',1)

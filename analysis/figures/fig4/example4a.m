@@ -38,9 +38,9 @@ stoe = [];
 stoc = [];
 
 %% setup timepoints and space points to measure
-inds = 1:1500;
+inds = 1:1501;
 inds = inds(2:end);
-ex_indis = [1 650 1300];
+ex_indis = [1 500 1000 1500];
 bpos = linspace(0,Dx,51);
 bpos = bpos(1:end-1)+bpos(2)/2;
 ll = 10;
@@ -62,8 +62,9 @@ temp=hot(2*lst);
 cc2 = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
 indi = 1;
 Dx_ = Dx;
-exw = 0.15;
-cdmn = 0.4;
+exw = 0.2;
+cdmn = 0.5;
+edmn = 0.05;
 lpr = 10;
 rpr = 90;
 
@@ -73,7 +74,7 @@ for ind = inds
     if(makemovs)
         figure(h)
         clf
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,cdmn);
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
         xlim([0 Dx_])
         set(gca,'xtick',[],'ytick',[],'box','on')
 
@@ -84,33 +85,45 @@ for ind = inds
     end
     figure(h2)
     if(indi==ex_indis(1))
-        subplot('Position',[0.05 0.95-exw*Dy/Dx_ exw exw*Dy/Dx_])
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,cdmn);
-        title(['t = ' num2str(t(ind)/10) ' s'])
-        xlim([0 Dx_])
+        subplot('Position',[0.05 0.95-exw*Dy/Dx_ exw exw*Dy/Dx_*0.9])
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
+        xlabel(['t = ' num2str(t(ind)/10) ' s'])
+        xlim([0.1 0.9]*Dx_)
+        ylim([0.1 0.9]*Dy)
         axis equal
         set(gca,'xtick',[],'ytick',[],'box','on')
         
     elseif(indi==ex_indis(2))
-        subplot('Position',[0.075+exw 0.95-exw*Dy/Dx_ exw exw*Dy/Dx_])
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,cdmn);
-        title(['t = ' num2str(t(ind)/10) ' s'])
-        xlim([0 Dx_])
+        subplot('Position',[0.075+exw 0.95-exw*Dy/Dx_ exw exw*Dy/Dx_*0.9])
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
+        xlabel(['t = ' num2str(t(ind)/10) ' s'])
+        xlim([0.1 0.9]*Dx_)
+        ylim([0.1 0.9]*Dy)
         axis equal
         set(gca,'xtick',[],'ytick',[],'box','on')
     elseif(indi==ex_indis(3))
-        subplot('Position',[0.1+2*exw 0.95-exw*Dy/Dx_ exw exw*Dy/Dx_])
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,cdmn);
-        title(['t = ' num2str(t(ind)/10) ' s'])
-        xlim([0 Dx_])
+        subplot('Position',[0.1+2*exw 0.95-exw*Dy/Dx_ exw exw*Dy/Dx_*0.9])
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
+        xlabel(['t = ' num2str(t(ind)/10) ' s'])
+        xlim([0.1 0.9]*Dx_)
+        ylim([0.1 0.9]*Dy)
+        axis equal
+        set(gca,'xtick',[],'ytick',[],'box','on')
+    elseif(indi==ex_indis(4))
+        subplot('Position',[0.125+3*exw 0.95-exw*Dy/Dx_ exw exw*Dy/Dx_*0.9])
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
+        xlabel(['t = ' num2str(t(ind)/10) ' s'])
+        xlim([0.1 0.9]*Dx_)
+        ylim([0.1 0.9]*Dy)
         axis equal
         set(gca,'xtick',[],'ytick',[],'box','on')
         
         colormap([flipud(cc2);cc])
-        cb=colorbar('Location','north','box','on','Ticks',[0 0.5 1],'TickLabels',{num2str(-cdmn), '0.00', num2str(cdmn)});
+        cb=colorbar('Location','east','box','on','Ticks',[0 0.5 1],'TickLabels',{num2str(-cdmn), '0.00', num2str(edmn)});
         pos = cb.Position;
-        cb.Position = [pos(1)+pos(3)/4 pos(2)+pos(4)*2/3 pos(3)*2/3 pos(4)/3];
+        cb.Position = [pos(1)+pos(3)*3 pos(2)+pos(4)/2 pos(3)/3 pos(4)/2];
     end
+    
     
     dp = (p-op);
     op = p;
@@ -208,7 +221,7 @@ end
 
 sbind = stot<=800;
 figure(h2);
-axx=subplot('Position',[0.075 0.925-exw*Dy/Dx_-0.2 0.465 0.2]);
+axx=subplot('Position',[0.075 0.915-exw*Dy/Dx_-0.225 0.4 0.215]);
 plot(stot/10,stoe,'DisplayName','Filament Extension');
 hold on
 plot(stot/10,stoc,'DisplayName','Filament Compression');

@@ -1,4 +1,4 @@
-bp = '~/Documents/MATLAB/activnet/data/fig3/examples/';
+bp = '~/Documents/MATLAB/activnet/data/examples/fig3/';
 code = 'zkyqjony';%gcqbbcyr
 cd(bp)
 
@@ -63,6 +63,8 @@ temp=hot(2*lst);
 cc2 = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
 indi = 1;
 Dx_ = 0.58*Dx;
+cdmn=0.06;
+edmn=0.06;
 
 for ind = inds
     p = reshape(zt(ind,:),[],2);
@@ -70,7 +72,7 @@ for ind = inds
     if(makemovs)
         figure(h)
         clf
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,0.05);
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
         xlim([0 Dx_])
         set(gca,'xtick',[],'ytick',[],'box','on')
 
@@ -82,28 +84,27 @@ for ind = inds
     figure(h2)
     if(indi==ex_indis(1))
         subplot('Position',[0.05 0.95-0.4*Dy/Dx_ 0.4 0.4*Dy/Dx_])
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,0.05);
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
         ylabel(['t = ' num2str(t(ind)/10) ' s'])
         xlim([0 Dx_])
         set(gca,'xtick',[],'ytick',[],'box','on')
         
         colormap([flipud(cc2);cc])
-        cb=colorbar('Location','east','box','on','Ticks',[0 0.5 1],'TickLabels',{'-0.05', '0.00', '0.05'},'TickDirection','out');
+        cb=colorbar('Location','east','box','on','Ticks',[0 0.5 1],'TickLabels',{num2str(-cdmn), '0.00', num2str(edmn)},'TickDirection','out');
         pos = cb.Position;
         cb.Position = [pos(1) pos(2)+pos(4)/3 pos(3)/2 pos(4)*2/3];
     elseif(indi==ex_indis(2))
         subplot('Position',[0.05 0.925-0.4*Dy/Dx_*2 0.4 0.4*Dy/Dx_])
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,0.05);
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
         ylabel(['t = ' num2str(t(ind)/10) ' s'])
         xlim([0 Dx_])
         set(gca,'xtick',[],'ytick',[],'box','on')
     elseif(indi==ex_indis(3))
         subplot('Position',[0.05 0.9-0.4*Dy/Dx_*3 0.4 0.4*Dy/Dx_])
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,0.05);
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
         ylabel(['t = ' num2str(t(ind)/10) ' s'])
         xlim([0 Dx_])
-        xlabel('Position (\mum)')
-        set(gca,'ytick',[],'box','on')
+        set(gca,'ytick',[],'xtick',[],'box','on')
     end
     
     dp = (p-op);
@@ -136,7 +137,7 @@ for ind = inds
     %bin tension data
     [bb,nb,sb]=bindata_line(XY,fx,bpos);
     [bc,nc,sc]=bindata_line(XY,abs(fx),bpos);
-    bv=bindata(v(:,1),p(:,1),bpos);
+    [bv,nv,sv]=bindata2(p(:,1),v(:,1),bpos);
     
     
     subind = p(:,1)<=bpos(rl)&p(:,1)>=bpos(ll);
@@ -145,16 +146,18 @@ for ind = inds
     
     % store data
     stot = [stot t(ind)];
-    stog = [stog nanmean(v(subind,1)./(p(subind,1)-Dx*Dw))];
+    stog = [stog nanmean(diff(bv(ll:rl)')./diff(bpos(ll:rl)))];
     stof = [stof nanmean(bb(ll:rl).*nb(ll:rl))/Dy];
     stoa = [stoa nanmean(bc(ll:rl).*nc(ll:rl))/Dy];
     
     if(indi==ex_indis(2))
         subplot('Position',[0.55 0.95-0.4*Dy/Dx_*1.25 0.35 0.4*Dy/Dx_*1.25])
-        ax=plotyy(bpos,bb.*nb/Dy,bpos(1:end-1),bv*10);
+        ax=plotyy(bpos,bb.*nb/Dy,bpos,bv*10);
         colorOrder = get(gca, 'ColorOrder');
-        set(ax(1),'xlim',[0 8])
-        set(ax(2),'xlim',[0 8])
+        set(ax(1),'xlim',[1 7])
+        set(ax(2),'xlim',[1 7])
+        set(ax(1),'ylim',[0 0.005])
+        set(ax(2),'ylim',[0 0.006])
         xlabel(ax(1),'Position (\mum)') % label x-axis
         ylabel(ax(1),'Stress (nN)') % label left y-axis
         ax(1).YLabel.Color=colorOrder(1,:);
@@ -211,11 +214,21 @@ ax(1).YLabel.Color=colorOrder(1,:);
 ylabel(ax(2),'Strain') % label rigdat = [ht y-axis
 % set(ax(2),'ylim',[0 0.08])
 % set(ax(2),'Box','off')
+val = cumtrapz(stot,stog);
+[c, in1] = min(abs(stot-40));
+axes(ax(2))
+hold on
+plot([4 4],[0 val(in1)],':','Color',[0.25 0.25 0.25])
+[c, in2] = min(abs(stot-100));
+[c, in3] = min(abs(stot-400));
+plot([10 40],[val(in2) val(in3)]-0.01,'--','Color',[0.25 0.25 0.25])
+
 pos = axx.Position;
-axes('Position',[pos(1)+pos(3)*0.55 pos(2)+0.18*pos(4) pos(3)/3 pos(4)/3])
+axes('Position',[pos(1)+pos(3)*0.65 pos(2)+0.2*pos(4) pos(3)/4 pos(4)/4])
 box on
 plot(stot/10,cumtrapz(stot,stog),'Color',colorOrder(2,:))
 xlim([0 500])
+ylabel('Strain')
 print('-depsc','-r0',[code '_ex.eps']);
     
 % close(h2)

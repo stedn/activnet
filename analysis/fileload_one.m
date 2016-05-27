@@ -1,5 +1,5 @@
- bp = '/Users/wmcfadden/activ_phi_sweep_b/';
-code = 'bewrzbbz';
+ bp = '/Users/wmcfadden/activ_rec_sweep_a/';
+code = 'atokdwme';
 cd(bp)
 fid = fopen([bp code '_scr.txt']);
 C = textscan(fid, '%s','delimiter', '\n');
@@ -77,7 +77,7 @@ for ind = inds
 %     whitebg('black')
     set(gcf,'Color',[0 0 0])
     set(gcf,'InvertHardcopy','off')
-    netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,0.001);
+    netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,0.1,0.1);
 
 
     axes('Position',[.75 .7 .12 .2])

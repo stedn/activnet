@@ -2,7 +2,7 @@ bp = '~/Documents/MATLAB/activnet/data/examples/fig6/';
 code = 'vimlpcks';%gcqbbcyr
 cd(bp)
 
-makemovs = 1;
+makemovs = 0;
 
 %% load param file and decipher params
 fid = fopen([bp code '_scr.txt']);
@@ -40,7 +40,7 @@ stoc = [];
 %% setup timepoints and space points to measure
 inds = 1:10:size(zt,1);
 inds = inds(2:end);
-ex_indis = [1 50 500];
+ex_indis = [1 50 400];
 bpos = linspace(0,Dx,51);
 bpos = bpos(1:end-1)+bpos(2)/2;
 ll = 10;
@@ -62,8 +62,9 @@ temp=hot(2*lst);
 cc2 = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
 indi = 1;
 Dx_ = Dx;
-exw = 0.4;
-cdmn = 0.2;
+exw = 0.35;
+cdmn = 0.5;
+edmn = 0.05;
 lpr = 10;
 rpr = 90;
 
@@ -73,7 +74,7 @@ for ind = inds
     if(makemovs)
         figure(h)
         clf
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,cdmn);
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
         xlim([0 Dx_])
         set(gca,'xtick',[],'ytick',[],'box','on')
 
@@ -84,17 +85,17 @@ for ind = inds
     end
     figure(h2)
     if(indi==ex_indis(3))
-        subplot('Position',[0.1 0.95-exw*Dy/Dx_ exw exw*Dy/Dx_])
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,cdmn);
-        title(['t = ' num2str(t(ind)/10) ' s'])
+        subplot('Position',[0.075 0.95-exw*Dy/Dx_ exw exw*Dy/Dx_])
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
+        ylabel(['\tau_r = ' num2str(1/r/10) ' s'])
         xlim([0 Dx_])
         axis equal
         set(gca,'xtick',[],'ytick',[],'box','on')
         
         colormap([flipud(cc2);cc])
-        cb=colorbar('Location','north','box','on','Ticks',[0 0.5 1],'TickLabels',{num2str(-cdmn), '0.00', num2str(cdmn)});
+        cb=colorbar('Location','south','box','on','Ticks',[0 0.5 1],'TickLabels',{num2str(-cdmn), '0.00', num2str(edmn)});
         pos = cb.Position;
-        cb.Position = [pos(1)+pos(3)/4 pos(2)+pos(4)*2/3 pos(3)*2/3 pos(4)/3];
+        cb.Position = [pos(1)+pos(3)/2 pos(2)-1.65*pos(4) pos(3)/2 pos(4)/3];
     end
     
     dp = (p-op);

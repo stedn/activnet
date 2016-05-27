@@ -64,7 +64,9 @@ cc = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
 temp=hot(2*lst);
 cc2 = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
 indi = 1;
-Dx_ = 0.58*Dx;
+Dx_ = 0.53*Dx;
+cdmn=0.05;
+edmn=0.05;
 
 for ind = inds
     p = reshape(zt(ind,:),[],2);
@@ -72,7 +74,7 @@ for ind = inds
     if(makemovs)
         figure(h)
         clf
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,0.05);
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
         xlim([0 Dx_])
         set(gca,'xtick',[],'ytick',[],'box','on')
 
@@ -84,15 +86,12 @@ for ind = inds
     figure(h2)
     if(indi==ex_indis(1))
         subplot('Position',[0.05 0.95-0.4*Dy/Dx_ 0.4 0.4*Dy/Dx_])
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,0.05);
-        ylabel(['t = ' num2str(t(ind)/10) ' s'])
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
+        ylabel(['\tau_r = \infty' s'])
         xlim([0 Dx_])
         set(gca,'xtick',[],'ytick',[],'box','on')
         
-        colormap([flipud(cc2);cc])
-        cb=colorbar('Location','east','box','on','Ticks',[0 0.5 1],'TickLabels',{'-0.05', '0.00', '0.05'},'TickDirection','out');
-        pos = cb.Position;
-        cb.Position = [pos(1)+pos(3)/2 pos(2)+pos(4)/3 pos(3)/2 pos(4)*2/3];
+        
     end
     
     dp = (p-op);

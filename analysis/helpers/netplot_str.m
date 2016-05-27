@@ -1,4 +1,5 @@
-function netplot_str(p,L,lf,ls,Dx,Dy,clr,clr2,str_max)    
+function netplot_str(p,L,lf,ls,Dx,Dy,clr,clr2,str_e,str_c) 
+
     ncnt = ceil(L/ls)+1;
     l0 = L/(ncnt-1);
 
@@ -33,14 +34,16 @@ function netplot_str(p,L,lf,ls,Dx,Dy,clr,clr2,str_max)
     l = l0 + l0*lf;
     str = sqrt((XY(:,3)-XY(:,1)).^2 + (XY(:,4)-XY(:,2)).^2);
     kn = (str-l)>=0;
-    str = max(min(length(clr),ceil(length(clr)*abs(str-l)/l/str_max)),1);
+    
 %     plot(XY(:,1),XY(:,2),'.');
     
     for i =1:size(XY,1)
         if(kn(i))
-            line([XY(i,1)';XY(i,3)'],[XY(i,2)';XY(i,4)'],'Color',clr(str(i),:),'LineWidth',1);
+            stri = max(min(length(clr),ceil(length(clr)*abs(str(i)-l)/l/str_e)),1);
+            line([XY(i,1)';XY(i,3)'],[XY(i,2)';XY(i,4)'],'Color',clr(stri,:),'LineWidth',1);
         else
-            line([XY(i,1)';XY(i,3)'],[XY(i,2)';XY(i,4)'],'Color',clr2(str(i),:),'LineWidth',1);
+            stri = max(min(length(clr),ceil(length(clr)*abs(str(i)-l)/l/str_c)),1);
+            line([XY(i,1)';XY(i,3)'],[XY(i,2)';XY(i,4)'],'Color',clr2(stri,:),'LineWidth',1);
         end
     end
     xlim([0 Dx]);

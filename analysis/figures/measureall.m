@@ -96,11 +96,12 @@ for ind = inds
     %bin tension data
     [bb,nb,sb]=bindata_line(XY,fx,bpos);
     [bc,nc,sc]=bindata_line(XY,abs(fx),bpos);
+    [bv,nv,sv]=bindata2(p(:,1),v(:,1),bpos);
     
     subind = p(:,1)<=bpos(rl)&p(:,1)>=bpos(ll);
     % store data
     stot = [stot t(ind)];
-    stog = [stog nanmean(v(subind,1)./(p(subind,1)-Dx*Dw))];
+    stog = [stog nanmean(diff(bv(ll:rl)')./diff(bpos(ll:rl)))];
     stow = [stow (prctile(cpx,rpr)-prctile(cpx,lpr))];
     stof = [stof nanmean(bb(ll:rl).*nb(ll:rl))/Dy];
     stoa = [stoa nanmean(bc(ll:rl).*nc(ll:rl))/Dy];
