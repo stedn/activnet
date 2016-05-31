@@ -48,7 +48,7 @@ for ind=1:size(allt,1)
     
 end
 axes(ax1);
-xlabel('Number of crosslinks (L/l_c-1)')
+xlabel('Number of crosslinks per filament (L/l_c-1)')
 ylabel('Normalized effective viscosity (\eta/\xi)')
 plot(linspace(0,25,20),pi/4*linspace(0,25,20).^2,'k:')
 axes(ax2);
@@ -56,7 +56,7 @@ loglog([10 1000],[10 1000],'k:')
 xlim([10 1000])
 ylim([10 1000])
 xlabel('Predicted \tau_c (L^2\xi/l_c\mu)')
-ylabel('Simulation Transition Time (s)')
+ylabel('Simulated Transition Time \tau_c (s)')
 
 annotation('textbox', [0.005 0.37 0.05 0.05],'String','a)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 annotation('textbox', [0.46 0.37 0.05 0.05],'String','b)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
