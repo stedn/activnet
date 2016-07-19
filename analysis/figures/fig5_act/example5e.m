@@ -1,4 +1,4 @@
-code = 'ekwfpndo'
+code = 'xqyrnptr';
 
 %% load param file and decipher params
 fid = fopen([bp code '_scr.txt']);
@@ -35,14 +35,14 @@ stot2 = 0;
 
    
 %% setup timepoints and space points to measure
-[c, lind] = min(abs(t-3800));
-inds = 1:lind;
-inds = inds(2:end);
-ex_indis = [2000];
+[c, lind] = min(abs(t-10000));
+inds = 4000;
+ex_indis = [1];
 bpos = linspace(0,Dx,51);
 bpos = bpos(1:end-1)+bpos(2)/2;
 ll = 4;
 rl = 16;
+indi=1;
 
 %% for loop over timepoints to display
 if(makemovs)
@@ -50,14 +50,6 @@ if(makemovs)
     h1 = figure; 
     h = figure('Position', [50, 100, 100+600*Dx/Dy, 600]);
 end
-lst = size(zt,1);
-trp = repmat((1:lst)'/lst,1,3);
-temp=flipud(winter(lst));
-temp2 = bone(2*lst);
-cc = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
-temp=hot(2*lst);
-cc2 = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
-indi = 1;
 
 for ind = inds
     p = reshape(zt(ind,:),[],2);
@@ -68,7 +60,7 @@ for ind = inds
         netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
         xlim([0 Dx_])
         set(gca,'xtick',[],'ytick',[],'box','on')
-
+       
         colormap([flipud(cc2);cc])
         colorbar('westoutside')
         drawnow
@@ -76,16 +68,13 @@ for ind = inds
     end
     figure(h2)
     if(indi==ex_indis(1))
-        subplot('Position',[0.05 0.925-0.4*Dy/Dx_*2 0.4 0.4*Dy/Dx_])
+        subplot('Position',[0.05 topp-0.15*Dy/Dx_*2.25 0.15 0.15*Dy/Dx_*0.9])
         netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
-        ylabel(['\tau_r = ' num2str(1/r/10) ' s'])
+        ylabel(['\tau_r = ' num2str(floor(1/r/10)) ' s'])
         xlim([0 Dx_])
         set(gca,'xtick',[],'ytick',[],'box','on')
+        axis equal
         
-        colormap([flipud(cc2);cc])
-        cb=colorbar('Location','east','box','on','Ticks',[0 0.5 1],'TickLabels',{num2str(-cdmn), '0.00', num2str(edmn)},'TickDirection','out');
-        pos = cb.Position;
-        cb.Position = [pos(1) pos(2)+pos(4)/3 pos(3)/2 pos(4)*2/3];
     end
     
     dp = (p-op);

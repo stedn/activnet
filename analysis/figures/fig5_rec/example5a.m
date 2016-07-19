@@ -43,7 +43,7 @@ stot = 0;
 [c, lind] = min(abs(t-10000));
 inds = 1:lind;
 inds = inds(2:end);
-ex_indis = [7000];
+ex_indis = [1 7000];
 bpos = linspace(0,Dx,51);
 bpos = bpos(1:end-1)+bpos(2)/2;
 ll = 4;
@@ -64,7 +64,7 @@ cc = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
 temp=hot(2*lst);
 cc2 = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
 indi = 1;
-Dx_ = 0.53*Dx;
+Dx_ = 0.33*Dx;
 cdmn=0.05;
 edmn=0.05;
 
@@ -85,13 +85,28 @@ for ind = inds
     end
     figure(h2)
     if(indi==ex_indis(1))
-        subplot('Position',[0.05 0.95-0.4*Dy/Dx_ 0.4 0.4*Dy/Dx_])
+        subplot('Position',[0.05 0.96-0.2*Dy/Dx_ 0.2 0.2*Dy/Dx_])
+        pat=patch([Dx_-Dx*Dw Dx_-Dx*Dw Dx_ Dx_],[0 Dy Dy 0],[.7 .5 0]);
+        set(pat,'FaceAlpha',0.25,'EdgeColor','none'); 
         netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
-        ylabel(['\tau_r = \infty' s'])
+        ylabel(['\tau_r = \infty s'])
         xlim([0 Dx_])
         set(gca,'xtick',[],'ytick',[],'box','on')
         
         
+    end
+    if(indi==ex_indis(2))
+        subplot('Position',[0.275 0.96-0.2*Dy/Dx_ 0.2 0.2*Dy/Dx_])
+        pat=patch([Dx_-Dx*Dw Dx_-Dx*Dw Dx_ Dx_],[0 Dy Dy 0],[.7 .5 0]);
+        set(pat,'FaceAlpha',0.25,'EdgeColor','none'); 
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
+        xlim([0 Dx_])
+        set(gca,'xtick',[],'ytick',[],'box','on')
+        
+        colormap([flipud(cc2);cc])
+        cb=colorbar('Location','south','box','on','Ticks',[0 0.5 1],'TickLabels',{num2str(-cdmn), '0.00', num2str(edmn)},'TickDirection','out');
+        pos = cb.Position;
+        cb.Position = [pos(1)+pos(3)/3 pos(2)-pos(4)*2.6 pos(3)/1.5 pos(4)*2/3];
     end
     
     dp = (p-op);

@@ -1,7 +1,7 @@
 
 bns = 51;
-ll = 5;
-rl = 30;
+ll = 4;
+rl = 20;
 
 allt = [];
 allp = [];
@@ -17,9 +17,7 @@ alln = {};
 
 
 
-
-
-bp = '/Users/wmcfadden/activ_domain/activ_domain_ed_sweep/';
+bp = '/Users/wmcfadden/activ_domain_ed_llc/';
 cd(bp);
 files = dir;
 files = {files.name};

@@ -1,4 +1,11 @@
-code = 'uazbwumf';
+bp = '~/Documents/MATLAB/activnet/data/examples/fig5/fig5_tear/';
+code = 'uazbwumf';%gcqbbcyr
+cd(bp)
+
+makemovs = 0;
+
+topp = 0.95;
+leftt = 0.525;
 
 %% load param file and decipher params
 fid = fopen([bp code '_scr.txt']);
@@ -7,7 +14,7 @@ fclose(fid);
 pare = strsplit(C{1}{9}, '>');
 paree = strsplit(pare{1}, ' ');
 paree = {paree{2:end}};
-zet=str2num(paree{2});L=str2num(paree{3});mu=-str2num(paree{4});kap=str2num(paree{5});lc=str2num(paree{6}); 
+zet=str2num(paree{2});L=str2num(paree{3});mu=str2num(paree{4});kap=str2num(paree{5});lc=str2num(paree{6}); 
 xi=str2num(paree{7});ups=str2num(paree{8});phi=str2num(paree{9});psi=str2num(paree{10});
 r=str2num(paree{11});sig=str2num(paree{12});Dx=str2num(paree{13});Dy=str2num(paree{14});Df=str2num(paree{15});
 Dw=str2num(paree{16});ls=str2num(paree{17});lf=str2num(paree{18});
@@ -28,22 +35,19 @@ zt = A(:,2:end);
 %% store initial positions and initial measurements (all 0)
 op = reshape(zt(1,:),[],2);
 tl=0;
-stof2 = 0;
-stog2 = 0;
-stoa2 = 0;
-stot2 = 0;
+stot = 0;
+stof = 0;
+stofe = 0;
+stofc = 0;
 
-   
 %% setup timepoints and space points to measure
-[c, lind] = min(abs(t-10000));
-inds = 1:lind;
+inds = 1:1:576;
 inds = inds(2:end);
-ex_indis = [400];
+ex_indis = [1 120 250 575];
 bpos = linspace(0,Dx,51);
 bpos = bpos(1:end-1)+bpos(2)/2;
-ll = 4;
-rl = 16;
-indi=1;
+ll = 10;
+rl = 40;
 
 %% for loop over timepoints to display
 if(makemovs)
@@ -51,6 +55,7 @@ if(makemovs)
     h1 = figure; 
     h = figure('Position', [50, 100, 100+600*Dx/Dy, 600]);
 end
+indi = 1;
 
 for ind = inds
     p = reshape(zt(ind,:),[],2);
@@ -61,7 +66,7 @@ for ind = inds
         netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
         xlim([0 Dx_])
         set(gca,'xtick',[],'ytick',[],'box','on')
-        
+
         colormap([flipud(cc2);cc])
         colorbar('westoutside')
         drawnow
@@ -69,17 +74,40 @@ for ind = inds
     end
     figure(h2)
     if(indi==ex_indis(1))
-        subplot('Position',[0.25 topp-0.15*Dy/Dx_ 0.15 0.15*Dy/Dx_*0.9])
+        subplot('Position',[0.05 0.95-2*exw*Dy/Dx_-0.015 exw exw*Dy/Dx_*0.9])
         netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
-        ylabel(['\tau_r = ' num2str(floor(1/r/10)) ' s'])
-        xlim([0 Dx_])
-        set(gca,'xtick',[],'ytick',[],'box','on')
+        xlabel(['t = ' num2str(t(ind)/10) ' s'])
+        xlim([0.1 0.9]*Dx_)
+        ylim([0.1 0.9]*Dy)
         axis equal
+        set(gca,'xtick',[],'ytick',[],'box','on')
         
-        colormap([flipud(cc2);cc])
-        cb=colorbar('Location','south','box','on','Ticks',[0 0.5 1],'TickLabels',{num2str(-cdmn), '0.00', num2str(edmn)});
-        pos = cb.Position;
-        cb.Position = [pos(1)+pos(3)/3 pos(2)-pos(4)*2.5 pos(3)/1.5 pos(4)/1.5];
+        ylabel('\tau_r = 33 s')
+    elseif(indi==ex_indis(2))
+        subplot('Position',[0.075+exw 0.95-2*exw*Dy/Dx_-0.015 exw exw*Dy/Dx_*0.9])
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
+        xlabel(['t = ' num2str(t(ind)/10) ' s'])
+        xlim([0.1 0.9]*Dx_)
+        ylim([0.1 0.9]*Dy)
+        axis equal
+        set(gca,'xtick',[],'ytick',[],'box','on')
+    elseif(indi==ex_indis(3))
+        subplot('Position',[0.1+2*exw 0.95-2*exw*Dy/Dx_-0.015 exw exw*Dy/Dx_*0.9])
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
+        xlabel(['t = ' num2str(t(ind)/10) ' s'])
+        xlim([0.1 0.9]*Dx_)
+        ylim([0.1 0.9]*Dy)
+        axis equal
+        set(gca,'xtick',[],'ytick',[],'box','on')
+    elseif(indi==ex_indis(4))
+        subplot('Position',[0.125+3*exw 0.95-2*exw*Dy/Dx_-0.015 exw exw*Dy/Dx_*0.9])
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
+        xlabel(['t = ' num2str(t(ind)/10) ' s'])
+        xlim([0.1 0.9]*Dx_)
+        ylim([0.1 0.9]*Dy)
+        axis equal
+        set(gca,'xtick',[],'ytick',[],'box','on')
+        
     end
     
     dp = (p-op);
@@ -99,14 +127,16 @@ for ind = inds
     tl = t(ind);
     
     % compute filament strain
-    [XY,sx,sy]=get_str(p,L,lf,ls,Dx,Dy);   
+    [XY,sx,sy,str]=get_str(p,L,lf,ls,Dx,Dy);   
 
     % compute filament tension
+    fstr = mu*str;
     fx = mu*sx;
     fy = mu*sy;
     if(mu<0)
         fx = -fx.*(1+99*double(sx>0));
         fy = -fy.*(1+99*double(sy>0));
+        fstr = -fstr.*(1+99*double(str>0));
     end
 
     %bin tension data
@@ -116,16 +146,26 @@ for ind = inds
     
     
     subind = p(:,1)<=bpos(rl)&p(:,1)>=bpos(ll);
-    cp = (XY(:,1)+XY(:,3))/2;
-    subindc = cp(:,1)<=bpos(rl)&cp(:,1)>=bpos(ll);
+    cpx = (XY(:,1)+XY(:,3))/2;
+    subindc = cpx(:,1)<=bpos(rl)&cpx(:,1)>=bpos(ll);
     
     % store data
-    stot2 = [stot2 t(ind)];
-    stog2 = [stog2 nanmean(v(subind,1)./(p(subind,1)-Dx*Dw))];
-    stof2 = [stof2 nanmean(bb(ll:rl).*nb(ll:rl))/Dy];
-    stoa2 = [stoa2 nanmean(bc(ll:rl).*nc(ll:rl))/Dy];
-    
-    
+    stot = [stot t(ind)];
+    stof = [stof nanmean(bb(ll:rl).*nb(ll:rl))/Dy];
+    stofe = [stofe sum(fstr(str>0))];
+    stofc = [stofc sum(fstr(str<0))];
+   
+%     if(indi==ex_indis(2))
+%         subplot('Position',[0.05 0.925-exw*Dy/Dx_-0.2 0.2 0.2])
+%         ax=plotyy(bpos,bb.*nb/Dy,bpos(1:length(bv)),bv*10);
+%         colorOrder = get(gca, 'ColorOrder');
+%         set(ax(1),'xlim',[0 Dx])
+%         set(ax(2),'xlim',[0 Dx])
+%         xlabel(ax(1),'Position (\mum)') % label x-axis
+%         ylabel(ax(1),'Stress (nN)') % label left y-axis
+%         ax(1).YLabel.Color=colorOrder(1,:);
+%         ylabel(ax(2),'Velocity (\mum/s)') % label rigdat = [ht y-axis
+%     end
     
     % plot spatially resolved data 
     if(makemovs)
@@ -165,8 +205,28 @@ if(makemovs)
     movie2avi(mov2,[bp code '_data_ex.avi']);
     close(h1);
 end
-    
-    
+
+figure(h2);
+subplot('Position',[0.55 0.915-2*exw*Dy/Dx_-0.015-0.225 0.4 0.215]);
+[ax, hh1, hh2]=plotyy(stot/10,stof,stot/10,abs(stofc));
+set(ax,{'ycolor'},{'k';'k'})
+set(hh1, 'Color', 'black');
+ylabel('Stress (nN/\mum)') % label rigdat = [ht y-axisaxes(ax(2))
+ylim([0 max(stof)])
+xlabel('Time (s)') % label x-axis
+axes(ax(2))
+hold on
+set(ax(2),'ColorOrderIndex',1)
+plot(stot/10,stofe);
+plot(stot/10,0*stot,'k');
+ylim([0 max(abs(stofe))])
+tks = linspace(0, max(stofe),7);
+set(ax(2),'YTick',[])
+set(ax(2),'YTickLabel', []);
+xlabel('Time (s)') % label x-axis
+legend('Compressional','Extensional','Net Stress')
 
 
-print('-depsc','-r0',[code '_ex.eps']);
+
+% close(h2)
+    

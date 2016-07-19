@@ -16,7 +16,7 @@ for muc = unique(-allp(:,3))'
             w0 = repmat(allw(subind,1),1,size(allw(subind,:),2));
             y = max(-(allw(subind,:)-w0)./w0,[],2);
             [sortedX, sortIndex] = sort(x);
-            plot(sortedX,y(sortIndex),'DisplayName',['\upsilon/\mu = ' num2str(ups/muc)],'Color',cols(coli,:))
+            plot(sortedX,y(sortIndex),'.','DisplayName',['\upsilon/\mu = ' num2str(ups/muc)],'Color',cols(coli,:))
             hold on
         end
     end
@@ -59,7 +59,7 @@ end
 loglog([0.1,1000],[0.1,1000],'k:')
 xlim([0.1 1000])
 ylim([0.1 1000])
-xlabel('Predicted $$\tau_a = $$ ($$\xi/l_c\sqrt{\mu_e\upsilon}$$)','interpreter','latex')
+xlabel('$$\tau_a = $$ ($$\xi/l_c\sqrt{\mu_e\upsilon}$$)','interpreter','latex')
 ylabel('Time of Max Stress')
 
 annotation('textbox', [0.01 0.89 0.05 0.05],'String','a)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])

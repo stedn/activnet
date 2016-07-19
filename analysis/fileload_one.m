@@ -1,5 +1,5 @@
- bp = '/Users/wmcfadden/activ_rec_sweep_a/';
-code = 'atokdwme';
+%  bp = '/Users/wmcfadden/activ_rec_sweep_a/';
+% code = 'atokdwme';
 cd(bp)
 fid = fopen([bp code '_scr.txt']);
 C = textscan(fid, '%s','delimiter', '\n');

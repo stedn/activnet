@@ -1,6 +1,4 @@
-bp = '~/Documents/MATLAB/activnet/data/examples/fig6/';
-code = 'halaykqq';%gcqbbcyr
-cd(bp)
+code = 'ekwfpndo'
 
 %% load param file and decipher params
 fid = fopen([bp code '_scr.txt']);
@@ -9,7 +7,7 @@ fclose(fid);
 pare = strsplit(C{1}{9}, '>');
 paree = strsplit(pare{1}, ' ');
 paree = {paree{2:end}};
-zet=str2num(paree{2});L=str2num(paree{3});mu=str2num(paree{4});kap=str2num(paree{5});lc=str2num(paree{6}); 
+zet=str2num(paree{2});L=str2num(paree{3});mu=-str2num(paree{4});kap=str2num(paree{5});lc=str2num(paree{6}); 
 xi=str2num(paree{7});ups=str2num(paree{8});phi=str2num(paree{9});psi=str2num(paree{10});
 r=str2num(paree{11});sig=str2num(paree{12});Dx=str2num(paree{13});Dy=str2num(paree{14});Df=str2num(paree{15});
 Dw=str2num(paree{16});ls=str2num(paree{17});lf=str2num(paree{18});
@@ -30,17 +28,21 @@ zt = A(:,2:end);
 %% store initial positions and initial measurements (all 0)
 op = reshape(zt(1,:),[],2);
 tl=0;
-stot3 = [];
-stog3 = [];
-stoe = [];
-stoc = [];
+stof2 = 0;
+stog2 = 0;
+stoa2 = 0;
+stot2 = 0;
 
+   
 %% setup timepoints and space points to measure
-inds = 1:10:size(zt,1);
+[c, lind] = min(abs(t-3800));
+inds = 1:lind;
 inds = inds(2:end);
-ex_indis = [1 50 200];
+ex_indis = [1 2000];
 bpos = linspace(0,Dx,51);
 bpos = bpos(1:end-1)+bpos(2)/2;
+ll = 4;
+rl = 16;
 
 %% for loop over timepoints to display
 if(makemovs)
@@ -56,8 +58,6 @@ cc = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
 temp=hot(2*lst);
 cc2 = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
 indi = 1;
-
-topp = 0.915-exw*Dy/Dx_;
 
 for ind = inds
     p = reshape(zt(ind,:),[],2);
@@ -75,14 +75,25 @@ for ind = inds
         mov(indi) = getframe(h);
     end
     figure(h2)
-    if(indi==ex_indis(3))
-        subplot('Position',[0.075 topp-exw*Dy/Dx_ exw exw*Dy/Dx_])
+    if(indi==ex_indis(1))
+        subplot('Position',[0.05 0.915-0.2*Dy/Dx_*2 0.2 0.2*Dy/Dx_])
+        pat=patch([Dx_-Dx*Dw Dx_-Dx*Dw Dx_ Dx_],[0 Dy Dy 0],[.7 .5 0]);
+        set(pat,'FaceAlpha',0.25,'EdgeColor','none'); 
         netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
         ylabel(['\tau_r = ' num2str(1/r/10) ' s'])
         xlim([0 Dx_])
-        axis equal
         set(gca,'xtick',[],'ytick',[],'box','on')
+        xlabel('\gamma = 0')
         
+    end
+    if(indi==ex_indis(2))
+        subplot('Position',[0.275 0.915-0.2*Dy/Dx_*2 0.2 0.2*Dy/Dx_])
+        pat=patch([Dx_-Dx*Dw Dx_-Dx*Dw Dx_ Dx_],[0 Dy Dy 0],[.7 .5 0]);
+        set(pat,'FaceAlpha',0.25,'EdgeColor','none'); 
+        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
+        xlim([0 Dx_])
+        set(gca,'xtick',[],'ytick',[],'box','on')
+        xlabel('\gamma = 0.4')
         
     end
     
@@ -103,7 +114,7 @@ for ind = inds
     tl = t(ind);
     
     % compute filament strain
-    [XY,sx,sy,str]=get_str(p,L,lf,ls,Dx,Dy);   
+    [XY,sx,sy]=get_str(p,L,lf,ls,Dx,Dy);   
 
     % compute filament tension
     fx = mu*sx;
@@ -116,30 +127,20 @@ for ind = inds
     %bin tension data
     [bb,nb,sb]=bindata_line(XY,fx,bpos);
     [bc,nc,sc]=bindata_line(XY,abs(fx),bpos);
-    [bv,nv,sv]=bindata2(p(:,1),v(:,1),bpos);
+    bv=bindata(v(:,1),p(:,1),bpos);
     
     
     subind = p(:,1)<=bpos(rl)&p(:,1)>=bpos(ll);
-    cpx = (XY(:,1)+XY(:,3))/2;
-    subindc = cpx(:,1)<=bpos(rl)&cpx(:,1)>=bpos(ll);
+    cp = (XY(:,1)+XY(:,3))/2;
+    subindc = cp(:,1)<=bpos(rl)&cp(:,1)>=bpos(ll);
     
     % store data
-    stot3 = [stot3 t(ind)];
-    stog3 = [stog3 nanmean(diff(bv(ll:rl)')./diff(bpos(ll:rl)))];
-    stoe = [stoe mean(str(str>0))];
-    stoc = [stoc mean(str(str<0))];
-   
-%     if(indi==ex_indis(2))
-%         subplot('Position',[0.05 0.925-exw*Dy/Dx_-0.2 0.2 0.2])
-%         ax=plotyy(bpos,bb.*nb/Dy,bpos(1:length(bv)),bv*10);
-%         colorOrder = get(gca, 'ColorOrder');
-%         set(ax(1),'xlim',[0 Dx])
-%         set(ax(2),'xlim',[0 Dx])
-%         xlabel(ax(1),'Position (\mum)') % label x-axis
-%         ylabel(ax(1),'Stress (nN)') % label left y-axis
-%         ax(1).YLabel.Color=colorOrder(1,:);
-%         ylabel(ax(2),'Velocity (\mum/s)') % label rigdat = [ht y-axis
-%     end
+    stot2 = [stot2 t(ind)];
+    stog2 = [stog2 nanmean(v(subind,1)./(p(subind,1)-Dx*Dw))];
+    stof2 = [stof2 nanmean(bb(ll:rl).*nb(ll:rl))/Dy];
+    stoa2 = [stoa2 nanmean(bc(ll:rl).*nc(ll:rl))/Dy];
+    
+    
     
     % plot spatially resolved data 
     if(makemovs)
@@ -148,19 +149,20 @@ for ind = inds
         plot(p(~subind,1),v(~subind,1),'.')
         hold on
         plot(p(subind,1),v(subind,1),'.')
-        plot(bpos,bv)
+        plot(bpos(1:end-1),bv)
         hold off
         xlim([0,Dx_])
-        ylim([-0.01,0.01])
+        ylim([-0.1*10^-3,0.75*10^-3])
         xlabel('x position (\mum)')
         ylabel('velocity_x (\mum/s)')
         subplot(2,1,2)
-        plot(cpx(~subindc,1),fx(~subindc),'.')
+        plot(cp(~subindc,1),fx(~subindc),'.')
         hold on
-        plot(cpx(subindc,1),fx(subindc),'.')
+        plot(cp(subindc,1),fx(subindc),'.')
         plot(bpos,bb)
         hold off
         xlim([0,Dx_])
+        ylim([-0.1*10^-3,0.75*10^-3])
         ylabel('tension_x (nN)')
         xlabel('x position (\mum)')
 
@@ -178,9 +180,8 @@ if(makemovs)
     movie2avi(mov2,[bp code '_data_ex.avi']);
     close(h1);
 end
-
-
-% close(h2)
+    
     
 
 
+print('-depsc','-r0',[code '_ex.eps']);

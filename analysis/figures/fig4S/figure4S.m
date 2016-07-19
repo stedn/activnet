@@ -28,21 +28,6 @@ subplot('Position',[0.55 0.95-0.2 0.35 0.2])
 for ind=1:size(allt,1)
     t = allt(ind,:);
     mx = max(allf(ind,:));
-    if(mx>0.005&&allp(ind,end)>0)
-        plot(sqrt(allp(ind,7)*abs(100*allp(ind,3)))/allp(ind,5),mx,'k.','DisplayName',[num2str(allp(ind,6)) ' ' num2str(allp(ind,end))])
-        hold on
-    end
-end
-
-xlabel('Predicted $$\sigma_a$$ ($$\sqrt{\mu_e\upsilon}/l_c$$)','interpreter','latex')
-ylabel('Max Stress')
-
-
-
-subplot('Position',[0.075 0.95-0.45 0.35 0.2])
-for ind=1:size(allt,1)
-    t = allt(ind,:);
-    mx = max(allf(ind,:));
     if(allp(ind,end)>0)
         plot(allp(ind,8),mx*allp(ind,5),'.','Color',[0.25 0.25 0.25],'DisplayName',[num2str(allp(ind,6)) ' ' num2str(allp(ind,end))])
         hold on
@@ -52,7 +37,21 @@ end
 xlabel('Activity Fraction $$\phi$$','interpreter','latex')
 ylabel('Normalized Max Stress ($$\sigma \cdot l_c$$)','interpreter','latex')
 
+
+% subplot('Position',[0.075 0.95-0.45 0.35 0.2])
+% for ind=1:size(allt,1)
+%     t = allt(ind,:);
+%     mx = max(allf(ind,:));
+%     if(mx>0.005&&allp(ind,end)>0)
+%         plot(sqrt(allp(ind,7)*abs(100*allp(ind,3)))/allp(ind,5),mx,'k.','DisplayName',[num2str(allp(ind,6)) ' ' num2str(allp(ind,end))])
+%         hold on
+%     end
+% end
+% 
+% xlabel('Predicted $$\sigma_a$$ ($$\sqrt{\mu_e\upsilon}/l_c$$)','interpreter','latex')
+% ylabel('Max Stress')
+
 annotation('textbox', [0.02 0.91 0.05 0.05],'String','a)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
-annotation('textbox', [0.48 0.91 0.05 0.05],'String','b)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
+annotation('textbox', [0.42 0.91 0.05 0.05],'String','b)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 
 print('-depsc','-r0',['figure4S.eps']);

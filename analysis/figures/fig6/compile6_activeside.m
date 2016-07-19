@@ -1,7 +1,7 @@
 
 bns = 51;
-ll = 5;
-rl = 30;
+ll = 32;
+rl = 47;
 
 allt = [];
 allp = [];
@@ -19,7 +19,7 @@ alln = {};
 
 
 
-bp = '/Users/wmcfadden/activ_domain/activ_domain_ed_sweep/';
+bp = '/Users/wmcfadden/activ_domain_ed/';
 cd(bp);
 files = dir;
 files = {files.name};
@@ -35,5 +35,5 @@ for f = files
 end
 
 if(size(allt)>0)
-    save('allmeas','allt','allp','allg','alla','allf','alle','allc','alln')
+    save('allmeas_activeside','allt','allp','allg','alla','allf','alle','allc','alln')
 end

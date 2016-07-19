@@ -65,7 +65,7 @@ for ind=1:size(allt,1)
     end
 end
 loglog([0.00001 100000],[1 1],':','Color',[0.25 0.25 0.25])
-ylim([0.001 2])
+ylim([0.001 5])
 ylabel('Normalized Viscosity (\eta/\eta_c)')
 xlabel('Normalized Recycling Time (\tau_r/\tau_c)')
 
@@ -80,6 +80,7 @@ for ind=1:size(allt,1)
     
     tr = 1./allp(ind,10);
     tscale=allp(ind,6)/(allp(ind,7)*mu)^(1/2)*allp(ind,2);
+    tscale2=allp(ind,2)*allp(ind,6)/allp(ind,7);
     sscale=1/10*(allp(ind,7)*mu)^(1/2)/allp(ind,5);
     
     tstop = find(allt(ind,:)==0,2);
@@ -97,7 +98,7 @@ for ind=1:size(allt,1)
      hold on
     end
 end
-ylabel('Normalized Max Stress (\sigma/\sigma_a)')
+ylabel('Normalized Steady State Stress (\sigma/\sigma_a)')
 xlabel('Normalized Recycling Time (\tau_r/\tau_a)')
 
 annotation('textbox', [0.01 0.91 0.05 0.05],'String','a)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])

@@ -2,7 +2,7 @@ bp = '~/Documents/MATLAB/activnet/data/examples/fig3/';
 code = 'zkyqjony';%gcqbbcyr
 cd(bp)
 
-makemovs = 0;
+makemovs = 1;
 
 %% load param file and decipher params
 fid = fopen([bp code '_scr.txt']);
@@ -39,7 +39,7 @@ stot = 0;
 
    
 %% setup timepoints and space points to measure
-inds = 1:ceil(size(zt,1)/500):size(zt,1);
+inds = 1:ceil(size(zt,1)/250):size(zt,1);
 inds = inds(2:end);
 ex_indis = [1 80 400];
 bpos = linspace(0,Dx,51);
@@ -62,10 +62,11 @@ cc = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
 temp=hot(2*lst);
 cc2 = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
 indi = 1;
-Dx_ = 0.58*Dx;
+Dx_ = 0.5*Dx;
+Dx__ = 0.35*Dx;
 cdmn=0.06;
 edmn=0.06;
-
+www = 0.37;
 for ind = inds
     p = reshape(zt(ind,:),[],2);
     p = [mod(p(:,1),Dx),mod(p(:,2),Dy)];
@@ -77,13 +78,15 @@ for ind = inds
         set(gca,'xtick',[],'ytick',[],'box','on')
 
         colormap([flipud(cc2);cc])
-        colorbar('westoutside')
+        cb=colorbar('Location','westoutside','box','on','Ticks',[0 0.5 1],'TickLabels',{num2str(-cdmn), '0.00', num2str(edmn)},'TickDirection','out');
         drawnow
         mov(indi) = getframe(h);
     end
     figure(h2)
     if(indi==ex_indis(1))
-        subplot('Position',[0.05 0.95-0.4*Dy/Dx_ 0.4 0.4*Dy/Dx_])
+        subplot('Position',[0.06 0.97-www*Dy/Dx_ www www*Dy/Dx_*0.9])
+        pat=patch([Dx__-Dx*Dw Dx__-Dx*Dw Dx__ Dx__],[0 Dy Dy 0],[.7 .5 0]);
+        set(pat,'FaceAlpha',0.25,'EdgeColor','none'); 
         netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
         ylabel(['t = ' num2str(t(ind)/10) ' s'])
         xlim([0 Dx_])
@@ -92,19 +95,27 @@ for ind = inds
         colormap([flipud(cc2);cc])
         cb=colorbar('Location','east','box','on','Ticks',[0 0.5 1],'TickLabels',{num2str(-cdmn), '0.00', num2str(edmn)},'TickDirection','out');
         pos = cb.Position;
-        cb.Position = [pos(1) pos(2)+pos(4)/3 pos(3)/2 pos(4)*2/3];
+        cb.Position = [pos(1) pos(2)+pos(4)/2 pos(3)/2 pos(4)/2];
     elseif(indi==ex_indis(2))
-        subplot('Position',[0.05 0.925-0.4*Dy/Dx_*2 0.4 0.4*Dy/Dx_])
+        subplot('Position',[0.06 0.97-www*Dy/Dx_*2 www www*Dy/Dx_*0.9])
+        pat=patch([Dx__-Dx*Dw Dx__-Dx*Dw Dx__ Dx__],[0 Dy Dy 0],[.7 .5 0]);
+        set(pat,'FaceAlpha',0.25,'EdgeColor','none'); 
         netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
         ylabel(['t = ' num2str(t(ind)/10) ' s'])
         xlim([0 Dx_])
         set(gca,'xtick',[],'ytick',[],'box','on')
+        
     elseif(indi==ex_indis(3))
-        subplot('Position',[0.05 0.9-0.4*Dy/Dx_*3 0.4 0.4*Dy/Dx_])
+        subplot('Position',[0.06 0.97-www*Dy/Dx_*3 www www*Dy/Dx_*0.9])
+        pat=patch([Dx__-Dx*Dw Dx__-Dx*Dw Dx__ Dx__],[0 Dy Dy 0],[.7 .5 0]);
+        set(pat,'FaceAlpha',0.25,'EdgeColor','none'); 
         netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
         ylabel(['t = ' num2str(t(ind)/10) ' s'])
         xlim([0 Dx_])
         set(gca,'ytick',[],'xtick',[],'box','on')
+        
+        
+        
     end
     
     dp = (p-op);
@@ -151,7 +162,7 @@ for ind = inds
     stoa = [stoa nanmean(bc(ll:rl).*nc(ll:rl))/Dy];
     
     if(indi==ex_indis(2))
-        subplot('Position',[0.55 0.95-0.4*Dy/Dx_*1.25 0.35 0.4*Dy/Dx_*1.25])
+        subplot('Position',[0.5 0.95-www*Dy/Dx_*1.18 0.4 www*Dy/Dx_*1.22])
         ax=plotyy(bpos,bb.*nb/Dy,bpos,bv*10);
         colorOrder = get(gca, 'ColorOrder');
         set(ax(1),'xlim',[1 7])
@@ -168,20 +179,20 @@ for ind = inds
     if(makemovs)
         figure(h1)
         subplot(2,1,1)
-        plot(p(~subind,1),v(~subind,1),'.')
-        hold on
         plot(p(subind,1),v(subind,1),'.')
-        plot(bpos(1:end-1),bv)
+        hold on
+        plot(bpos,bv)
+        plot(p(~subind,1),v(~subind,1),'.','Color',[0.75 0.75 0.75])
         hold off
         xlim([0,Dx_])
-        ylim([-0.1*10^-3,0.75*10^-3])
+        ylim([-0.1*10^-3,1.5*10^-3])
         xlabel('x position (\mum)')
         ylabel('velocity_x (\mum/s)')
         subplot(2,1,2)
-        plot(cp(~subindc,1),fx(~subindc),'.')
-        hold on
         plot(cp(subindc,1),fx(subindc),'.')
+        hold on
         plot(bpos,bb)
+        plot(cp(~subindc,1),fx(~subindc),'.','Color',[0.75 0.75 0.75])
         hold off
         xlim([0,Dx_])
         ylim([-0.1*10^-3,0.75*10^-3])
@@ -205,7 +216,7 @@ end
 
 sbind = stot<=800;
 figure(h2);
-axx=subplot('Position',[0.55 0.95-0.4*Dy/Dx_*3.35 0.35 0.4*Dy/Dx_*1.5]);
+axx=subplot('Position',[0.5 0.95-www*Dy/Dx_*2.9 0.4 0.4*Dy/Dx_*1.3]);
 myy = cumtrapz(stot,stog);
 [ax,p1,p2] = plotyy(stot(sbind)/10,stof(sbind),stot(sbind)/10,myy(sbind));
 xlabel(ax(1),'Time (s)') % label x-axis
