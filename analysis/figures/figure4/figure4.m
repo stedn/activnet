@@ -1,5 +1,5 @@
-example5a
-example5b
+example4_1
+example4_2
 
 
 subplot('Position',[0.575 0.94-0.2*Dy/Dx_*2 0.4 0.2*Dy/Dx_*2])
@@ -15,7 +15,7 @@ load('extendrec_meas')
 indabl = find(allp(:,6)==1&allp(:,5)==0.5&allp(:,11)==-0.0002&allp(:,12)==75);
 [dum,srt] = sort(allp(indabl,10));
 for ind=indabl(srt)'
-    
+
     tstop = find(allt(ind,:)==0,1);
     if(length(tstop)>0)
         tstop = tstop(1)-1;
@@ -25,7 +25,7 @@ for ind=indabl(srt)'
     t = allt(ind,1:tstop);
     sl = allf(ind,1:tstop);
     g = allg(ind,1:tstop);
-    
+
     if(1)
                 plot(t/10,cumtrapz(t,g,2),'DisplayName',['\tau_r = ' num2str(1/allp(ind,10)/10) ])
      hold on
@@ -36,7 +36,7 @@ load('extend_meas')
 indabl = find(allp(:,6)==1&allp(:,5)==0.5&allp(:,11)==-0.0002&allp(:,2)==5);
 [dum,srt] = sort(allp(indabl,10));
 for ind=indabl(srt)'
-    
+
     tstop = find(allt(ind,:)==0,1);
     if(length(tstop)>0)
         tstop = tstop(1)-1;
@@ -46,7 +46,7 @@ for ind=indabl(srt)'
     t = allt(ind,1:tstop);
     sl = allf(ind,1:tstop);
     g = allg(ind,1:tstop);
-    
+
     if(1)
                 plot(t/10,cumtrapz(t,g,2),'DisplayName','\tau_r = \infty' )
      hold on
@@ -75,10 +75,10 @@ for ind=indabl(srt)'
     else
         tstop = length(allt(ind,:));
     end
-   
+
     t = allt(ind,1:tstop);
     g = allg(ind,floor(tstop/2):tstop);
-    
+
     if(1)
         st_x=[st_x tr/ntscale];
         st_y=[st_y abs(allp(ind,11))/mean(g)];
@@ -98,17 +98,17 @@ for ind=indabl(srt)'
     ntscale = allp(ind,2)^2*allp(ind,6)/allp(ind,5)/abs(allp(ind,3))/10;
     sscale=10*(allp(ind,7)*mu)^(1/2)/allp(ind,5);
     nscale = pi/4*(allp(ind,2)/allp(ind,5)-1)^2*allp(ind,6);
-    
+
     tstop = find(allt(ind,:)==0,1);
     if(length(tstop)>0)
         tstop = tstop(1)-1;
     else
         tstop = length(allt(ind,:));
     end
-   
+
     t = allt(ind,1:tstop);
     g = allg(ind,floor(tstop/2):tstop);
-    
+
     if(1)
         st_x=[10^4.7 st_x ];
         st_y=[abs(allp(ind,11))/mean(g) st_y ];
@@ -118,7 +118,7 @@ for ind=indabl(srt)'
     end
 end
 semilogx(st_x,st_y,'Color',[0.25,0.25,0.25])
-hold on 
+hold on
 semilogx(st_x(1),st_y(1),'o','Color',[0.25,0.25,0.25],'MarkerSize',6)
 xlim([0.000005,10^5])
 ylabel('Effective Viscosity (nNs/\mum)')
@@ -129,14 +129,14 @@ load('extendrec_meas')
 
 subplot('Position',[0.575+0.0125 0.94-0.25*2 0.375 0.2])
 for ind=1:size(allt,1)
-    
-       
+
+
     mu = 100*abs(allp(ind,3));
-    
+
     tr = 1./allp(ind,10);
     nscale = pi/4*(allp(ind,2)/allp(ind,5)-1)^2*allp(ind,6);
     ntscale = allp(ind,2)^2*allp(ind,6)/allp(ind,5)/abs(allp(ind,3));
-    
+
     tstop = find(allt(ind,:)==0,2);
     if(length(tstop)>1)
         tstop = tstop(2)-1;
@@ -146,7 +146,7 @@ for ind=1:size(allt,1)
     t = allt(ind,1:tstop);
     sl = allf(ind,1:tstop);
     g = allg(ind,1:tstop);
-    
+
     if(allp(ind,11)<0&&tr>=allp(ind,6))
                 loglog(tr/ntscale,abs(allp(ind,11))/mean(g(find(abs(t-2*tr)==min(abs(t-2*tr))):end))/nscale/2,'.','Color',[0.25 0.25 0.25],'DisplayName',['\tau = ' num2str(1/allp(ind,10)) ',  \xi = ' num2str(allp(ind,6)) ',  \sigma = ' num2str(allp(ind,11))])
      hold on
@@ -157,10 +157,10 @@ load('extend_meas2')
 
 for ind=1:size(allt,1)
     mu = abs(allp(ind,3));
-    
+
     nscale = pi/4*(allp(ind,2)/allp(ind,5)-1)^2*allp(ind,6);
     ntscale = allp(ind,2)^2*allp(ind,6)/allp(ind,5)/abs(allp(ind,3));
-    
+
     tstop = find(allt(ind,:)==0,2);
     if(length(tstop)>1)
         tstop = tstop(2)-1;
@@ -170,7 +170,7 @@ for ind=1:size(allt,1)
     t = allt(ind,1:tstop);
     sl = allf(ind,1:tstop);
     g = allg(ind,1:tstop);
-    
+
     sl2 = cumtrapz(t,g,2);
     sl = diff(log(sl2),1,2)./diff(log(t),1,2);
 
@@ -200,7 +200,5 @@ annotation('textbox', [0.00 0.61 0.05 0.05],'String','c)','LineStyle','none','Fo
 annotation('textbox', [0.47 0.61 0.05 0.05],'String','d)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 
 
-print('-depsc','-r0',['figure5a.eps']);
-
-
-
+cd('~/Documents/MATLAB/activnet/figures')
+print('-depsc','-r0',['figure4.eps']);

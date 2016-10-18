@@ -1,8 +1,8 @@
 h2=figure;
-example5c
-example5d
-example5e
-example5f
+example7_1
+example7_2
+example7_3
+example7_4
 
 bp = '~/Documents/MATLAB/activnet/data/';
 cd(bp);
@@ -24,7 +24,7 @@ for ind=indabl(srt)'
     t = allt(ind,1:tstop);
     sl = allf(ind,1:tstop);
     g = allg(ind,1:tstop);
-    
+
     if(1)
                 plot([0 t]/10,[0 sl],'DisplayName',['\tau_r = ' num2str(1/allp(ind,10)/10,4)])
                 hold on
@@ -54,7 +54,7 @@ for ind=indabl(srt)'
     t = allt(ind,1:tstop);
     sl = allf(ind,1:tstop);
     g = allg(ind,1:tstop);
-    
+
     if(1)
         st_x=[st_x tr/tscale];
         st_y=[st_y mean(sl(end-10:end))];
@@ -76,12 +76,12 @@ load('actrec_meas')
 subplot('Position',[0.525+0.025 topp-0.3*2 0.4-0.05 0.23])
 for ind=1:size(allt,1)
     mu = 100*abs(allp(ind,3));
-    
+
     tr = 1./allp(ind,10);
     tscale=allp(ind,6)/(allp(ind,7)*mu)^(1/2)*allp(ind,2);
     tscale2=allp(ind,2)*allp(ind,6)/allp(ind,7);
     sscale=1/10*(allp(ind,7)*mu)^(1/2)/allp(ind,5);
-    
+
     tstop = find(allt(ind,:)==0,2);
     if(length(tstop)>1)
         tstop = tstop(2)-1;
@@ -91,7 +91,7 @@ for ind=1:size(allt,1)
     t = allt(ind,1:tstop);
     sl = allf(ind,1:tstop);
     g = allg(ind,1:tstop);
-    
+
     if(1)
                 loglog(tr/tscale,mean(sl(find(abs(t-2*tr)==min(abs(t-2*tr))):end))/sscale,'.','Color',[0.25 0.25 0.25],'DisplayName',['\tau = ' num2str(1/allp(ind,10)) ',  \xi = ' num2str(allp(ind,6)) ',  \upsilon = ' num2str(allp(ind,7))])
      hold on
@@ -107,5 +107,5 @@ annotation('textbox', [0.44 0.66 0.05 0.05],'String','b)','LineStyle','none','Fo
 annotation('textbox', [0.001 0.27 0.05 0.05],'String','c)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 annotation('textbox', [0.44 0.3 0.05 0.05],'String','d)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 
+cd('~/Documents/MATLAB/activnet/figures')
 print('-depsc','-r0',['figure5b.eps']);
-

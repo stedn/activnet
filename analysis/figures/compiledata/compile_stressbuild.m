@@ -59,4 +59,4 @@ for f = files
         end
     end
 end
-save('allmeas','allt','allp','allg','alla','allf','alle','allc','allw','alln')
+save('astress_meas','allt','allp','allg','alla','allf','alle','allc','allw','alln')

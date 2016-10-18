@@ -1,10 +1,6 @@
-bp = '/Users/wmcfadden/activ_free_sweep_nonl/';
-cd(bp);
-files = dir;
-files = {files.name};
 
 bns = 51;
-ll = 10;
+ll = 4;
 rl = 40;
 
 allt = [];
@@ -18,6 +14,13 @@ allfc = [];
 alla = [];
 allw = [];
 alln = {};
+
+
+bp = '/Users/wmcfadden/activ_rec_sweep_b/';
+cd(bp);
+files = dir;
+files = {files.name};
+
 for f = files
     if(strfind(f{1},'_scr') )
         code = strsplit(f{1},'_');
@@ -27,4 +30,9 @@ for f = files
         end
     end
 end
-save('allmeas','allt','allp','allg','alla','allf','alle','allc','allw','alln')
+
+
+
+if(size(allt)>0)
+    save('actrec_meas','allt','allp','allg','alla','allf','alle','allc','alln')
+end

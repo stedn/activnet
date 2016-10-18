@@ -1,12 +1,6 @@
-example3
-annotation('textbox', [0.015 0.93 0.05 0.05],'String','a)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
-annotation('textbox', [0.440 0.93 0.05 0.05],'String','b)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
-annotation('textbox', [0.440 0.70 0.05 0.05],'String','c)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
-
 bp = '~/Documents/MATLAB/activnet/data/';
 cd(bp);
 load('extend_meas2')
-print('-depsc','-r0','figure3a.eps');
 h2=figure;
 
 

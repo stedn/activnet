@@ -1,11 +1,11 @@
-bp = '/Users/wmcfadden/extend_llc_ver/';
+bp = '/Users/wmcfadden/activ_free_sweep_nonl/';
 cd(bp);
 files = dir;
 files = {files.name};
 
 bns = 51;
-ll = 4;
-rl = 16;
+ll = 10;
+rl = 40;
 
 allt = [];
 allp = [];
@@ -27,4 +27,4 @@ for f = files
         end
     end
 end
-save('allmeas','allt','allp','allg','alla','allf','alle','allc','allw','alln')
+save('contract_meas','allt','allp','allg','alla','allf','alle','allc','allw','alln')

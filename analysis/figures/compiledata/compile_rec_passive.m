@@ -61,5 +61,5 @@ for f = files
 end
 
 if(size(allt)>0)
-    save('allmeas','allt','allp','allg','alla','allf','alle','allc','alln')
+    save('extendrec_meas','allt','allp','allg','alla','allf','alle','allc','alln')
 end
