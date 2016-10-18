@@ -10,14 +10,14 @@ load('contract_meas')
 subplot('Position',[0.075 0.95-0.2 0.35 0.2])
 for ind=1:size(allt,1)
     t = allt(ind,:);
-    taui = find(allw(ind,:)>0.85*max(allw(ind,:)));
+    w = allw(ind,:);
+    w = (w(1)-w)/w(1);
+    taui = find(w>0.99*max(w));
     stotau = t(taui(1));
     loglog(allp(ind,2)*allp(ind,6)/allp(ind,7),stotau/10,'.','Color',[0.25 0.25 0.25],'DisplayName',[num2str(allp(ind,6))])
     hold on
 end
 loglog([1,1000],[1,1000],'k:')
-ylim([3 300])
-xlim([3 300])
 xlabel('Predicted \tau_m = (L\xi/\upsilon)')
 ylabel('Time of Max Strain')
 

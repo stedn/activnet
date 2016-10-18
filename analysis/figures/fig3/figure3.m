@@ -40,7 +40,7 @@ for ind=1:size(allt,1)
         plot(allp(ind,2)./allp(ind,5)-1,eta/allp(ind,6),'.','Color',[0.25 0.25 0.25])
         hold on
         axes(ax2);
-        if(~isempty(tau))
+        if(~isempty(tau)&&tau<t(end))
             loglog(allp(ind,2).^2./allp(ind,5)./abs(allp(ind,3)).*allp(ind,6)/10,tau/10,'.','Color',[0.25 0.25 0.25])
             hold on
         end
@@ -55,7 +55,7 @@ axes(ax2);
 loglog([10 1000],[10 1000],'k:')
 xlim([10 1000])
 ylim([10 1000])
-xlabel('Predicted \tau_c (L^2\xi/l_c\mu)')
+xlabel('Predicted \tau_c (L^2\xi/l_c\mu_e)')
 ylabel('Simulated Transition Time \tau_c (s)')
 
 annotation('textbox', [0.005 0.37 0.05 0.05],'String','a)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])

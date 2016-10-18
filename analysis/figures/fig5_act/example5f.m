@@ -36,7 +36,7 @@ stot2 = 0;
    
 %% setup timepoints and space points to measure
 [c, lind] = min(abs(t-10000));
-inds = 4000;
+inds = 1:40:4000;
 ex_indis = [1];
 bpos = linspace(0,Dx,51);
 bpos = bpos(1:end-1)+bpos(2)/2;
@@ -123,7 +123,7 @@ for ind = inds
     
     
     % plot spatially resolved data 
-    if(makemovs)
+    if(0)
         figure(h1)
         subplot(2,1,1)
         plot(p(~subind,1),v(~subind,1),'.')

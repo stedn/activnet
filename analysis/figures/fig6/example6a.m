@@ -2,7 +2,7 @@ bp = '~/Documents/MATLAB/activnet/data/examples/fig6/';
 code = 'vimlpcks';%gcqbbcyr
 cd(bp)
 
-makemovs = 0;
+makemovs = 1;
 
 %% load param file and decipher params
 fid = fopen([bp code '_scr.txt']);
@@ -38,7 +38,7 @@ stoe = [];
 stoc = [];
 
 %% setup timepoints and space points to measure
-inds = 1:10:size(zt,1);
+inds = 1:50:size(zt,1);
 inds = inds(2:end);
 ex_indis = [1 50 200];
 bpos = linspace(0,Dx,51);

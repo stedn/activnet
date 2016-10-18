@@ -41,7 +41,7 @@ stot = 0;
 %% setup timepoints and space points to measure
 inds = 1:ceil(size(zt,1)/250):size(zt,1);
 inds = inds(2:end);
-ex_indis = [1 80 400];
+ex_indis = [1 40 200];
 bpos = linspace(0,Dx,51);
 bpos = bpos(1:end-1)+bpos(2)/2;
 ll = 4;
@@ -78,7 +78,7 @@ for ind = inds
         set(gca,'xtick',[],'ytick',[],'box','on')
 
         colormap([flipud(cc2);cc])
-        cb=colorbar('Location','westoutside','box','on','Ticks',[0 0.5 1],'TickLabels',{num2str(-cdmn), '0.00', num2str(edmn)},'TickDirection','out');
+        colorbar('Location','westoutside','box','on','Ticks',[0 0.5 1],'TickLabels',{num2str(-cdmn), '0.00', num2str(edmn)},'TickDirection','out');
         drawnow
         mov(indi) = getframe(h);
     end
@@ -94,8 +94,9 @@ for ind = inds
         
         colormap([flipud(cc2);cc])
         cb=colorbar('Location','east','box','on','Ticks',[0 0.5 1],'TickLabels',{num2str(-cdmn), '0.00', num2str(edmn)},'TickDirection','out');
+        ylabel(cb,'Strain')
         pos = cb.Position;
-        cb.Position = [pos(1) pos(2)+pos(4)/2 pos(3)/2 pos(4)/2];
+        cb.Position = [pos(1)+pos(3)/8 pos(2)+pos(4)/2 pos(3)/2 pos(4)/2];
     elseif(indi==ex_indis(2))
         subplot('Position',[0.06 0.97-www*Dy/Dx_*2 www www*Dy/Dx_*0.9])
         pat=patch([Dx__-Dx*Dw Dx__-Dx*Dw Dx__ Dx__],[0 Dy Dy 0],[.7 .5 0]);
@@ -165,8 +166,8 @@ for ind = inds
         subplot('Position',[0.5 0.95-www*Dy/Dx_*1.18 0.4 www*Dy/Dx_*1.22])
         ax=plotyy(bpos,bb.*nb/Dy,bpos,bv*10);
         colorOrder = get(gca, 'ColorOrder');
-        set(ax(1),'xlim',[1 7])
-        set(ax(2),'xlim',[1 7])
+        set(ax(1),'xlim',[0.5 6.5])
+        set(ax(2),'xlim',[0.5 6.5])
         set(ax(1),'ylim',[0 0.005])
         set(ax(2),'ylim',[0 0.006])
         xlabel(ax(1),'Position (\mum)') % label x-axis

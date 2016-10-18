@@ -11,6 +11,7 @@ indabl = find(allp(:,6)==10&allp(:,7)==0.1);
 [dum,srt] = sort(allp(indabl,10));
 for ind=indabl(srt)'
     
+    tscale=allp(ind,6)/(allp(ind,7)*mu)^(1/2)*allp(ind,2);
     tstop = find(allt(ind,:)==0,1);
     if(length(tstop)>0)
         tstop = tstop(1)-1;
@@ -21,7 +22,7 @@ for ind=indabl(srt)'
     sl = allf(ind,1:tstop);
     g = allg(ind,1:tstop);
     
-    if(allp(ind,6)==10&&allp(ind,7)==0.1&&t(end)>3000)
+    if(t(end)>2000)
                 plot(t/10,cumtrapz(t,g,2),'DisplayName',['\tau_r = ' num2str(1/allp(ind,10)/10,4)])
      hold on
     end
@@ -37,7 +38,8 @@ load('domain_meas')
 indabl = find(allp(:,6)==10&allp(:,7)==0.1);
 [dum,srt] = sort(allp(indabl,10));
 subplot('Position',[0.1 0.9-0.3*2 0.3 0.22])
-
+st_x = []
+st_y = []
 for ind=indabl(srt)'
      mu = 100*abs(allp(ind,3));
     tr = 1./allp(ind,10);
@@ -53,11 +55,14 @@ for ind=indabl(srt)'
     sl = allf(ind,1:tstop);
     g = allg(ind,1:tstop);
     
-    if(allp(ind,6)==10&&allp(ind,7)==0.1&&t(end)>3000)
-                semilogx(tr/tscale,mean(g(end-100:end)),'.')
-     hold on
+    if(t(end)>2*tscale)
+                %semilogx(tr/tscale,mean(g(end-100:end)),'.')
+                st_x=[st_x tr/tscale];
+                st_y=[st_y mean(g(end-100:end))];
+               
     end
 end
+semilogx(st_x,st_y,'Color',[0.25,0.25,0.25])
 xlabel('Normalized Recycling Time (\tau_r/\tau_a)')
 ylabel('Strain Rate (1/s)','interpreter','latex')
 
@@ -84,7 +89,7 @@ for ind=1:size(allp,1)
     g = allg(ind,floor(tstop/2):tstop);
     
     if(t(end)>2*tscale)
-         semilogx(tr/tscale,mean(g)/allp(ind,7)*allp(ind,6)*allp(ind,2),'.','Color',[0.25 0.25 0.25],'DisplayName',['\tau_r = ' num2str(1/allp(ind,10)/10) '  \xi = ' num2str(allp(ind,6)) '  \upsilon = ' num2str(allp(ind,7)) '  t_{last} = ' num2str(t(end))])
+         loglog(tr/tscale,mean(g)/allp(ind,7)*allp(ind,6)*allp(ind,2),'.','Color',[0.25 0.25 0.25],'DisplayName',['\tau_r = ' num2str(1/allp(ind,10)/10) '  \xi = ' num2str(allp(ind,6)) '  \upsilon = ' num2str(allp(ind,7)) '  t_{last} = ' num2str(t(end))])
          hold on
     end
 end

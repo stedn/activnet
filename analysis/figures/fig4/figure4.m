@@ -16,17 +16,17 @@ for muc = unique(-allp(:,3))'
             w0 = repmat(allw(subind,1),1,size(allw(subind,:),2));
             y = max(-(allw(subind,:)-w0)./w0,[],2);
             [sortedX, sortIndex] = sort(x);
-            plot(sortedX,y(sortIndex),'.','DisplayName',['\upsilon/\mu = ' num2str(ups/muc)],'Color',cols(coli,:))
+            plot(sortedX,y(sortIndex),'DisplayName',['\upsilon/\mu = ' num2str(ups/muc)],'Color',cols(coli,:))
             hold on
         end
     end
 end
 colormap(ax1,cols)
 cb = colorbar('Location','south','Ticks',linspace(0,1,5),'TickLabels',{'0.3','1.0','3.3','10','33'});
-title(cb,'\upsilon/\mu');
+title(cb,'\upsilon/\mu_c');
 pos = cb.Position;
 cb.Position = [pos(1)+pos(3)/2 pos(2) pos(3)/2 pos(4)/3];
-xlabel('Stiffness Asymmetry (\mu_c/\mu_e)')
+xlabel('Stiffness Asymmetry (\mu_e/\mu_c)')
 ylabel('Maximum Strain')
 
 annotation('textbox', [0.01 0.89 0.05 0.05],'String','a)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])

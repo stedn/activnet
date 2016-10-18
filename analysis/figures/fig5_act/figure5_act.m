@@ -39,6 +39,8 @@ indabl = find(allp(:,6)==10&allp(:,5)==0.3&allp(:,7)==0.1&allp(:,8)==0.25);
     %(allp(:,10)==0.0003|allp(:,10)==0.003|allp(:,10)==0.03|allp(:,10)==0.3|allp(:,10)==3));
 [dum,srt] = sort(allp(indabl,10));
 subplot('Position',[0.1 topp-0.3*2 0.3 0.2])
+st_x=[];
+st_y=[];
 for ind=indabl(srt)'
     mu = 100*abs(allp(ind,3));
     tr = 1./allp(ind,10);
@@ -54,10 +56,15 @@ for ind=indabl(srt)'
     g = allg(ind,1:tstop);
     
     if(1)
-                semilogx(tr/tscale,mean(sl(end-10:end)),'.','DisplayName',['\tau_r = ' num2str(1/allp(ind,10)/10,3)])
-                hold on
+        st_x=[st_x tr/tscale];
+        st_y=[st_y mean(sl(end-10:end))];
+
+%                 semilogx(tr/tscale,mean(sl(end-10:end)),'.','DisplayName',['\tau_r = ' num2str(1/allp(ind,10)/10,3)])
+%                 hold on
     end
 end
+semilogx(st_x,st_y,'Color',[0.25,0.25,0.25])
+
 ylabel('Steady State Stress (nN)')
 xlabel('Normalized Recycling Time (\tau_r/\tau_a)')
 xlim([0.0001 100])

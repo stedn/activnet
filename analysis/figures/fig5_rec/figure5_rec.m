@@ -31,17 +31,73 @@ for ind=indabl(srt)'
      hold on
     end
 end
+
+load('extend_meas')
+indabl = find(allp(:,6)==1&allp(:,5)==0.5&allp(:,11)==-0.0002&allp(:,2)==5);
+[dum,srt] = sort(allp(indabl,10));
+for ind=indabl(srt)'
+    
+    tstop = find(allt(ind,:)==0,1);
+    if(length(tstop)>0)
+        tstop = tstop(1)-1;
+    else
+        tstop = length(allt(ind,:));
+    end
+    t = allt(ind,1:tstop);
+    sl = allf(ind,1:tstop);
+    g = allg(ind,1:tstop);
+    
+    if(1)
+                plot(t/10,cumtrapz(t,g,2),'DisplayName','\tau_r = \infty' )
+     hold on
+    end
+end
+xlim([0 200])
 legend('Location','northeast')
 
-
-
+load('extendrec_meas')
 subplot('Position',[0.075+0.0125 0.94-0.25*2 0.375 0.2])
+st_x=[];
+st_y=[];
+
+indabl = find(allp(:,6)==1&allp(:,5)==0.5&allp(:,11)==-0.0002&allp(:,2)==5);
+[dum,srt] = sort(allp(indabl,10));
 
 for ind=indabl(srt)'
     tr = 1/allp(ind,10)/10;
-    ntscale = allp(ind,2)^2*allp(ind,6)/allp(ind,5)/abs(allp(ind,3));
+    ntscale = allp(ind,2)^2*allp(ind,6)/allp(ind,5)/abs(allp(ind,3))/10;
     sscale=10*(allp(ind,7)*mu)^(1/2)/allp(ind,5);
-    nscale = (allp(ind,2)/allp(ind,5))^2*allp(ind,6);
+    nscale = pi/4*(allp(ind,2)/allp(ind,5)-1)^2*allp(ind,6);
+    ntscale
+    tstop = find(allt(ind,:)==0,1);
+    if(length(tstop)>0)
+        tstop = tstop(1)-1;
+    else
+        tstop = length(allt(ind,:));
+    end
+   
+    t = allt(ind,1:tstop);
+    g = allg(ind,floor(tstop/2):tstop);
+    
+    if(1)
+        st_x=[st_x tr/ntscale];
+        st_y=[st_y abs(allp(ind,11))/mean(g)];
+
+%          semilogx(tr/ntscale,abs(allp(ind,11))/mean(g),'.','DisplayName',['\tau_r = ' num2str(1/allp(ind,10)/10) ])
+%          hold on
+    end
+end
+
+load('extend_meas')
+
+indabl = find(allp(:,6)==1&allp(:,5)==0.5&allp(:,11)==-0.0002&allp(:,2)==5);
+[dum,srt] = sort(allp(indabl,10));
+
+for ind=indabl(srt)'
+    tr = 1/allp(ind,10)/10;
+    ntscale = allp(ind,2)^2*allp(ind,6)/allp(ind,5)/abs(allp(ind,3))/10;
+    sscale=10*(allp(ind,7)*mu)^(1/2)/allp(ind,5);
+    nscale = pi/4*(allp(ind,2)/allp(ind,5)-1)^2*allp(ind,6);
     
     tstop = find(allt(ind,:)==0,1);
     if(length(tstop)>0)
@@ -54,13 +110,19 @@ for ind=indabl(srt)'
     g = allg(ind,floor(tstop/2):tstop);
     
     if(1)
-         semilogx(tr/ntscale,abs(allp(ind,11))/mean(g),'.','DisplayName',['\tau_r = ' num2str(1/allp(ind,10)/10) ])
-         hold on
+        st_x=[10^4.7 st_x ];
+        st_y=[abs(allp(ind,11))/mean(g) st_y ];
+
+%          semilogx(tr/ntscale,abs(allp(ind,11))/mean(g),'.','DisplayName',['\tau_r = ' num2str(1/allp(ind,10)/10) ])
+%          hold on
     end
 end
-
+semilogx(st_x,st_y,'Color',[0.25,0.25,0.25])
+hold on 
+semilogx(st_x(1),st_y(1),'o','Color',[0.25,0.25,0.25],'MarkerSize',6)
+xlim([0.000005,10^5])
 ylabel('Effective Viscosity (nNs/\mum)')
-xlabel('Normalized Recycling Time (\tau_r/\tau_c)')
+xlabel('Normalized Recycling Time (\tau_r/\tau_x)')
 
 
 load('extendrec_meas')
@@ -130,7 +192,7 @@ loglog(myx,1./(1+1./myx.^(3/4)),'--')
 loglog([0.00001 100000],[1 1],':','Color',[0.25 0.25 0.25])
 ylim([0.001 5])
 ylabel('Normalized Viscosity (\eta/\eta_c)')
-xlabel('Normalized Recycling Time (\tau_r/\tau_c)')
+xlabel('Normalized Recycling Time (\tau_r/\tau_x)')
 
 annotation('textbox', [0.00 0.915 0.05 0.05],'String','a)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 annotation('textbox', [0.49 0.915 0.05 0.05],'String','b)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])

@@ -36,7 +36,7 @@ stot2 = 0;
    
 %% setup timepoints and space points to measure
 [c, lind] = min(abs(t-3800));
-inds = 1:lind;
+inds = 1:20:lind;
 inds = inds(2:end);
 ex_indis = [1 2000];
 bpos = linspace(0,Dx,51);
@@ -74,7 +74,6 @@ for ind = inds
         drawnow
         mov(indi) = getframe(h);
     end
-    figure(h2)
     if(indi==ex_indis(1))
         subplot('Position',[0.05 0.915-0.2*Dy/Dx_*2 0.2 0.2*Dy/Dx_])
         pat=patch([Dx_-Dx*Dw Dx_-Dx*Dw Dx_ Dx_],[0 Dy Dy 0],[.7 .5 0]);
@@ -152,19 +151,19 @@ for ind = inds
         plot(bpos(1:end-1),bv)
         hold off
         xlim([0,Dx_])
-        ylim([-0.1*10^-3,0.75*10^-3])
+        ylim([-0.1*10^-3,0.5*10^-2])
         xlabel('x position (\mum)')
         ylabel('velocity_x (\mum/s)')
-        subplot(2,1,2)
-        plot(cp(~subindc,1),fx(~subindc),'.')
-        hold on
-        plot(cp(subindc,1),fx(subindc),'.')
-        plot(bpos,bb)
-        hold off
-        xlim([0,Dx_])
-        ylim([-0.1*10^-3,0.75*10^-3])
-        ylabel('tension_x (nN)')
-        xlabel('x position (\mum)')
+%         subplot(2,1,2)
+%         plot(cp(~subindc,1),fx(~subindc),'.')
+%         hold on
+%         plot(cp(subindc,1),fx(subindc),'.')
+%         plot(bpos,bb)
+%         hold off
+%         xlim([0,Dx_])
+%         ylim([-0.1*10^-3,0.75*10^-3])
+%         ylabel('tension_x (nN)')
+%         xlabel('x position (\mum)')
 
         drawnow
         mov2(indi) = getframe(h1);

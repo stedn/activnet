@@ -27,32 +27,28 @@ for ind=1:size(allt,1)
     if(isempty(term))
         term = length(sl);
     end
-    spt = cutoff+find(sl(cutoff:term-1)>0.1,1);
+    spt = cutoff+find(sl(cutoff:term-1)>0.25,1);
     if(~isempty(spt)&&allp(ind,6)==1)
         tau=myt(cutoff+find(sl(cutoff:term-1)>0.8,1));
         G = abs(allp(ind,11))./sl2(spt);
+        if(myt(spt)>500)
         axes(ax1);
-        plot(abs(allp(ind,3))/allp(ind,5),G,'.','Color',[0.25 0.25 0.25])
+        plot(myt(1:spt)/10,2*sl2(1:spt)/abs(allp(ind,11))*abs(allp(ind,3))/allp(ind,5))
         hold on
-        axes(ax2);
-        if(~isempty(tau))
-            loglog(allp(ind,2).^2./allp(ind,5)./abs(allp(ind,3)).*allp(ind,6)/10,tau/10,'.','Color',[0.25 0.25 0.25])
-            hold on
         end
+        axes(ax2);
+        plot(2*abs(allp(ind,3))/allp(ind,5),G,'.','Color',[0.25 0.25 0.25])
+        hold on
+        
     end
     
 end
-axes(ax1);
-xlabel('Estimated elastic modulus (\mu/l_c)')
-ylabel('Measured elastic modulus, G_0 (nN/\mum)')
-xlim([0.0 0.055])
-ylim([0 0.15])
 axes(ax2);
-loglog([10 1000],[10 1000],'k:')
-xlim([10 1000])
-ylim([10 1000])
-xlabel('Predicted \tau_c (L^2\xi/l_c\mu)')
-ylabel('Simulated Transition Time \tau_c (s)')
+xlabel('Estimated elastic modulus (2\mu/l_c)')
+ylabel('Measured elastic modulus, G_0 (nN/\mum)')
+axes(ax1);
+ylabel('Normalized Strain (\gamma/\sigma\cdot2\mu/l_c)')
+xlabel('Time (s)')
 
 annotation('textbox', [0.005 0.37 0.05 0.05],'String','a)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 annotation('textbox', [0.46 0.37 0.05 0.05],'String','b)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
