@@ -46,7 +46,7 @@ for ind=1:size(allt,1)
 end
 xlabel('Number of crosslinks per filament (L/l_c-1)')
 ylabel('Normalized effective viscosity (\eta/\xi)')
-plot(linspace(0,25,20),linspace(0,25,20).^2,'k:')
+plot(linspace(0,25,20),3*pi*linspace(0,25,20).^2,'k:')
 
 
 
