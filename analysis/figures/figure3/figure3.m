@@ -1,4 +1,4 @@
-bp = '~/Documents/MATLAB/activnet/data/';
+bp = '../../../data/';
 cd(bp);
 
 %% load premeasured data
@@ -110,5 +110,5 @@ ylabel('Simulated Transition Time \tau_c (s)')
 annotation('textbox', [0.005 0.37 0.05 0.05],'String','a)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 annotation('textbox', [0.46 0.37 0.05 0.05],'String','b)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 
-cd('~/Documents/MATLAB/activnet/figures')
+cd('../figures')
 print('-depsc','-r0','figure3.eps');

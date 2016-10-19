@@ -10,7 +10,7 @@ subplot('Position',[0.575 0.94-0.2*Dy/Dx_*2 0.4 0.2*Dy/Dx_*2])
 hold on
 ylabel('Strain')
 xlabel('Time (s)')
-bp = '~/Documents/MATLAB/activnet/data/';
+bp = '../..';
 cd(bp);
 load('extendrec_meas')
 
@@ -175,7 +175,7 @@ for ind=1:size(allt,1)
 
     if(allp(ind,11)<0&&tr>=xi*10)
          gam = mean(g(find(abs(t-2*tr)==min(abs(t-2*tr))):end))
-                loglog(tr/ntscale,sig/gam/nscale,'.','Color',[0.25 0.25 0.25],'DisplayName',['\tau = ' num2str(tr ',  \xi = ' num2str(xi) ',  \sigma = ' num2str(sig)])
+                loglog(tr/ntscale,sig/gam/nscale,'.','Color',[0.25 0.25 0.25],'DisplayName',['\tau = ' num2str(tr) ',  \xi = ' num2str(xi) ',  \sigma = ' num2str(sig)])
      hold on
     end
 end
@@ -240,5 +240,5 @@ annotation('textbox', [0.00 0.61 0.05 0.05],'String','c)','LineStyle','none','Fo
 annotation('textbox', [0.47 0.61 0.05 0.05],'String','d)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 
 
-cd('~/Documents/MATLAB/activnet/figures')
+cd('../figures')
 print('-depsc','-r0',['figure4.eps']);

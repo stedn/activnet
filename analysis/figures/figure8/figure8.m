@@ -1,7 +1,7 @@
 example8_1
 example8_2
 
-bp = '~/Documents/MATLAB/activnet/data/';
+bp = '../..';
 cd(bp);
 load('domain_meas')
 
@@ -113,5 +113,5 @@ annotation('textbox', [0.44 0.91 0.05 0.05],'String','b)','LineStyle','none','Fo
 annotation('textbox', [0.005 0.9-0.4-0.01 0.05 0.05],'String','c)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 annotation('textbox', [0.42 0.9-0.4+0.01 0.05 0.05],'String','d)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 
-cd('~/Documents/MATLAB/activnet/figures')
+cd('../figures')
 print('-depsc','-r0',['figure8.eps']);

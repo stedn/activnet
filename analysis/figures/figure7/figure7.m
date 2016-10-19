@@ -4,7 +4,7 @@ example7_2
 example7_3
 example7_4
 
-bp = '~/Documents/MATLAB/activnet/data/';
+bp = '../..';
 cd(bp);
 load('actrec_meas')
 
@@ -123,5 +123,5 @@ annotation('textbox', [0.44 0.66 0.05 0.05],'String','b)','LineStyle','none','Fo
 annotation('textbox', [0.001 0.27 0.05 0.05],'String','c)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 annotation('textbox', [0.44 0.3 0.05 0.05],'String','d)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 
-cd('~/Documents/MATLAB/activnet/figures')
+cd('../figures')
 print('-depsc','-r0',['figure7.eps']);

@@ -1,4 +1,5 @@
-
+bp = '../../../data/';
+cd(bp);
 
 h2=figure;
 
@@ -74,5 +75,5 @@ xlabel('Cross-link spacing, l_c (\mum)')
 ylabel('Normalized Strain Rate ($$\dot{\gamma}\xi L^{1.1} $$)','interpreter','latex')
 ylim ([0 .11])
 
-cd('~/Documents/MATLAB/activnet/figures')
+cd('../figures')
 print('-depsc','-r0',['figure10.eps']);

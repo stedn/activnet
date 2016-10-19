@@ -1,4 +1,4 @@
-bp = '~/Documents/MATLAB/activnet/data/examples/fig4/';
+bp = '../../../data/examples/fig4/';
 code = 'ueusrfzf';%gcqbbcyr
 cd(bp)
 

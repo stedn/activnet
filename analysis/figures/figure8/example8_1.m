@@ -1,4 +1,4 @@
-bp = '~/Documents/MATLAB/activnet/data/examples/fig6/';
+bp = '../../../data/examples/fig6/';
 code = 'vimlpcks';%gcqbbcyr
 cd(bp)
 

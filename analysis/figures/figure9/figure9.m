@@ -1,5 +1,4 @@
-bp = '~/Documents/MATLAB/activnet/data/';
-cd(bp);
+
 
 topp=0.95;
 w=0.33;
@@ -86,5 +85,5 @@ set(h,'YTick',[])
 set(h,'fontsize',14);
 ylim([0.001,1000])
 
-
+cd('../../../figures')
 print('-depsc','-r0',['figure_theor.eps']);

@@ -1,4 +1,4 @@
-bp = '~/Documents/MATLAB/activnet/data/examples/fig3/';
+bp = '../../../data/examples/fig3/';
 code = 'zkyqjony';%gcqbbcyr
 cd(bp)
 
@@ -269,5 +269,5 @@ annotation('textbox', [0.015 0.93 0.05 0.05],'String','a)','LineStyle','none','F
 annotation('textbox', [0.440 0.93 0.05 0.05],'String','b)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 annotation('textbox', [0.440 0.70 0.05 0.05],'String','c)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 
-cd('~/Documents/MATLAB/activnet/figures')
+cd('../figures')
 print('-depsc','-r0','figure2.eps');

@@ -1,4 +1,4 @@
-bp = '~/Documents/MATLAB/activnet/data/examples/fig5/';
+bp = '../../../data/examples/fig5/';
 cd(bp)
 makemovs = 1;
 
