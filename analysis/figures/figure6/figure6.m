@@ -6,12 +6,22 @@ load('astress_meas')
 
 ax2 = subplot('Position',[0.565,0.915-exw*Dy/Dx_-0.225,0.39,0.215]);
 for ind=1:size(allt,1)
-    t = allt(ind,:);
+    t = allt(ind,:)/10;
+
+    r = allp(ind,10)*10
+    tr = 1/r;
+    L = allp(ind,2)
+    lc = allp(ind,5)
+    mu = 100*abs(allp(ind,3))
+    xi = allp(ind,6)/10
+
+    ntscale = L^2*xi/lc/mu;
     mx = max(allf(ind,:));
     if(mx>0.005&&allp(ind,end)>0)
-        taui = find(allf(ind,:)>0.75*mx);
+        taui = find(allf(ind,:)>0.9*mx);
         stotau = t(taui(1));
-        loglog((1/allp(ind,5)*allp(ind,6)/10/sqrt(allp(ind,7)*abs(100*allp(ind,3)))),stotau/10,'.','Color',[0.25 0.25 0.25],'DisplayName',[num2str(allp(ind,6)) ' ' num2str(allp(ind,end))])
+        tau_pred = xi/lc/sqrt(ups*mu))
+        loglog(tau_pred,stotau,'.','Color',[0.25 0.25 0.25],'DisplayName',[num2str(allp(ind,6)) ' ' num2str(allp(ind,end))])
         hold on
     end
 end

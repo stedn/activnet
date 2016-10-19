@@ -11,11 +11,13 @@ fclose(fid);
 pare = strsplit(C{1}{9}, '>');
 paree = strsplit(pare{1}, ' ');
 paree = {paree{2:end}};
-zet=str2num(paree{2});L=str2num(paree{3});mu=-str2num(paree{4});kap=str2num(paree{5});lc=str2num(paree{6}); 
+zet=str2num(paree{2});L=str2num(paree{3});mu=-str2num(paree{4});kap=str2num(paree{5});lc=str2num(paree{6});
 xi=str2num(paree{7});ups=str2num(paree{8});phi=str2num(paree{9});psi=str2num(paree{10});
 r=str2num(paree{11});sig=str2num(paree{12});Dx=str2num(paree{13});Dy=str2num(paree{14});Df=str2num(paree{15});
 Dw=str2num(paree{16});ls=str2num(paree{17});lf=str2num(paree{18});
 
+xi=xi/10
+r = r*10
 
 %% load simulation data
 A = importdata([bp code '_out.txt']);
@@ -26,7 +28,7 @@ if(size(A,1)==1)
         A = [A;imp2.data];
     end
 end
-t = A(:,1);
+t = A(:,1)/10;
 zt = A(:,2:end);
 
 %% store initial positions and initial measurements (all 0)
@@ -50,7 +52,7 @@ rl = 40;
 h2 = figure;
 if(makemovs)
     clear mov mov2
-    h1 = figure; 
+    h1 = figure;
     h = figure('Position', [50, 100, 100+600*Dx/Dy, 600]);
 end
 lst = size(zt,1);
@@ -87,16 +89,16 @@ for ind = inds
     if(indi==ex_indis(1))
         subplot('Position',[0.05 0.95-exw*Dy/Dx_ exw exw*Dy/Dx_*0.9])
         netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
-        xlabel(['t = ' num2str(t(ind)/10) ' s'])
+        xlabel(['t = ' num2str(t(ind)) ' s'])
         xlim([0.1 0.9]*Dx_)
         ylim([0.1 0.9]*Dy)
         axis equal
         set(gca,'xtick',[],'ytick',[],'box','on')
-        
+
     elseif(indi==ex_indis(2))
         subplot('Position',[0.075+exw 0.95-exw*Dy/Dx_ exw exw*Dy/Dx_*0.9])
         netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
-        xlabel(['t = ' num2str(t(ind)/10) ' s'])
+        xlabel(['t = ' num2str(t(ind)) ' s'])
         xlim([0.1 0.9]*Dx_)
         ylim([0.1 0.9]*Dy)
         axis equal
@@ -104,7 +106,7 @@ for ind = inds
     elseif(indi==ex_indis(3))
         subplot('Position',[0.1+2*exw 0.95-exw*Dy/Dx_ exw exw*Dy/Dx_*0.9])
         netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
-        xlabel(['t = ' num2str(t(ind)/10) ' s'])
+        xlabel(['t = ' num2str(t(ind)) ' s'])
         xlim([0.1 0.9]*Dx_)
         ylim([0.1 0.9]*Dy)
         axis equal
@@ -112,23 +114,23 @@ for ind = inds
     elseif(indi==ex_indis(4))
         subplot('Position',[0.125+3*exw 0.95-exw*Dy/Dx_ exw exw*Dy/Dx_*0.9])
         netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
-        xlabel(['t = ' num2str(t(ind)/10) ' s'])
+        xlabel(['t = ' num2str(t(ind)) ' s'])
         xlim([0.1 0.9]*Dx_)
         ylim([0.1 0.9]*Dy)
         axis equal
         set(gca,'xtick',[],'ytick',[],'box','on')
-        
+
         colormap([flipud(cc2);cc])
         cb=colorbar('Location','east','box','on','Ticks',[0 0.5 1],'TickLabels',{num2str(-cdmn), '0.00', num2str(edmn)});
         pos = cb.Position;
         cb.Position = [pos(1)+pos(3)*3 pos(2)+pos(4)/2 pos(3)/3 pos(4)/2];
     end
-    
-    
+
+
     dp = (p-op);
     op = p;
-    
-    % remove data if has moved farther than realistically possible 
+
+    % remove data if has moved farther than realistically possible
     % these events are due to crossing domain boundary or recycling
     jumpcut = 50*median(abs(dp(1:1:end,1)));
     subind = abs(dp(1:2:end-1,2))>jumpcut|abs(dp(2:2:end,2))>jumpcut|abs(dp(1:2:end-1,1))>jumpcut|abs(dp(2:2:end,1))>jumpcut;
@@ -136,13 +138,13 @@ for ind = inds
     subind = subind(:);
     dp(subind,:)=[];
     p(subind,:)=[];
-    
+
     % compute velocities
     v = dp/(t(ind)-tl);
     tl = t(ind);
-    
+
     % compute filament strain
-    [XY,sx,sy,str]=get_str(p,L,lf,ls,Dx,Dy);   
+    [XY,sx,sy,str]=get_str(p,L,lf,ls,Dx,Dy);
 
     % compute filament tension
     fx = mu*sx;
@@ -156,18 +158,18 @@ for ind = inds
     [bb,nb,sb]=bindata_line(XY,fx,bpos);
     [bc,nc,sc]=bindata_line(XY,abs(fx),bpos);
     bv=bindata(v(:,1),p(:,1),bpos);
-    
-    
+
+
     subind = p(:,1)<=bpos(rl)&p(:,1)>=bpos(ll);
     cpx = (XY(:,1)+XY(:,3))/2;
     subindc = cpx(:,1)<=bpos(rl)&cpx(:,1)>=bpos(ll);
-    
+
     % store data
     stot = [stot t(ind)];
     stow = [stow (prctile(cpx,rpr)-prctile(cpx,lpr))];
     stoe = [stoe mean(str(str>0))];
     stoc = [stoc mean(str(str<0))];
-   
+
 %     if(indi==ex_indis(2))
 %         subplot('Position',[0.05 0.925-exw*Dy/Dx_-0.2 0.2 0.2])
 %         ax=plotyy(bpos,bb.*nb/Dy,bpos(1:length(bv)),bv*10);
@@ -179,8 +181,8 @@ for ind = inds
 %         ax(1).YLabel.Color=colorOrder(1,:);
 %         ylabel(ax(2),'Velocity (\mum/s)') % label rigdat = [ht y-axis
 %     end
-    
-    % plot spatially resolved data 
+
+    % plot spatially resolved data
     if(makemovs)
         figure(h1)
         subplot(2,1,1)
@@ -208,7 +210,7 @@ for ind = inds
         mov2(indi) = getframe(h1);
     end
     indi=indi+1;
-    
+
 end
 
 %% if there was any data to store we will now display it and save it
@@ -219,19 +221,16 @@ if(makemovs)
     close(h1);
 end
 
-sbind = stot<=800;
+sbind = stot<=80;
 figure(h2);
 axx=subplot('Position',[0.075 0.915-exw*Dy/Dx_-0.225 0.4 0.215]);
-plot(stot/10,stoe,'DisplayName','Filament Extension');
+plot(stot,stoe,'DisplayName','Filament Extension');
 hold on
-plot(stot/10,stoc,'DisplayName','Filament Compression');
-plot(stot/10,(stow-stow(1))/stow(1),'Color','k','DisplayName','Network Strain');
+plot(stot,stoc,'DisplayName','Filament Compression');
+plot(stot,(stow-stow(1))/stow(1),'Color','k','DisplayName','Network Strain');
 ylabel('Strain')
 xlabel('Time (s)')
 legend('show','Location','east')
 print('-depsc','-r0',[code '_ex.eps']);
 
 % close(h2)
-    
-
-

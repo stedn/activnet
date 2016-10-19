@@ -16,6 +16,8 @@ xi=str2num(paree{7});ups=str2num(paree{8});phi=str2num(paree{9});psi=str2num(par
 r=str2num(paree{11});sig=str2num(paree{12});Dx=str2num(paree{13});Dy=str2num(paree{14});Df=str2num(paree{15});
 Dw=str2num(paree{16});ls=str2num(paree{17});lf=str2num(paree{18});
 
+xi=xi/10
+r = r*10
 
 %% load simulation data
 A = importdata([bp code '_out.txt']);
@@ -26,7 +28,7 @@ if(size(A,1)==1)
         A = [A;imp2.data];
     end
 end
-t = A(:,1);
+t = A(:,1)/10;
 zt = A(:,2:end);
 
 %% store initial positions and initial measurements (all 0)
@@ -47,13 +49,14 @@ bpos = bpos(1:end-1)+bpos(2)/2;
 ll = 4;
 rl = 16;
 
-%% for loop over timepoints to display
 h2 = figure;
 if(makemovs)
     clear mov mov2
     h1 = figure;
     h = figure('Position', [50, 100, 100+600*Dx/Dy, 600]);
 end
+
+%% just setup stupid plotting colors
 lst = size(zt,1);
 trp = repmat((1:lst)'/lst,1,3);
 temp=flipud(winter(lst));
@@ -62,11 +65,20 @@ cc = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
 temp=hot(2*lst);
 cc2 = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
 indi = 1;
+
+
 Dx_ = 0.5*Dx;
 Dx__ = 0.35*Dx;
+
+%% color limits for strains
 cdmn=0.06;
 edmn=0.06;
+
+%% figure width
 www = 0.37;
+
+
+%% for loop over timepoints to display
 for ind = inds
     p = reshape(zt(ind,:),[],2);
     p = [mod(p(:,1),Dx),mod(p(:,2),Dy)];
@@ -88,7 +100,7 @@ for ind = inds
         pat=patch([Dx__-Dx*Dw Dx__-Dx*Dw Dx__ Dx__],[0 Dy Dy 0],[.7 .5 0]);
         set(pat,'FaceAlpha',0.25,'EdgeColor','none');
         netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
-        ylabel(['t = ' num2str(t(ind)/10) ' s'])
+        ylabel(['t = ' num2str(t(ind)) ' s'])
         xlim([0 Dx_])
         set(gca,'xtick',[],'ytick',[],'box','on')
 
@@ -102,7 +114,7 @@ for ind = inds
         pat=patch([Dx__-Dx*Dw Dx__-Dx*Dw Dx__ Dx__],[0 Dy Dy 0],[.7 .5 0]);
         set(pat,'FaceAlpha',0.25,'EdgeColor','none');
         netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
-        ylabel(['t = ' num2str(t(ind)/10) ' s'])
+        ylabel(['t = ' num2str(t(ind)) ' s'])
         xlim([0 Dx_])
         set(gca,'xtick',[],'ytick',[],'box','on')
 
@@ -111,7 +123,7 @@ for ind = inds
         pat=patch([Dx__-Dx*Dw Dx__-Dx*Dw Dx__ Dx__],[0 Dy Dy 0],[.7 .5 0]);
         set(pat,'FaceAlpha',0.25,'EdgeColor','none');
         netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
-        ylabel(['t = ' num2str(t(ind)/10) ' s'])
+        ylabel(['t = ' num2str(t(ind)) ' s'])
         xlim([0 Dx_])
         set(gca,'ytick',[],'xtick',[],'box','on')
 
@@ -157,11 +169,12 @@ for ind = inds
     subindc = cp(:,1)<=bpos(rl)&cp(:,1)>=bpos(ll);
 
     % store data
-    stot = [stot t(ind)];
-    stog = [stog nanmean(diff(bv(ll:rl)')./diff(bpos(ll:rl)))];
-    stof = [stof nanmean(bb(ll:rl).*nb(ll:rl))/Dy];
-    stoa = [stoa nanmean(bc(ll:rl).*nc(ll:rl))/Dy];
+    stot = [stot t(ind)];  % time
+    stog = [stog nanmean(diff(bv(ll:rl)')./diff(bpos(ll:rl)))]; % mean strain rate
+    stof = [stof nanmean(bb(ll:rl).*nb(ll:rl))/Dy]; % mean stress (signed)
+    stoa = [stoa nanmean(bc(ll:rl).*nc(ll:rl))/Dy]; % mean stress (absolute value)
 
+    % on the timepoint we want to save draw the stress and strain profile
     if(indi==ex_indis(2))
         subplot('Position',[0.5 0.95-www*Dy/Dx_*1.18 0.4 www*Dy/Dx_*1.22])
         ax=plotyy(bpos,bb.*nb/Dy,bpos,bv*10);
@@ -215,33 +228,43 @@ if(makemovs)
     close(h1);
 end
 
-sbind = stot<=800;
+% only plotting the times below 80 s
+sbind = stot<=80;
+
 figure(h2);
 axx=subplot('Position',[0.5 0.95-www*Dy/Dx_*2.9 0.4 0.4*Dy/Dx_*1.3]);
-myy = cumtrapz(stot,stog);
-[ax,p1,p2] = plotyy(stot(sbind)/10,stof(sbind),stot(sbind)/10,myy(sbind));
+
+%% generate strain from strain rate and plot stress and strain
+gam = cumtrapz(stot,stog);
+[ax,p1,p2] = plotyy(stot(sbind),stof(sbind),stot(sbind),gam(sbind));
+
+%% now edit the plot labels and colors
 xlabel(ax(1),'Time (s)') % label x-axis
 ylabel(ax(1),'Stress (nN)') % label left y-axis
 ax(1).YLabel.Color=colorOrder(1,:);
 ylabel(ax(2),'Strain') % label rigdat = [ht y-axis
 % set(ax(2),'ylim',[0 0.08])
 % set(ax(2),'Box','off')
-val = cumtrapz(stot,stog);
+
+%% add some stupid little lines for style points
 [c, in1] = min(abs(stot-40));
 axes(ax(2))
 hold on
-plot([4 4],[0 val(in1)],':','Color',[0.25 0.25 0.25])
-[c, in2] = min(abs(stot-100));
-[c, in3] = min(abs(stot-400));
-plot([10 40],[val(in2) val(in3)]-0.01,'--','Color',[0.25 0.25 0.25])
+plot([4 4],[0 gam(in1)],':','Color',[0.25 0.25 0.25])
+[c, in2] = min(abs(stot-10));
+[c, in3] = min(abs(stot-40));
+plot([10 40],[gam(in2) gam(in3)]-0.01,'--','Color',[0.25 0.25 0.25])
 
+%% inset graph of long term tearing
 pos = axx.Position;
 axes('Position',[pos(1)+pos(3)*0.65 pos(2)+0.2*pos(4) pos(3)/4 pos(4)/4])
 box on
-plot(stot/10,cumtrapz(stot,stog),'Color',colorOrder(2,:))
+plot(stot,gam,'Color',colorOrder(2,:))
 xlim([0 500])
 ylabel('Strain')
 
+
+%% adding annotations for figure part label
 annotation('textbox', [0.015 0.93 0.05 0.05],'String','a)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 annotation('textbox', [0.440 0.93 0.05 0.05],'String','b)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 annotation('textbox', [0.440 0.70 0.05 0.05],'String','c)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])

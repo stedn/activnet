@@ -2,6 +2,9 @@
 example5
 bp = '~/Documents/MATLAB/activnet/data/';
 cd(bp);
+
+
+%% this part shows the dependence on the ratio of the mus
 load('contract_meas')
 
 ax1 = subplot('Position',[0.565,0.915-exw*Dy/Dx_-0.225,0.39,0.215]);
