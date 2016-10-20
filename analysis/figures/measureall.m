@@ -58,7 +58,7 @@ rpr = 90;
 
 %% for loop over timepoints to measure
 
-h1 = figure('Position', [50, 100, 800, 600]);  
+
 for ind = inds
     p = reshape(zt(ind,:),[],2);
     p = [mod(p(:,1),Dx),mod(p(:,2),Dy)];
@@ -109,71 +109,11 @@ for ind = inds
     stoc = [stoc mean(str(str<0))];
     stofe = [stofe sum(fstr(str>0))];
     stofc = [stofc sum(fstr(str<0))];
-    if(0)
-        subplot(2,1,1)
-        plot(p(~subind,1),v(~subind,1),'.')
-        hold on
-        plot(p(subind,1),v(subind,1),'.')
-        hold off
-        xlim([0,Dx])
-        subplot(2,1,2)
-        plot(bpos,bb.*nb)
-        hold on
-        plot(bpos(ll:rl),bb(ll:rl).*nb(ll:rl))
-        plot(bpos,nb*max(bb))
-        plot(bpos,nb*max(bb))
-        hold off
-        xlim([0,Dx])
-        drawnow
-    end
 end
-close(h1)
+
 
 %% if there was any data to store we will now display it and save it
 if(length(stof)>2)
-    
-    h2 = figure;
-    if(1)
-        [ax,p1,p2] = plotyy(stot/10,stof,stot/10,cumtrapz(stot,stog));
-        xlabel(ax(1),'Time (s)') % label x-axis
-        ylabel(ax(1),'Stress (nN)') % label left y-axis
-        ylabel(ax(2),'Strain') % label rigdat = [ht y-axis
-    end
-    
-    if(0)
-        subplot(2,1,1)
-        w = -(stow-stow(1))/stow(1);
-%         spt = min(length(w),floor(1.5*find(w==max(w))));
-        spt = length(w);
-        plot(stot(1:spt)/10,abs(stoe(1:spt)));
-        hold on
-        plot(stot(1:spt)/10,abs(stoc(1:spt)));
-%         plot(stot(1:spt)/10,w(1:spt),'Color','k');
-        xlabel('Time (s)') % label x-axis
-        ylabel('Strain') % label rigdat = [ht y-axis
-        
-        subplot(2,1,2)
-        [ax, hh1, hh2]=plotyy(stot(1:spt)/10,stof(1:spt),stot(1:spt)/10,abs(stofc(1:spt)));
-        set(ax,{'ycolor'},{'k';'k'})
-        set(hh1, 'Color', 'black');
-        axes(ax(1))
-        hold on
-        plot(stot(1:spt)/10,stoa(1:spt),'k:');
-        ylim([0,max(stoa)])
-        ylabel('net stress') % label rigdat = [ht y-axisaxes(ax(2))
-        axes(ax(2))
-        hold on
-        set(ax(2),'ColorOrderIndex',1)
-        plot(stot(1:spt)/10,stofe(1:spt));
-        ylim([0 max(abs(stofe(1:spt)))])
-        xlabel('Time (s)') % label x-axis
-        ylabel('filament') % label rigdat = [ht y-axis
-    end
-    h_leg=annotation('textbox', [0.55 0.45 0.15 0.1],...
-            'String',{['\xi = ' num2str(xi)],['L = ' num2str(L)],['l_c = ' num2str(lc)],...
-            ['\mu = ' num2str(mu)],['\sigma = ' num2str(sig)],['\upsilon = ' num2str(ups)],['r = ' num2str(r)]});
-    print('-dpng','-r0',[code '_fig.png']);
-    close(h2)
     
     % saving data, must extend sto data to fit with all data
     if(~isempty(allg))
@@ -182,8 +122,8 @@ if(length(stof)>2)
         stot = [stot zeros(1,size(allg,2)-length(stot))];
         stoc = [stoc zeros(1,size(allc,2)-length(stoc))];
         stoe = [stoe zeros(1,size(alle,2)-length(stoe))];
-        stofc = [stofc zeros(1,size(allfc,2)-length(stofc))];
-        stofe = [stofe zeros(1,size(allfe,2)-length(stofe))];
+%        stofc = [stofc zeros(1,size(allfc,2)-length(stofc))];
+%        stofe = [stofe zeros(1,size(allfe,2)-length(stofe))];
         stoa = [stoa zeros(1,size(alla,2)-length(stoa))];
         stow = [stow zeros(1,size(allw,2)-length(stow))];
         allg = [allg zeros(size(allg,1),length(stog)-size(allg,2))];
@@ -191,8 +131,8 @@ if(length(stof)>2)
         allt = [allt zeros(size(allt,1),length(stot)-size(allt,2))];
         allc = [allc zeros(size(allc,1),length(stoc)-size(allc,2))];
         alle = [alle zeros(size(alle,1),length(stoe)-size(alle,2))];
-        allfc = [allfc zeros(size(allfc,1),length(stofc)-size(allfc,2))];
-        allfe = [allfe zeros(size(allfe,1),length(stofe)-size(allfe,2))];
+%        allfc = [allfc zeros(size(allfc,1),length(stofc)-size(allfc,2))];
+%        allfe = [allfe zeros(size(allfe,1),length(stofe)-size(allfe,2))];
         alla = [alla zeros(size(alla,1),length(stoa)-size(alla,2))];
         allw = [allw zeros(size(allw,1),length(stow)-size(allw,2))];
     end
