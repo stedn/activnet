@@ -1,5 +1,6 @@
-example8_1
-example8_2
+orig_bp=pwd;
+% example8_1
+% example8_2
 
 bp = '../..';
 cd(bp);
@@ -115,3 +116,4 @@ annotation('textbox', [0.42 0.9-0.4+0.01 0.05 0.05],'String','d)','LineStyle','n
 
 cd('../figures')
 print('-depsc','-r0',['figure8.eps']);
+cd(orig_bp)

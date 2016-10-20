@@ -1,8 +1,9 @@
+orig_bp=pwd;
 h2=figure;
-example7_1
-example7_2
-example7_3
-example7_4
+% example7_1
+% example7_2
+% example7_3
+% example7_4
 
 bp = '../..';
 cd(bp);
@@ -114,7 +115,7 @@ for ind=1:size(allt,1)
 
 end
 myx = logspace(-4,4,35);
-loglog(myx,1./(1./myx+myx),'--')
+loglog(myx,0.1./(1./myx+myx),'--')
 ylabel('Normalized Steady State Stress (\sigma/\sigma_a)')
 xlabel('Normalized Recycling Time (\tau_r/\tau_a)')
 
@@ -125,3 +126,4 @@ annotation('textbox', [0.44 0.3 0.05 0.05],'String','d)','LineStyle','none','Fon
 
 cd('../figures')
 print('-depsc','-r0',['figure7.eps']);
+cd(orig_bp)

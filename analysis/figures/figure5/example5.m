@@ -2,7 +2,7 @@ bp = '../../../data/examples/fig4/';
 code = 'ueusrfzf';%gcqbbcyr
 cd(bp)
 
-makemovs = 1;
+makemovs = 0;
 
 %% load param file and decipher params
 fid = fopen([bp code '_scr.txt']);
@@ -42,7 +42,7 @@ stoc = [];
 %% setup timepoints and space points to measure
 inds = 1:10:2001;
 %inds = inds(2:end);
-ex_indis = [1 500 1000 1500];
+ex_indis = [1 50 100 150];
 bpos = linspace(0,Dx,51);
 bpos = bpos(1:end-1)+bpos(2)/2;
 ll = 10;
@@ -192,19 +192,9 @@ for ind = inds
         plot(bpos(1:end-1),bv)
         hold off
         xlim([0,Dx_])
-        ylim([-0.3*10^-1,0.3*10^-1])
+        ylim([-0.3,0.3])
         xlabel('x position (\mum)')
         ylabel('velocity_x (\mum/s)')
-%         subplot(2,1,2)
-%         plot(cpx(~subindc,1),fx(~subindc),'.')
-%         hold on
-%         plot(cpx(subindc,1),fx(subindc),'.')
-%         plot(bpos,bb)
-%         hold off
-%         xlim([0,Dx_])
-%         %ylim([-0.1*10^-3,0.75*10^-3])
-%         ylabel('tension_x (nN)')
-%         xlabel('x position (\mum)')
 
         drawnow
         mov2(indi) = getframe(h1);

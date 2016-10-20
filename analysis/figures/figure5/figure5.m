@@ -1,4 +1,5 @@
 %% figure5
+orig_bp=pwd;
 example5
 bp = '../..';
 cd(bp);
@@ -38,3 +39,4 @@ annotation('textbox', [0.49 0.68 0.05 0.05],'String','c)','LineStyle','none','Fo
 
 cd('../figures')
 print('-depsc','-r0',['figure5.eps']);
+cd(orig_bp)

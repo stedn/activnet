@@ -1,5 +1,6 @@
-example4_1
-example4_2
+orig_bp=pwd;
+% example4_1
+% example4_2
 
 
 
@@ -150,18 +151,19 @@ xlabel('Normalized Recycling Time (\tau_r/\tau_x)')
 load('extendrec_meas')
 
 subplot('Position',[0.575+0.0125 0.94-0.25*2 0.375 0.2])
+bigtrack=[]
 for ind=1:size(allt,1)
-    r = allp(ind,10)*10
+    r = allp(ind,10)*10;
     tr = 1/r;
-    L = allp(ind,2)
-    lc = allp(ind,5)
-    mu = 100*abs(allp(ind,3))
-    xi = allp(ind,6)/10
+    L = allp(ind,2);
+    lc = allp(ind,5);
+    mu = 100*abs(allp(ind,3));
+    xi = allp(ind,6)/10;
 
-    sig = abs(allp(ind,11))
+    sig = abs(allp(ind,11));
 
-    ntscale = L^2*xi/lc/mu;
-    nscale = (L/lc-1)^2*xi;
+    ntscale = L^2*xi/lc/mu*4*pi;
+    nscale = (L/lc-1)^2*xi*4*pi;
 
     tstop = find(allt(ind,:)==0,2);
     if(length(tstop)>1)
@@ -173,10 +175,13 @@ for ind=1:size(allt,1)
     sl = allf(ind,1:tstop);
     g = allg(ind,1:tstop);
 
-    if(allp(ind,11)<0&&tr>=xi*10)
+    if(allp(ind,11)<0&&tr>=xi&&sig>1e-5)
          gam = mean(g(find(abs(t-2*tr)==min(abs(t-2*tr))):end))
                 loglog(tr/ntscale,sig/gam/nscale,'.','Color',[0.25 0.25 0.25],'DisplayName',['\tau = ' num2str(tr) ',  \xi = ' num2str(xi) ',  \sigma = ' num2str(sig)])
      hold on
+        if(sig/gam>nscale*5)
+            bigtrack
+        end
     end
 end
 
@@ -185,17 +190,17 @@ end
 load('extend_meas2')
 
 for ind=1:size(allt,1)
-    r = allp(ind,10)*10
+    r = allp(ind,10)*10;
     tr = 1/r;
-    L = allp(ind,2)
-    lc = allp(ind,5)
-    mu = 100*abs(allp(ind,3))
-    xi = allp(ind,6)/10
+    L = allp(ind,2);
+    lc = allp(ind,5);
+    mu = 100*abs(allp(ind,3));
+    xi = allp(ind,6)/10;
 
-    sig = abs(allp(ind,11))
+    sig = abs(allp(ind,11));
 
-    ntscale = L^2*xi/lc/mu;
-    nscale = (L/lc-1)^2*xi;
+    ntscale = L^2*xi/lc/mu*4*pi;
+    nscale = (L/lc-1)^2*xi*4*pi;
 
     tstop = find(allt(ind,:)==0,2);
     if(length(tstop)>1)
@@ -227,7 +232,7 @@ myx = logspace(-5,5,35);
 loglog(myx,1./(1+1./myx.^(3/4)),'--')
 
 loglog([0.00001 100000],[1 1],':','Color',[0.25 0.25 0.25])
-ylim([0.001 5])
+% ylim([0.001 5])
 ylabel('Normalized Viscosity (\eta/\eta_c)')
 xlabel('Normalized Recycling Time (\tau_r/\tau_x)')
 
@@ -242,3 +247,4 @@ annotation('textbox', [0.47 0.61 0.05 0.05],'String','d)','LineStyle','none','Fo
 
 cd('../figures')
 print('-depsc','-r0',['figure4.eps']);
+cd(orig_bp)

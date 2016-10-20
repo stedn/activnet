@@ -236,8 +236,8 @@ xlabel('Time (s)') % label x-axis
 axes(ax(2))
 hold on
 set(ax(2),'ColorOrderIndex',1)
-plot(stot/10,stofe);
-plot(stot/10,0*stot,'k');
+plot(stot,stofe);
+plot(stot,0*stot,'k');
 ylim([0 max(abs(stofe))])
 tks = linspace(0, max(stofe),7);
 set(ax(2),'YTick',[])

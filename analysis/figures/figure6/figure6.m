@@ -1,3 +1,4 @@
+orig_bp=pwd;
 example6
 
 bp = '../..';
@@ -20,7 +21,7 @@ for ind=1:size(allt,1)
     if(mx>0.005&&allp(ind,end)>0)
         taui = find(allf(ind,:)>0.9*mx);
         stotau = t(taui(1));
-        tau_pred = xi/lc/sqrt(ups*mu))
+        tau_pred = xi/lc/sqrt(ups*mu)
         loglog(tau_pred,stotau,'.','Color',[0.25 0.25 0.25],'DisplayName',[num2str(allp(ind,6)) ' ' num2str(allp(ind,end))])
         hold on
     end
@@ -37,3 +38,4 @@ annotation('textbox', [0.49 0.68 0.05 0.05],'String','c)','LineStyle','none','Fo
 
 cd('../figures')
 print('-depsc','-r0',['figure6.eps']);
+cd(orig_bp)

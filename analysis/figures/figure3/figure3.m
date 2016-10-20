@@ -1,3 +1,4 @@
+orig_bp=pwd
 bp = '../../../data/';
 cd(bp);
 
@@ -112,3 +113,4 @@ annotation('textbox', [0.46 0.37 0.05 0.05],'String','b)','LineStyle','none','Fo
 
 cd('../figures')
 print('-depsc','-r0','figure3.eps');
+cd(orig_bp)

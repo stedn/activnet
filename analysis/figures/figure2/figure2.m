@@ -1,8 +1,9 @@
+orig_bp = pwd
 bp = '../../../data/examples/fig3/';
 code = 'zkyqjony';%gcqbbcyr
 cd(bp)
 
-makemovs = 1;
+makemovs = 0;
 
 %% load param file and decipher params
 fid = fopen([bp code '_scr.txt']);
@@ -177,12 +178,12 @@ for ind = inds
     % on the timepoint we want to save draw the stress and strain profile
     if(indi==ex_indis(2))
         subplot('Position',[0.5 0.95-www*Dy/Dx_*1.18 0.4 www*Dy/Dx_*1.22])
-        ax=plotyy(bpos,bb.*nb/Dy,bpos,bv*10);
+        ax=plotyy(bpos,bb.*nb/Dy,bpos,bv);
         colorOrder = get(gca, 'ColorOrder');
         set(ax(1),'xlim',[0.5 6.5])
         set(ax(2),'xlim',[0.5 6.5])
         set(ax(1),'ylim',[0 0.005])
-        set(ax(2),'ylim',[0 0.006])
+%         set(ax(2),'ylim',[0 0.006])
         xlabel(ax(1),'Position (\mum)') % label x-axis
         ylabel(ax(1),'Stress (nN)') % label left y-axis
         ax(1).YLabel.Color=colorOrder(1,:);
@@ -269,5 +270,6 @@ annotation('textbox', [0.015 0.93 0.05 0.05],'String','a)','LineStyle','none','F
 annotation('textbox', [0.440 0.93 0.05 0.05],'String','b)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 annotation('textbox', [0.440 0.70 0.05 0.05],'String','c)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 
-cd('../figures')
+cd('../../../figures')
 print('-depsc','-r0','figure2.eps');
+cd(orig_bp)
