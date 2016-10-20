@@ -3,7 +3,7 @@ example6
 
 bp = '../..';
 cd(bp);
-load('astress_meas')
+load('astress_meas_correct')
 
 ax2 = subplot('Position',[0.565,0.915-exw*Dy/Dx_-0.225,0.39,0.215]);
 for ind=1:size(allt,1)
@@ -16,20 +16,19 @@ for ind=1:size(allt,1)
     mu = 100*abs(allp(ind,3))
     xi = allp(ind,6)/10
 
-    ntscale = L^2*xi/lc/mu;
     mx = max(allf(ind,:));
     if(mx>0.005&&allp(ind,end)>0)
         taui = find(allf(ind,:)>0.9*mx);
         stotau = t(taui(1));
-        tau_pred = xi/lc/sqrt(ups*mu)
+        tau_pred = L*xi/sqrt(ups*mu)
         loglog(tau_pred,stotau,'.','Color',[0.25 0.25 0.25],'DisplayName',[num2str(allp(ind,6)) ' ' num2str(allp(ind,end))])
         hold on
     end
 end
 loglog([0.1,1000],[0.1,1000],'k:')
-xlim([0.1 1000])
-ylim([0.1 1000])
-xlabel('$$\tau_a = $$ ($$\xi/l_c\sqrt{\mu_e\upsilon}$$)','interpreter','latex')
+% xlim([0.1 1000])
+% ylim([0.1 1000])
+xlabel('$$\tau_a = $$ ($$L\xi/\sqrt{\mu_e\upsilon}$$)','interpreter','latex')
 ylabel('Time of Max Stress')
 
 annotation('textbox', [0.01 0.89 0.05 0.05],'String','a)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
