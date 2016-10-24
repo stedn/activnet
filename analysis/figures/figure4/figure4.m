@@ -1,11 +1,11 @@
 orig_bp=pwd;
-% example4_1
-% example4_2
+example4_1
+example4_2
 
 
 
 %% plot the strain curves for the recycling and the no recycling case
-subplot('Position',[0.575 0.94-0.2*Dy/Dx_*2 0.4 0.2*Dy/Dx_*2])
+subplot('Position',[0.55 0.94-0.2*Dy/Dx_*2 0.4 0.2*Dy/Dx_*2])
 
 
 hold on
@@ -27,7 +27,7 @@ for ind=indabl(srt)'
     end
     t = allt(ind,1:tstop)/10;
     sl = allf(ind,1:tstop);
-    g = allg(ind,1:tstop);
+    g = allg(ind,1:tstop)*10;
 
     r = allp(ind,10)*10
 
@@ -53,7 +53,7 @@ for ind=indabl(srt)'
     end
     t = allt(ind,1:tstop)/10;
     sl = allf(ind,1:tstop);
-    g = allg(ind,1:tstop);
+    g = allg(ind,1:tstop)*10;
 
     if(1)
                 plot(t,cumtrapz(t,g,2),'DisplayName','\tau_r = \infty' )
@@ -142,7 +142,7 @@ hold on
 semilogx(st_x(1),st_y(1),'o','Color',[0.25,0.25,0.25],'MarkerSize',6)
 xlim([0.000005,10^5])
 ylabel('Effective Viscosity (nNs/\mum)')
-xlabel('Normalized Recycling Time (\tau_r/\tau_x)')
+xlabel('Normalized Recycling Time (\tau_r/\tau_c)')
 
 
 
@@ -150,7 +150,7 @@ xlabel('Normalized Recycling Time (\tau_r/\tau_x)')
 
 load('extendrec_meas')
 
-subplot('Position',[0.575+0.0125 0.94-0.25*2 0.375 0.2])
+subplot('Position',[0.55+0.0125 0.94-0.25*2 0.375 0.2])
 bigtrack=[]
 for ind=1:size(allt,1)
     r = allp(ind,10)*10;
@@ -232,9 +232,9 @@ myx = logspace(-5,5,35);
 loglog(myx,1./(1+1./myx.^(3/4)),'--')
 
 loglog([0.00001 100000],[1 1],':','Color',[0.25 0.25 0.25])
-% ylim([0.001 5])
+ylim([0.001 8])
 ylabel('Normalized Viscosity (\eta/\eta_c)')
-xlabel('Normalized Recycling Time (\tau_r/\tau_x)')
+xlabel('Normalized Recycling Time (\tau_r/\tau_c)')
 
 
 

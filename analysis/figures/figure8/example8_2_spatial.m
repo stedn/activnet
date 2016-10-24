@@ -136,13 +136,13 @@ end
 
 %% if there was any data to store we will now display it and save it
 
-plot(bpos,mean(gp));
+plot(bpos,mean(gp),'DisplayName','\tau_r=\infty');
 hold on
-plot(bpos,mean(gp2));
+plot(bpos,mean(gp2),'DisplayName','\tau_r=10 s');
 ylim([-0.003,0.003])
 xlabel('position (\mum)')
 ylabel('velocity (\mum/s)')
+legend('Location','southwest')
 
-title('\tau_r=10 s')
 
 

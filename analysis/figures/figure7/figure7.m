@@ -1,9 +1,9 @@
 orig_bp=pwd;
 h2=figure;
-% example7_1
-% example7_2
-% example7_3
-% example7_4
+example7_1
+example7_2
+example7_3
+example7_4
 
 bp = '../..';
 cd(bp);
@@ -20,7 +20,7 @@ for ind=indabl(srt)'
     tr = 1/r;
     L = allp(ind,2)
     lc = allp(ind,5)
-    mu = 100*abs(allp(ind,3))
+    mu = abs(allp(ind,3))
     xi = allp(ind,6)/10
 
     alln{ind}
@@ -97,7 +97,7 @@ for ind=1:size(allt,1)
     ups = allp(ind,7)
 
     tscale=L*xi/(ups*mu)^(1/2);
-    sscale=(ups*mu)^(1/2)/lc;
+    sscale=0.1*(ups*mu)^(1/2)/lc;
 
     tstop = find(allt(ind,:)==0,2);
     if(length(tstop)>1)
@@ -115,7 +115,7 @@ for ind=1:size(allt,1)
 
 end
 myx = logspace(-4,4,35);
-loglog(myx,0.1./(1./myx+myx),'--')
+loglog(myx,1./(1./myx+myx),'--')
 ylabel('Normalized Steady State Stress (\sigma/\sigma_a)')
 xlabel('Normalized Recycling Time (\tau_r/\tau_a)')
 

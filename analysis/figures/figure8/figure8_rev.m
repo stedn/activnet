@@ -6,8 +6,7 @@ bp = '../..';
 cd(bp);
 load('domain_meas')
 
-% subplot('Position',[exw+0.15 0.95-(0.8-exw)*Dy/Dx_*1.525 0.8-exw (0.8-exw)*Dy/Dx_*1.5])
-figure
+subplot('Position',[exw+0.15 0.95-(0.8-exw)*Dy/Dx_*1.525 0.8-exw (0.8-exw)*Dy/Dx_*1.5])
 indabl = find(allp(:,6)==10&allp(:,7)==0.1);
 [dum,srt] = sort(allp(indabl,10));
 for ind=indabl(srt)'
@@ -44,11 +43,10 @@ load('domain_meas')
 
 indabl = find(allp(:,6)==10&allp(:,7)==0.1);
 [dum,srt] = sort(allp(indabl,10));
-% subplot('Position',[0.1 0.9-0.3*2 0.3 0.22])
-figure
+subplot('Position',[0.1 0.9-0.3*2 0.3 0.22])
 example8_1_spatial
 example8_2_spatial
-figure
+
 subplot('Position',[exw+0.2 0.9-0.3*2 0.8-exw-0.07 0.25])
 st_x = []
 st_y = []
@@ -86,10 +84,10 @@ ylabel('Strain Rate (1/s)','interpreter','latex')
 
 
 
-% annotation('textbox', [0.005 0.91 0.05 0.05],'String','a)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
-% annotation('textbox', [0.44 0.91 0.05 0.05],'String','b)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
-% annotation('textbox', [0.005 0.9-0.4-0.01 0.05 0.05],'String','c)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
-% annotation('textbox', [0.42 0.9-0.4+0.01 0.05 0.05],'String','d)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
+annotation('textbox', [0.005 0.91 0.05 0.05],'String','a)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
+annotation('textbox', [0.44 0.91 0.05 0.05],'String','b)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
+annotation('textbox', [0.005 0.9-0.4-0.01 0.05 0.05],'String','c)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
+annotation('textbox', [0.42 0.9-0.4+0.01 0.05 0.05],'String','d)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 
 cd('../../../figures')
 print('-depsc','-r0',['figure8.eps']);

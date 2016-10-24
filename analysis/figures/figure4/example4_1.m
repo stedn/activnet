@@ -1,6 +1,6 @@
 bp = '../../../data/examples/fig5/';
 cd(bp)
-makemovs = 1;
+makemovs = 0;
 
 code = 'wwalghpo';%gcqbbcyr
 
@@ -42,10 +42,10 @@ stot = 0;
 
 
 %% setup timepoints and space points to measure
-[c, lind] = min(abs(t-10000));
+[c, lind] = min(abs(t-1000));
 inds = 1:20:3801;
 inds = inds(2:end);
-ex_indis = [1 7000];
+ex_indis = [1 190];
 bpos = linspace(0,Dx,51);
 bpos = bpos(1:end-1)+bpos(2)/2;
 ll = 4;
@@ -65,7 +65,7 @@ cc = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
 temp=hot(2*lst);
 cc2 = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
 indi = 1;
-Dx_ = 0.5*Dx;
+Dx_ = 0.33*Dx;
 cdmn=0.05;
 edmn=0.05;
 
@@ -170,16 +170,6 @@ for ind = inds
         ylim([-0.1*10^-3,0.5*10^-2])
         xlabel('x position (\mum)')
         ylabel('velocity_x (\mum/s)')
-%         subplot(2,1,2)
-%         plot(cp(~subindc,1),fx(~subindc),'.')
-%         hold on
-%         plot(cp(subindc,1),fx(subindc),'.')
-%         plot(bpos,bb)
-%         hold off
-%         xlim([0,Dx_])
-%         ylim([-0.1*10^-3,0.75*10^-3])
-%         ylabel('tension_x (nN)')
-%         xlabel('x position (\mum)')
 
         drawnow
         mov2(indi) = getframe(h1);

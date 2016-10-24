@@ -40,7 +40,7 @@ stoc = [];
 %% setup timepoints and space points to measure
 inds = 1:50:size(zt,1);
 inds = inds(2:end);
-ex_indis = [1 50 200];
+ex_indis = [1 50 98];
 bpos = linspace(0,Dx,51);
 bpos = bpos(1:end-1)+bpos(2)/2;
 

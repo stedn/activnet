@@ -37,10 +37,10 @@ stot2 = 0;
 
 
 %% setup timepoints and space points to measure
-[c, lind] = min(abs(t-3800));
+[c, lind] = min(abs(t-380));
 inds = 1:20:lind;
 inds = inds(2:end);
-ex_indis = [1 2000];
+ex_indis = [1 19];
 bpos = linspace(0,Dx,51);
 bpos = bpos(1:end-1)+bpos(2)/2;
 ll = 4;

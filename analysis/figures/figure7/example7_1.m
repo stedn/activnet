@@ -1,6 +1,6 @@
 bp = '../../../data/examples/fig5/';
 cd(bp)
-makemovs = 1;
+makemovs = 0;
 
 code = 'fvidbrhe';%gcqbbcyr
 
@@ -43,6 +43,7 @@ stot = 0;
 
 %% setup timepoints and space points to measure
 inds = 1:40:4000;
+inds=4000;
 ex_indis = [1];
 bpos = linspace(0,Dx,51);
 bpos = bpos(1:end-1)+bpos(2)/2;
