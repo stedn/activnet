@@ -45,11 +45,7 @@ bpos = linspace(0,Dx,51);
 bpos = bpos(1:end-1)+bpos(2)/2;
 
 %% for loop over timepoints to display
-if(makemovs)
-    clear mov mov2
-    h1 = figure;
-    h = figure('Position', [50, 100, 100+600*Dx/Dy, 600]);
-end
+
 lst = size(zt,1);
 trp = repmat((1:lst)'/lst,1,3);
 temp=flipud(winter(lst));
@@ -64,19 +60,7 @@ topp = 0.915-exw*Dy/Dx_;
 for ind = inds
     p = reshape(zt(ind,:),[],2);
     p = [mod(p(:,1),Dx),mod(p(:,2),Dy)];
-    if(makemovs)
-        figure(h)
-        clf
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
-        xlim([0 Dx_])
-        set(gca,'xtick',[],'ytick',[],'box','on')
-
-        colormap([flipud(cc2);cc])
-        colorbar('westoutside')
-        drawnow
-        mov(indi) = getframe(h);
-    end
-    figure(h2)
+    
     if(indi==ex_indis(3))
         subplot('Position',[0.075 topp-exw*Dy/Dx_ exw exw*Dy/Dx_])
         netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
@@ -132,40 +116,8 @@ for ind = inds
     stoc = [stoc mean(str(str<0))];
 
 
-    % plot spatially resolved data
-    if(makemovs)
-        figure(h1)
-        subplot(2,1,1)
-        plot(p(~subind,1),v(~subind,1),'.')
-        hold on
-        plot(p(subind,1),v(subind,1),'.')
-        plot(bpos,bv)
-        hold off
-        xlim([0,Dx_])
-        ylim([-0.01,0.01])
-        xlabel('x position (\mum)')
-        ylabel('velocity_x (\mum/s)')
-        subplot(2,1,2)
-        plot(cpx(~subindc,1),fx(~subindc),'.')
-        hold on
-        plot(cpx(subindc,1),fx(subindc),'.')
-        plot(bpos,bb)
-        hold off
-        xlim([0,Dx_])
-        ylabel('tension_x (nN)')
-        xlabel('x position (\mum)')
-
-        drawnow
-        mov2(indi) = getframe(h1);
-    end
+    
     indi=indi+1;
 
 end
 
-%% if there was any data to store we will now display it and save it
-if(makemovs)
-    movie2avi(mov,[bp code '_mov_ex.avi']);
-    close(h);
-    movie2avi(mov2,[bp code '_data_ex.avi']);
-    close(h1);
-end
