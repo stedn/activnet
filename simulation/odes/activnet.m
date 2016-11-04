@@ -1,4 +1,6 @@
 function activnet(N,tt,z0,zet,L,mu,muN,kap,xi,nu,psi,sig,Dx,Dy,Df,Dw,Dp,ncnt,lf,r,tinc,fileID)
+% evalutates a simulation under the input conditions
+
     pull = (isempty(nu)&&sig~=0);
     if(pull)
         options = odeset('Mass',@activnet_mass_sp,'AbsTol',0.001,'RelTol',0.001);

@@ -1,4 +1,6 @@
 function dz = activnet_act_ode(t,z,zet,L,mu,muN,kap,xi,nu,psi,sig,Dx,Dy,Df,Dw,ncnt,lf)
+% return right side of diff equation A*x'=f for node position, x
+
 
     %% compute intrafilament forces    
     l0 = L/(ncnt-1);

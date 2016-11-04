@@ -1,4 +1,7 @@
 function g = lineSegmentGrid(indL,XY,Dx,Dy,l0)
+% find intersections of lines XY
+% keeps persistent ga in memory to keep from generating it every time
+
 persistent ga;
 
 if isempty(ga)

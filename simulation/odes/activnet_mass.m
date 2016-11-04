@@ -1,4 +1,6 @@
 function Mz = activnet_mass(t,z,zet,L,mu,muN,kap,xi,nu,psi,sig,Dx,Dy,Df,Dw,ncnt,lf,ext)
+% return right side of diff equation A*x'=f for node position, x
+% uses a non sparse matrix 
 
     %% create velocity coupling matrix    
     l0 = L/(ncnt-1);

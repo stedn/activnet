@@ -1,5 +1,30 @@
 function p = activnet_gen(zet,L,mu,kap,lc,xi,ups,phi,psi,r,sig,Dx,Dy,Df,Dw,ls,lf,tinc,tfin,nonlin)
-    
+% generates an active network simulation and prints node positions
+% at time steps.  Parameters are defined as follows:
+%
+%   zet - medium viscosity
+%   L - length of the filament
+%   mu - compressional modulus of the filament
+%   kap - bending modulus of a filament if ls<L
+%   lc - average distance between filament overlaps
+%   xi - frictional resistance between two overlapping segments
+%   ups - motor force at filament overlaps
+%   phi - fraction of overlaps that receive a motor force
+%   psi - spatial variation in motor force (see below)
+%   sig - applied force
+%   Dx - x-dimension of domain
+%   Dy - y-dimension of domain
+%   Df - 
+%   Dw - width of window in x-dimension where forces/constraints are applied
+%   ls - length of filament segments
+%   lf - length of force falloff at end of filament (for continuous forces)
+%   tinc - time increment to return solutions
+%   tfin - end time of simulation
+%   nonlin - nonlinear factor by which to make filament stiffer by extension
+%
+%   See also SUM, PLUS.    
+
+
 %% this mess just ensures that any string input is converted to numbers
     if(ischar(zet)); zet = str2num(zet); end;
     if(ischar(L)); L = str2num(L); end;

@@ -1,5 +1,7 @@
 function dz = activnet_pull_ode(t,z,zet,L,mu,muN,kap,xi,nu,psi,sig,Dx,Dy,Df,Dw,ncnt,lf)
-    
+% return right side of diff equation A*x'=f for node position, x
+% leaves out inefficient O(~N^2) intersection step
+
     %% compute intrafilament forces    
     l0 = L/(ncnt-1);
     p = reshape(z,[],2);
