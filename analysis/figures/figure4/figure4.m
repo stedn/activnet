@@ -13,6 +13,30 @@ ylabel('Strain')
 xlabel('Time (s)')
 bp = '../..';
 cd(bp);
+
+%% just fyi this for loop is only going to plot one thing
+
+load('extend_meas')
+indabl = find(allp(:,6)==1&allp(:,5)==0.5&allp(:,11)==-0.0002&allp(:,2)==5);
+[dum,srt] = sort(allp(indabl,10));
+for ind=indabl(srt)'
+
+    tstop = find(allt(ind,:)==0,1);
+    if(length(tstop)>0)
+        tstop = tstop(1)-1;
+    else
+        tstop = length(allt(ind,:));
+    end
+    t = allt(ind,1:tstop)/10;
+    sl = allf(ind,1:tstop);
+    g = allg(ind,1:tstop)*10;
+
+    if(1)
+                plot(t,cumtrapz(t,g,2),'DisplayName','\tau_r = \infty' ,'Color',[0.25 0.25 0.25])
+     hold on
+    end
+end
+
 load('extendrec_meas')
 
 indabl = find(allp(:,6)==1&allp(:,5)==0.5&allp(:,11)==-0.0002&allp(:,12)==75);
@@ -38,29 +62,9 @@ for ind=indabl(srt)'
 end
 
 
-%% just fyi this for loop is only going to plot one thing
 
-load('extend_meas')
-indabl = find(allp(:,6)==1&allp(:,5)==0.5&allp(:,11)==-0.0002&allp(:,2)==5);
-[dum,srt] = sort(allp(indabl,10));
-for ind=indabl(srt)'
-
-    tstop = find(allt(ind,:)==0,1);
-    if(length(tstop)>0)
-        tstop = tstop(1)-1;
-    else
-        tstop = length(allt(ind,:));
-    end
-    t = allt(ind,1:tstop)/10;
-    sl = allf(ind,1:tstop);
-    g = allg(ind,1:tstop)*10;
-
-    if(1)
-                plot(t,cumtrapz(t,g,2),'DisplayName','\tau_r = \infty' )
-     hold on
-    end
-end
 xlim([0 200])
+ylim([0 0.05])
 legend('Location','northeast')
 
 
@@ -68,44 +72,9 @@ legend('Location','northeast')
 
 
 %% this is going to plot all of the strain rates for the experiments above
-
-
-load('extendrec_meas')
 subplot('Position',[0.075+0.0125 0.94-0.25*2 0.375 0.2])
 st_x=[];
 st_y=[];
-
-indabl = find(allp(:,6)==1&allp(:,5)==0.5&allp(:,11)==-0.0002&allp(:,2)==5);
-[dum,srt] = sort(allp(indabl,10));
-
-for ind=indabl(srt)'
-    r = allp(ind,10)*10
-    tr = 1/r;
-    L = allp(ind,2)
-    lc = allp(ind,5)
-    mu = abs(allp(ind,3))
-    xi = allp(ind,6)/10
-
-    sig = abs(allp(ind,11))
-
-    ntscale = L^2*xi/lc/mu;
-
-    tstop = find(allt(ind,:)==0,1);
-    if(length(tstop)>0)
-        tstop = tstop(1)-1;
-    else
-        tstop = length(allt(ind,:));
-    end
-
-    t = allt(ind,1:tstop)/10;
-    g = allg(ind,floor(tstop/2):tstop);
-
-
-    st_x=[st_x tr/ntscale];
-    st_y=[st_y sig/mean(g)];
-
-end
-
 load('extend_meas')
 
 indabl = find(allp(:,6)==1&allp(:,5)==0.5&allp(:,11)==-0.0002&allp(:,2)==5);
@@ -133,16 +102,55 @@ for ind=indabl(srt)'
     t = allt(ind,1:tstop)/10;
     g = allg(ind,floor(tstop/2):tstop);
 
-    st_x=[10^4.7 st_x ];
+    st_x=[10^5.7 st_x ];
     st_y=[sig/mean(g) st_y ];
+    
+    semilogx(st_x(1),st_y(1),'o','Color','k','MarkerSize',6)
+    hold on
 end
+
+load('extendrec_meas')
+
+
+indabl = find(allp(:,6)==1&allp(:,5)==0.5&allp(:,11)==-0.0002&allp(:,2)==5);
+[dum,srt] = sort(allp(indabl,10));
+
+for ind=indabl(srt)'
+    r = allp(ind,10)*10
+    tr = 1/r;
+    L = allp(ind,2)
+    lc = allp(ind,5)
+    mu = abs(allp(ind,3))
+    xi = allp(ind,6)/10
+
+    sig = abs(allp(ind,11))
+
+    ntscale = L^2*xi/lc/mu;
+
+    tstop = find(allt(ind,:)==0,1);
+    if(length(tstop)>0)
+        tstop = tstop(1)-1;
+    else
+        tstop = length(allt(ind,:));
+    end
+
+    t = allt(ind,1:tstop)/10;
+    g = allg(ind,floor(tstop/2):tstop);
+
+
+    st_x=[st_x tr];
+    st_y=[st_y sig/mean(g)];
+    semilogx(tr,sig/mean(g),'o','MarkerSize',6)
+    hold on
+end
+
+
 
 semilogx(st_x,st_y,'Color',[0.25,0.25,0.25])
 hold on
-semilogx(st_x(1),st_y(1),'o','Color',[0.25,0.25,0.25],'MarkerSize',6)
-xlim([0.000005,10^5])
+xlim([0.05,10^6])
 ylabel('Effective Viscosity (nNs/\mum)')
-xlabel('Normalized Recycling Time (\tau_r/\tau_c)')
+xlabel('Recycling Time (\tau_r)')
 
 
 

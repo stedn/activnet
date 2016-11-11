@@ -40,7 +40,7 @@ stot2 = 0;
 [c, lind] = min(abs(t-380));
 inds = 1:20:lind;
 inds = inds(2:end);
-ex_indis = [1 19];
+ex_indis = [5 19];
 bpos = linspace(0,Dx,51);
 bpos = bpos(1:end-1)+bpos(2)/2;
 ll = 4;
@@ -84,7 +84,7 @@ for ind = inds
         ylabel(['\tau_r = ' num2str(1/r) ' s'])
         xlim([0 Dx__])
         set(gca,'xtick',[],'ytick',[],'box','on')
-        xlabel('\gamma = 0')
+        xlabel('\gamma = 0.005')
 
     end
     if(indi==ex_indis(2))
@@ -94,7 +94,7 @@ for ind = inds
         netplot_str_grey(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn,Dx_);
         xlim([0 Dx__])
         set(gca,'xtick',[],'ytick',[],'box','on')
-        xlabel('\gamma = 0.4')
+        xlabel('\gamma = 0.04')
 
     end
 
