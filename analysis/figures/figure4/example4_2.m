@@ -67,8 +67,8 @@ for ind = inds
     if(makemovs)
         figure(h)
         clf
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
-        xlim([0 Dx_])
+        netplot_str_grey(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn,Dx_);
+        xlim([0 Dx__])
         set(gca,'xtick',[],'ytick',[],'box','on')
 
         colormap([flipud(cc2);cc])
@@ -80,9 +80,9 @@ for ind = inds
         subplot('Position',[0.05 0.915-0.2*Dy/Dx_*2 0.2 0.2*Dy/Dx_])
         pat=patch([Dx_-Dx*Dw Dx_-Dx*Dw Dx_ Dx_],[0 Dy Dy 0],[.7 .5 0]);
         set(pat,'FaceAlpha',0.25,'EdgeColor','none');
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
+        netplot_str_grey(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn,Dx_);
         ylabel(['\tau_r = ' num2str(1/r) ' s'])
-        xlim([0 Dx_])
+        xlim([0 Dx__])
         set(gca,'xtick',[],'ytick',[],'box','on')
         xlabel('\gamma = 0')
 
@@ -91,8 +91,8 @@ for ind = inds
         subplot('Position',[0.275 0.915-0.2*Dy/Dx_*2 0.2 0.2*Dy/Dx_])
         pat=patch([Dx_-Dx*Dw Dx_-Dx*Dw Dx_ Dx_],[0 Dy Dy 0],[.7 .5 0]);
         set(pat,'FaceAlpha',0.25,'EdgeColor','none');
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
-        xlim([0 Dx_])
+        netplot_str_grey(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn,Dx_);
+        xlim([0 Dx__])
         set(gca,'xtick',[],'ytick',[],'box','on')
         xlabel('\gamma = 0.4')
 
@@ -152,7 +152,7 @@ for ind = inds
         plot(p(subind,1),v(subind,1),'.')
         plot(bpos(1:end-1),bv)
         hold off
-        xlim([0,Dx_])
+        xlim([0,Dx__])
         ylim([-0.1*10^-3,0.5*10^-2])
         xlabel('x position (\mum)')
         ylabel('velocity_x (\mum/s)')

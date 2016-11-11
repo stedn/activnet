@@ -5,7 +5,7 @@ bp = '../..';
 cd(bp);
 load('astress_meas_correct')
 
-ax2 = subplot('Position',[0.565,0.915-exw*Dy/Dx_-0.225,0.39,0.215]);
+ax2 = subplot('Position',[0.625,0.915-exw*Dy/Dx_-0.225,0.36,0.215]);
 for ind=1:size(allt,1)
     t = allt(ind,:)/10;
 
@@ -26,14 +26,14 @@ for ind=1:size(allt,1)
     end
 end
 loglog([0.1,1000],[0.1,1000],'k:')
-% xlim([0.1 1000])
-% ylim([0.1 1000])
+xlim([0.1 1000])
+ylim([0.1 1000])
 xlabel('$$\tau_a = $$ ($$L\xi/\sqrt{\mu_e\upsilon}$$)','interpreter','latex')
 ylabel('Time of Max Stress')
 
 annotation('textbox', [0.01 0.89 0.05 0.05],'String','a)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 annotation('textbox', [0.00 0.68 0.05 0.05],'String','b)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
-annotation('textbox', [0.49 0.68 0.05 0.05],'String','c)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
+annotation('textbox', [0.52 0.68 0.05 0.05],'String','c)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 
 cd('../figures')
 print('-depsc','-r0',['figure6.eps']);

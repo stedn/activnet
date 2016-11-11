@@ -45,7 +45,7 @@ stofc = 0;
 %% setup timepoints and space points to measure
 inds = 1:10:10001;
 inds = inds(2:end);
-ex_indis = [1 100 500 1000];
+ex_indis = [1 10 100 1000];
 bpos = linspace(0,Dx,51);
 bpos = bpos(1:end-1)+bpos(2)/2;
 ll = 10;
@@ -160,7 +160,10 @@ for ind = inds
 
     %bin tension data
     [bb,nb,sb]=bindata_line(XY,fx,bpos);
-    [bc,nc,sc]=bindata_line(XY,abs(fx),bpos);
+    [be,ne,se]=bindata_line(XY(fx>0,:),abs(fx(fx>0)),bpos);
+    [bc,nc,sc]=bindata_line(XY(fx<0,:),abs(fx(fx<0)),bpos);
+    
+    %[bc,nc,sc]=bindata_line(XY,abs(fx),bpos);
     bv=bindata(v(:,1),p(:,1),bpos);
 
 
@@ -171,8 +174,10 @@ for ind = inds
     % store data
     stot = [stot t(ind)];
     stof = [stof nanmean(bb(ll:rl).*nb(ll:rl))/Dy];
-    stofe = [stofe sum(fstr(str>0))];
-    stofc = [stofc sum(fstr(str<0))];
+    stofe = [stofe nanmean(be(ll:rl).*ne(ll:rl))/Dy];
+    stofc = [stofc nanmean(bc(ll:rl).*nc(ll:rl))/Dy];
+%     stofe = [stofe sum(fstr(str>0))];
+%     stofc = [stofc sum(fstr(str<0))];
 
 %     if(indi==ex_indis(2))
 %         subplot('Position',[0.05 0.925-exw*Dy/Dx_-0.2 0.2 0.2])
@@ -226,25 +231,49 @@ if(makemovs)
 end
 
 figure(h2);
-subplot('Position',[0.08 0.915-exw*Dy/Dx_-0.225 0.4 0.215]);
-[ax, hh1, hh2]=plotyy(stot,stof,stot,abs(stofc));
-set(ax,{'ycolor'},{'k';'k'})
-set(hh1, 'Color', 'black');
-ylabel('Stress (nN/\mum)') % label rigdat = [ht y-axisaxes(ax(2))
-ylim([0 max(stof)])
-xlabel('Time (s)') % label x-axis
-axes(ax(2))
+subplot('Position',[0.08 0.915-exw*Dy/Dx_-0.225 0.1 0.215]);
+plot(stot,stofe)
 hold on
-set(ax(2),'ColorOrderIndex',1)
-plot(stot,stofe);
-plot(stot,0*stot,'k');
-ylim([0 max(abs(stofe))])
-tks = linspace(0, max(stofe),7);
-set(ax(2),'YTick',[])
-set(ax(2),'YTickLabel', []);
+plot(stot,stofc);
+plot(stot,stof,'Color','k')
+ylim([0 max(stofe)])
+xlim([0 20])
+ylabel('Stress (nN/\mum)') % label rigdat = [ht y-axisaxes(ax(2))
+%xlabel('Time (s)') % label x-axis
+
+axx = subplot('Position',[0.18 0.915-exw*Dy/Dx_-0.225 0.35 0.215]);
+% [ax, hh1, hh2]=plotyy(stot,stof,stot,abs(stofc));
+% set(ax,{'ycolor'},{'k';'k'})
+% set(hh1, 'Color', 'black');
+% ylabel('Stress (nN/\mum)') % label rigdat = [ht y-axisaxes(ax(2))
+% ylim([0 max(stof)])
+% xlabel('Time (s)') % label x-axis
+% axes(ax(2))
+% hold on
+% set(ax(2),'ColorOrderIndex',1)
+% plot(stot,stofe);
+% plot(stot,0*stot,'k');
+% ylim([0 max(abs(stofe))])
+% tks = linspace(0, max(stofe),7);
+% set(ax(2),'YTick',[])
+% set(ax(2),'YTickLabel', []);
+% xlabel('Time (s)') % label x-axis
+% legend('Compressional','Extensional','Net Stress')
+plot(stot,stofe)
+hold on
+
+%ylabel('Stress (nN/\mum)') % label rigdat = [ht y-axisaxes(ax(2))
 xlabel('Time (s)') % label x-axis
-legend('Compressional','Extensional','Net Stress')
+plot(stot,stofc);
+plot(stot,stof,'Color','k')
+ylim([0 max(stofe)])
+xlim([20 1000])
+set(axx,'YTick',[])
+legend('Extensional Stress','Compressional Stress','Total Stress','Location','northeast')
 
-
-
+% pos = axx.Position;
+% axes('Position',[pos(1)+pos(3)*0.25 pos(2)+0.5*pos(4) pos(3)/4 pos(4)/2])
+% box on
+% plot(stot,stof,'Color','k')
+% xlim([0 100])
 % close(h2)

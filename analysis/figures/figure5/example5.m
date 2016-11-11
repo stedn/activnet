@@ -11,7 +11,7 @@ fclose(fid);
 pare = strsplit(C{1}{9}, '>');
 paree = strsplit(pare{1}, ' ');
 paree = {paree{2:end}};
-zet=str2num(paree{2});L=str2num(paree{3});mu=-str2num(paree{4});kap=str2num(paree{5});lc=str2num(paree{6});
+zet=str2num(paree{2});L=str2num(paree{3});mu=str2num(paree{4});kap=str2num(paree{5});lc=str2num(paree{6});
 xi=str2num(paree{7});ups=str2num(paree{8});phi=str2num(paree{9});psi=str2num(paree{10});
 r=str2num(paree{11});sig=str2num(paree{12});Dx=str2num(paree{13});Dy=str2num(paree{14});Df=str2num(paree{15});
 Dw=str2num(paree{16});ls=str2num(paree{17});lf=str2num(paree{18});
@@ -38,6 +38,10 @@ stot = [];
 stow = [];
 stoe = [];
 stoc = [];
+
+stof = [];
+stofe = [];
+stofc = [];
 
 %% setup timepoints and space points to measure
 inds = 1:10:2001;
@@ -147,16 +151,19 @@ for ind = inds
     [XY,sx,sy,str]=get_str(p,L,lf,ls,Dx,Dy);
 
     % compute filament tension
+    fstr = mu*str;
     fx = mu*sx;
     fy = mu*sy;
     if(mu<0)
         fx = -fx.*(1+99*double(sx>0));
         fy = -fy.*(1+99*double(sy>0));
+        fstr = -fstr.*(1+99*double(str>0));
     end
 
     %bin tension data
     [bb,nb,sb]=bindata_line(XY,fx,bpos);
-    [bc,nc,sc]=bindata_line(XY,abs(fx),bpos);
+    [be,ne,se]=bindata_line(XY(fx>0,:),abs(fx(fx>0)),bpos);
+    [bc,nc,sc]=bindata_line(XY(fx<0,:),abs(fx(fx<0)),bpos);
     bv=bindata(v(:,1),p(:,1),bpos);
 
 
@@ -170,6 +177,12 @@ for ind = inds
     stoe = [stoe mean(str(str>0))];
     stoc = [stoc mean(str(str<0))];
 
+    stof = [stof nanmean(bb(ll:rl).*nb(ll:rl))/Dy];
+    stofe = [stofe nanmean(be(ll:rl).*ne(ll:rl))/Dy];
+    stofc = [stofc nanmean(bc(ll:rl).*nc(ll:rl))/Dy];
+%    stofe = [stofe 2*sum(fstr(str>0))];
+%    stofc = [stofc sum(fstr(str<0))];
+    
 %     if(indi==ex_indis(2))
 %         subplot('Position',[0.05 0.925-exw*Dy/Dx_-0.2 0.2 0.2])
 %         ax=plotyy(bpos,bb.*nb/Dy,bpos(1:length(bv)),bv*10);
@@ -223,4 +236,16 @@ xlabel('Time (s)')
 legend('show','Location','east')
 print('-depsc','-r0',[code '_ex.eps']);
 
+subplot('Position',[0.565,0.915-exw*Dy/Dx_-0.225,0.39,0.215]);
+%[ax, hh1, hh2]=plotyy(stot,stof,stot,abs(stofc));
+plot(stot,stofe)
+hold on
+
+ylabel('Stress (nN/\mum)') % label rigdat = [ht y-axisaxes(ax(2))
+xlabel('Time (s)') % label x-axis
+plot(stot,stofc);
+plot(stot,stof,'Color','k')
+ylim([0 max(stofe)])
+
+legend('Extensional Stress','Compressional Stress','Total Stress','Location','southeast')
 % close(h2)

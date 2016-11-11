@@ -42,9 +42,10 @@ stot = 0;
 
 
 %% setup timepoints and space points to measure
-inds = 1:ceil(size(zt,1)/250):size(zt,1);
+%inds = 1:ceil(size(zt,1)/250):size(zt,1);
+inds = 1:size(zt,1);
 inds = inds(2:end);
-ex_indis = [1 40 200];
+ex_indis = [1 800 4000];
 bpos = linspace(0,Dx,51);
 bpos = bpos(1:end-1)+bpos(2)/2;
 ll = 4;
@@ -86,7 +87,7 @@ for ind = inds
     if(makemovs)
         figure(h)
         clf
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
+        netplot_str_grey(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn,Dx__);
         xlim([0 Dx_])
         set(gca,'xtick',[],'ytick',[],'box','on')
 
@@ -100,7 +101,7 @@ for ind = inds
         subplot('Position',[0.06 0.97-www*Dy/Dx_ www www*Dy/Dx_*0.9])
         pat=patch([Dx__-Dx*Dw Dx__-Dx*Dw Dx__ Dx__],[0 Dy Dy 0],[.7 .5 0]);
         set(pat,'FaceAlpha',0.25,'EdgeColor','none');
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
+        netplot_str_grey(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn,Dx__);
         ylabel(['t = ' num2str(t(ind)) ' s'])
         xlim([0 Dx_])
         set(gca,'xtick',[],'ytick',[],'box','on')
@@ -114,7 +115,7 @@ for ind = inds
         subplot('Position',[0.06 0.97-www*Dy/Dx_*2 www www*Dy/Dx_*0.9])
         pat=patch([Dx__-Dx*Dw Dx__-Dx*Dw Dx__ Dx__],[0 Dy Dy 0],[.7 .5 0]);
         set(pat,'FaceAlpha',0.25,'EdgeColor','none');
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
+        netplot_str_grey(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn,Dx__);
         ylabel(['t = ' num2str(t(ind)) ' s'])
         xlim([0 Dx_])
         set(gca,'xtick',[],'ytick',[],'box','on')
@@ -123,7 +124,7 @@ for ind = inds
         subplot('Position',[0.06 0.97-www*Dy/Dx_*3 www www*Dy/Dx_*0.9])
         pat=patch([Dx__-Dx*Dw Dx__-Dx*Dw Dx__ Dx__],[0 Dy Dy 0],[.7 .5 0]);
         set(pat,'FaceAlpha',0.25,'EdgeColor','none');
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
+        netplot_str_grey(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn,Dx__);
         ylabel(['t = ' num2str(t(ind)) ' s'])
         xlim([0 Dx_])
         set(gca,'ytick',[],'xtick',[],'box','on')

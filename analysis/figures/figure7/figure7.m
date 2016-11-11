@@ -70,13 +70,14 @@ for ind=indabl(srt)'
     sl = allf(ind,1:tstop);
     g = allg(ind,1:tstop);
 
-    st_x=[st_x tr/tscale];
+    st_x=[st_x tr];
     st_y=[st_y mean(sl(end-10:end))];
+    semilogx(tr,mean(sl(end-10:end)),'o')
 end
 semilogx(st_x,st_y,'Color',[0.25,0.25,0.25])
 
 ylabel('Steady State Stress (nN)')
-xlabel('Normalized Recycling Time (\tau_r/\tau_a)')
+xlabel('Recycling Time (\tau_r)')
 xlim([0.0001 100])
 set(gca,'XTick',[0.01 1 100],'XTickLabel',[0.01 1 100])
 

@@ -68,13 +68,13 @@ for ind=indabl(srt)'
     g = allg(ind,1:tstop);
 
     if(t(end)>2*tscale)
-                st_x=[st_x tr/tscale];
+                st_x=[st_x tr];
                 st_y=[st_y mean(g(end-100:end))];
-
+                semilogx(tr,mean(g(end-100:end)),'o')
     end
 end
 semilogx(st_x,st_y,'Color',[0.25,0.25,0.25])
-xlabel('Normalized Recycling Time (\tau_r/\tau_a)')
+xlabel('Recycling Time (\tau_r)')
 ylabel('Strain Rate (1/s)','interpreter','latex')
 
 

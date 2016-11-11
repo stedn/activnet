@@ -42,7 +42,6 @@ stot = 0;
 
 
 %% setup timepoints and space points to measure
-[c, lind] = min(abs(t-1000));
 inds = 1:20:3801;
 inds = inds(2:end);
 ex_indis = [1 190];
@@ -66,6 +65,7 @@ temp=hot(2*lst);
 cc2 = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
 indi = 1;
 Dx_ = 0.33*Dx;
+Dx__ = 0.5*Dx;
 cdmn=0.05;
 edmn=0.05;
 
@@ -77,8 +77,8 @@ for ind = inds
     if(makemovs)
         figure(h)
         clf
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
-        xlim([0 Dx_])
+        netplot_str_grey(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn,Dx_);
+        xlim([0 Dx__])
         set(gca,'xtick',[],'ytick',[],'box','on')
 
         colormap([flipud(cc2);cc])
@@ -91,9 +91,9 @@ for ind = inds
         subplot('Position',[0.05 0.96-0.2*Dy/Dx_ 0.2 0.2*Dy/Dx_])
         pat=patch([Dx_-Dx*Dw Dx_-Dx*Dw Dx_ Dx_],[0 Dy Dy 0],[.7 .5 0]);
         set(pat,'FaceAlpha',0.25,'EdgeColor','none');
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
+        netplot_str_grey(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn,Dx_);
         ylabel(['\tau_r = \infty s'])
-        xlim([0 Dx_])
+        xlim([0 Dx__])
         set(gca,'xtick',[],'ytick',[],'box','on')
 
 
@@ -102,7 +102,7 @@ for ind = inds
         subplot('Position',[0.275 0.96-0.2*Dy/Dx_ 0.2 0.2*Dy/Dx_])
         pat=patch([Dx_-Dx*Dw Dx_-Dx*Dw Dx_ Dx_],[0 Dy Dy 0],[.7 .5 0]);
         set(pat,'FaceAlpha',0.25,'EdgeColor','none');
-        netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
+        netplot_str_grey(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn,Dx_);
         xlim([0 Dx_])
         set(gca,'xtick',[],'ytick',[],'box','on')
 
