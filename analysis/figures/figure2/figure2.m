@@ -271,6 +271,9 @@ annotation('textbox', [0.015 0.93 0.05 0.05],'String','a)','LineStyle','none','F
 annotation('textbox', [0.440 0.93 0.05 0.05],'String','b)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 annotation('textbox', [0.440 0.70 0.05 0.05],'String','c)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 
+annotation('arrow','X',[0.28 0.31],'Y',[0.51 0.51],'HeadWidth',12,'HeadLength',12,'LineWidth',7,'HeadStyle','plain','Color',[0.5 0.5 0.5])
+annotation('arrow','X',[0.28 0.31],'Y',[0.97 0.97],'HeadWidth',12,'HeadLength',12,'LineWidth',7,'HeadStyle','plain','Color',[0.5 0.5 0.5])
+
 cd('../../../figures')
 print('-depsc','-r0','figure2.eps');
 cd(orig_bp)
