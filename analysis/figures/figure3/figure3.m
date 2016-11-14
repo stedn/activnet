@@ -7,7 +7,7 @@ load('extend_meas2')
 h2=figure;
 
 %% subplot for estimated elastic modulus
-subplot('Position',[0.1,0.1,0.225,0.25]);
+subplot('Position',[0.1,0.1,0.225,0.2]);
 for ind=1:size(allt,1)
     
     r = allp(ind,10)*10;
@@ -56,7 +56,7 @@ loglog([0 0.15],[0 0.15],'k:')
 
 %% subplot for effective viscosity scaling
 
-subplot('Position',[0.425,0.1,0.225,0.25]);
+subplot('Position',[0.425,0.1,0.225,0.2]);
 for ind=1:size(allt,1)
 
     t = allt(ind,:)/10;
@@ -105,7 +105,7 @@ plot(linspace(0,25,20),3*pi*linspace(0,25,20).^2,'k:')
 
 
 
-subplot('Position',[0.75,0.1,0.225,0.25]);
+subplot('Position',[0.75,0.1,0.225,0.2]);
 for ind=1:size(allt,1)
 
     t = allt(ind,:)/10;
@@ -155,9 +155,9 @@ ylabel('Transition Time (s)')
 
 
 
-annotation('textbox', [0.00 0.37 0.05 0.05],'String','a)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
-annotation('textbox', [0.33 0.37 0.05 0.05],'String','b)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
-annotation('textbox', [0.66 0.37 0.05 0.05],'String','c)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
+annotation('textbox', [0.00 0.28 0.05 0.05],'String','a)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
+annotation('textbox', [0.33 0.28 0.05 0.05],'String','b)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
+annotation('textbox', [0.66 0.28 0.05 0.05],'String','c)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 
 cd('../figures')
 print('-depsc','-r0','figure3.eps');

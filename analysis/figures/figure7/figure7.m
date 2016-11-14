@@ -12,7 +12,7 @@ load('actrec_meas')
 subplot('Position',[0.525 topp-0.3 0.4 0.275])
 
 indabl = find(allp(:,6)==10&allp(:,5)==0.3&allp(:,7)==0.1&allp(:,8)==0.25&...
-    (allp(:,10)==0.0001|allp(:,10)==0.001|allp(:,10)==0.01|allp(:,10)==0.1));
+    (allp(:,10)==0.0001|allp(:,10)==0.001|allp(:,10)==0.01|allp(:,10)==0.1|allp(:,10)==1));
 [dum,srt] = sort(allp(indabl,10));
 for ind=indabl(srt)'
 
@@ -72,14 +72,17 @@ for ind=indabl(srt)'
 
     st_x=[st_x tr];
     st_y=[st_y mean(sl(end-10:end))];
-    semilogx(tr,mean(sl(end-10:end)),'o')
+    if(tr==1000||tr==100||tr==10||tr==1||tr==0.1)
+        loglog(tr,mean(sl(end-10:end)),'o','MarkerSize',6)
+        hold on
+    end
 end
-semilogx(st_x,st_y,'Color',[0.25,0.25,0.25])
+loglog(st_x,st_y,'Color',[0.25,0.25,0.25])
 
 ylabel('Steady State Stress (nN)')
 xlabel('Recycling Time (\tau_r)')
-xlim([0.0001 100])
-set(gca,'XTick',[0.01 1 100],'XTickLabel',[0.01 1 100])
+xlim([0.005 5000])
+% set(gca,'XTick',[0.01 1 100],'XTickLabel',[0.01 1 100])
 
 
 
@@ -116,7 +119,7 @@ for ind=1:size(allt,1)
 
 end
 myx = logspace(-4,4,35);
-loglog(myx,1./(1./myx+myx),'--')
+loglog(myx,1./(1./myx+myx.^0.5),'--')
 ylabel('Normalized Steady State Stress (\sigma/\sigma_a)')
 xlabel('Normalized Recycling Time (\tau_r/\tau_a)')
 

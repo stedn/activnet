@@ -39,7 +39,7 @@ end
 
 load('extendrec_meas')
 
-indabl = find(allp(:,6)==1&allp(:,5)==0.5&allp(:,11)==-0.0002&allp(:,12)==75);
+indabl = find(allp(:,6)==1&allp(:,5)==0.5&allp(:,11)==-0.0002&allp(:,12)==75&allp(:,10)<1);
 [dum,srt] = sort(allp(indabl,10));
 for ind=indabl(srt)'
 
@@ -105,14 +105,14 @@ for ind=indabl(srt)'
     st_x=[10^5.7 st_x ];
     st_y=[sig/mean(g) st_y ];
     
-    semilogx(st_x(1),st_y(1),'o','Color','k','MarkerSize',6)
+    loglog(st_x(1),st_y(1),'square','Color','k','MarkerSize',6)
     hold on
 end
 
 load('extendrec_meas')
 
 
-indabl = find(allp(:,6)==1&allp(:,5)==0.5&allp(:,11)==-0.0002&allp(:,2)==5);
+indabl = find(allp(:,6)==1&allp(:,5)==0.5&allp(:,11)==-0.0002&allp(:,2)==5&allp(:,10)<1);
 [dum,srt] = sort(allp(indabl,10));
 
 for ind=indabl(srt)'
@@ -140,15 +140,15 @@ for ind=indabl(srt)'
 
     st_x=[st_x tr];
     st_y=[st_y sig/mean(g)];
-    semilogx(tr,sig/mean(g),'o','MarkerSize',6)
+    loglog(tr,sig/mean(g),'o','MarkerSize',6)
     hold on
 end
 
 
 
-semilogx(st_x,st_y,'Color',[0.25,0.25,0.25])
+loglog(st_x,st_y,'Color',[0.25,0.25,0.25])
 hold on
-xlim([0.05,10^6])
+xlim([0.1,10^6])
 ylabel('Effective Viscosity (nNs/\mum)')
 xlabel('Recycling Time (\tau_r)')
 

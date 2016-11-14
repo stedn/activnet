@@ -13,7 +13,7 @@ subplot('Position',[xspot topp-h w h])
 tc = 100000;
 ta = 10;
 nr = 1./(1+(tc./tr).^(3/4));
-sr = 1./(tr/ta + ta./tr);
+sr = 1./((tr/ta).^0.5 + ta./tr);
 
 loglog(tr,sr,':','DisplayName','Stress')
 hold on
@@ -38,7 +38,7 @@ subplot('Position',[xspot topp-h*2-0.05 w h])
 tc = 10;
 ta = 100000;
 nr = 1./(1+(tc./tr).^(3/4));
-sr = 1./(tr/ta + ta./tr);
+sr = 1./((tr/ta).^0.5 + ta./tr);
 
 loglog(tr,sr,':','DisplayName','Stress')
 hold on
@@ -68,7 +68,7 @@ subplot('Position',[xspot topp-h*2-0.025 0.8-w h*2])
 r = logspace(-3,3,50);
 [X,Y] = meshgrid(logspace(-3,3,50),logspace(-3,3,50));
 % C = (1+X.^(-3/4))./(X./Y+Y./X);
-C = (1+(Y./X).^(3/4))./(X+1./X);
+C = (1+(Y./X).^(3/4))./(X.^0.5+1./X);
 
 contour(X,Y,log10(C),20)
 hold on

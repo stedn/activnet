@@ -247,5 +247,5 @@ plot(stot,stofc);
 plot(stot,stof,'Color','k')
 ylim([0 max(stofe)])
 
-legend('Extensional Stress','Compressional Stress','Total Stress','Location','southeast')
+legend('Extensional Stress','Compressional Stress','Total Stress','Location','east')
 % close(h2)

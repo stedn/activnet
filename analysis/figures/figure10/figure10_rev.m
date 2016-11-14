@@ -63,7 +63,7 @@ for ind=1:size(allp,1)
     end
 end
 myx = logspace(-2,4,35);
-loglog(myx,0.1./(1./myx.^(1/4)+myx),'--')
+loglog(myx,0.1./(1./myx.^(1/4)+myx.^0.5),'--')
 xlabel('Normalized Recycling Time (\tau_r/\tau_a)')
 ylabel('Normalized Strain Rate ($$\dot{\gamma}L\xi/\upsilon$$)','interpreter','latex')
 

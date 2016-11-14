@@ -1,6 +1,6 @@
 orig_bp=pwd;
-% example8_1
-% example8_2
+example8_1
+example8_2
 
 bp = '../..';
 cd(bp);
@@ -70,10 +70,13 @@ for ind=indabl(srt)'
     if(t(end)>2*tscale)
                 st_x=[st_x tr];
                 st_y=[st_y mean(g(end-100:end))];
-                semilogx(tr,mean(g(end-100:end)),'o')
+                if(tr>1)
+                    loglog(tr,mean(g(end-100:end)),'o','MarkerSize',6)
+                    hold on
+                end
     end
 end
-semilogx(st_x,st_y,'Color',[0.25,0.25,0.25])
+loglog(st_x,st_y,'Color',[0.25,0.25,0.25])
 xlabel('Recycling Time (\tau_r)')
 ylabel('Strain Rate (1/s)','interpreter','latex')
 

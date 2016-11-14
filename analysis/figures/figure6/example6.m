@@ -231,17 +231,18 @@ if(makemovs)
 end
 
 figure(h2);
-subplot('Position',[0.08 0.915-exw*Dy/Dx_-0.225 0.1 0.215]);
+subplot('Position',[0.08 0.915-exw*Dy/Dx_-0.225 0.09 0.215]);
 plot(stot,stofe)
 hold on
 plot(stot,stofc);
 plot(stot,stof,'Color','k')
+set(gca,'TickLength',[ 0 0 ])
 ylim([0 max(stofe)])
-xlim([0 20])
+xlim([0 40])
 ylabel('Stress (nN/\mum)') % label rigdat = [ht y-axisaxes(ax(2))
-%xlabel('Time (s)') % label x-axis
+xlabel('Time (s)') % label x-axis
 
-axx = subplot('Position',[0.18 0.915-exw*Dy/Dx_-0.225 0.35 0.215]);
+axx = subplot('Position',[0.19 0.915-exw*Dy/Dx_-0.225 0.35 0.215]);
 % [ax, hh1, hh2]=plotyy(stot,stof,stot,abs(stofc));
 % set(ax,{'ycolor'},{'k';'k'})
 % set(hh1, 'Color', 'black');
@@ -267,7 +268,8 @@ xlabel('Time (s)') % label x-axis
 plot(stot,stofc);
 plot(stot,stof,'Color','k')
 ylim([0 max(stofe)])
-xlim([20 1000])
+xlim([0 1000])
+set(gca,'TickLength',[ 0 0 ])
 set(axx,'YTick',[])
 legend('Extensional Stress','Compressional Stress','Total Stress','Location','northeast')
 
