@@ -1,6 +1,6 @@
 orig_bp=pwd;
-example8_1
-example8_2
+example9_1
+example9_2
 
 bp = '../..';
 cd(bp);
@@ -44,8 +44,8 @@ load('domain_meas')
 indabl = find(allp(:,6)==10&allp(:,7)==0.1);
 [dum,srt] = sort(allp(indabl,10));
 subplot('Position',[0.1 0.9-0.3*2 0.3 0.22])
-example8_1_spatial
-example8_2_spatial
+example9_1_spatial
+example9_2_spatial
 
 subplot('Position',[exw+0.2 0.9-0.3*2 0.8-exw-0.07 0.25])
 st_x = []

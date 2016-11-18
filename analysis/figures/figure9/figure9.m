@@ -1,89 +1,155 @@
+orig_bp=pwd;
+example9_1
+example9_2
+
+bp = '../..';
+cd(bp);
+load('domain_meas')
+
+subplot('Position',[exw+0.15 0.95-(0.8-exw)*Dy/Dx_*1.525 0.8-exw (0.8-exw)*Dy/Dx_*1.5])
+
+indabl = find(allp(:,6)==10&allp(:,7)==0.1);
+[dum,srt] = sort(allp(indabl,10));
+for ind=indabl(srt)'
+    r = allp(ind,10)*10
+    tr = 1/r;
+    L = allp(ind,2)
+    lc = allp(ind,5)
+    mu = 100*abs(allp(ind,3))
+    xi = allp(ind,6)/10
+    ups = allp(ind,7)
+
+    tstop = find(allt(ind,:)==0,1);
+    if(length(tstop)>0)
+        tstop = tstop(1)-1;
+    else
+        tstop = length(allt(ind,:));
+    end
+    t = allt(ind,1:tstop)/10;
+    sl = allf(ind,1:tstop);
+    g = allg(ind,1:tstop);
+
+    if(t(end)>200)
+                plot(t,cumtrapz(t,g,2),'DisplayName',['\tau_r = ' num2str(tr,4)])
+     hold on
+    end
+end
+legend('Location','northwest')
+xlabel('Time (s)')
+ylabel('Strain')
 
 
-topp=0.95;
-w=0.33;
-h=0.15;
-tr = logspace(-2,8,50);
+load('domain_meas')
 
 
+indabl = find(allp(:,6)==10&allp(:,7)==0.1);
+[dum,srt] = sort(allp(indabl,10));
+subplot('Position',[0.1 0.9-0.3*2 0.3 0.22])
+st_x = []
+st_y = []
+for ind=indabl(srt)'
+    r = allp(ind,10)*10
+    tr = 1/r;
+    L = allp(ind,2)
+    lc = allp(ind,5)
+    mu = 100*abs(allp(ind,3))
+    xi = allp(ind,6)/10
+    ups = allp(ind,7)
+    tscale=L*xi/(ups*mu)^(1/2);
 
-xspot=0.05;
+    tstop = find(allt(ind,:)==0,1);
+    if(length(tstop)>0)
+        tstop = tstop(1)-1;
+    else
+        tstop = length(allt(ind,:));
+    end
+    t = allt(ind,1:tstop)/10;
+    sl = allf(ind,1:tstop);
+    g = allg(ind,1:tstop);
 
-subplot('Position',[xspot topp-h w h])
-tc = 100000;
-ta = 10;
-nr = 1./(1+(tc./tr).^(3/4));
-sr = 1./((tr/ta).^0.5 + ta./tr);
-
-loglog(tr,sr,':','DisplayName','Stress')
-hold on
-loglog(tr,nr/2,':','DisplayName','Viscosity')
-ylim([0 1])
-xlim([10^-2 10^8])
+    if(t(end)>2*tscale)
+                st_x=[st_x tr];
+                st_y=[st_y mean(g(end-100:end))];
+                if(tr>1)
+                    loglog(tr,mean(g(end-100:end)),'o','MarkerSize',6)
+                    hold on
+                end
+    end
+end
+loglog(st_x,st_y,'Color',[0.25,0.25,0.25])
 xlabel('Recycling Time (\tau_r)')
-set(gca,'ytick',[],'xtick',[ta tc], 'xticklabel',{'\tau_a' '\tau_c'},'xminortick','off')
-
-semilogx(tr,sr./nr/10000,'Color',[0.25 0.25 0.25],'DisplayName','Strain Rate')
-
-ylabel('Relative Units')
-xlabel('Recycling Time (\tau_r)')
-set(gca,'ytick',[],'xtick',[ta tc], 'xticklabel',{'\tau_a' '\tau_c'},'xminortick','off')
-legend('Location','southwest')
+ylabel('Strain Rate (1/s)','interpreter','latex')
 
 
+subplot('Position',[exw+0.2 0.9-0.3*2 0.8-exw-0.07 0.25])
+
+for ind=1:size(allp,1)
+    r = allp(ind,10)*10
+    tr = 1/r;
+    L = allp(ind,2)
+    lc = allp(ind,5)
+    mu = 100*abs(allp(ind,3))
+    xi = allp(ind,6)/10
+    ups = allp(ind,7)
+    tscale=L*xi/(ups*mu)^(1/2);
+    sscale=(ups*mu)^(1/2)/lc;
+    nscale = (L/lc -1)^2*xi;
+
+    tstop = find(allt(ind,:)==0,1);
+    if(length(tstop)>0)
+        tstop = tstop(1)-1;
+    else
+        tstop = length(allt(ind,:));
+    end
+    t = allt(ind,1:tstop)/10;
+    g = allg(ind,floor(tstop/2):tstop)*10;
+
+    if(t(end)>2*tscale)
+         loglog(tr/tscale,mean(g)/ups*xi*L,'.','Color',[0.25 0.25 0.25],'DisplayName',['\tau_r = ' num2str(1/allp(ind,10)/10) '  \xi = ' num2str(allp(ind,6)) '  \upsilon = ' num2str(allp(ind,7)) '  t_{last} = ' num2str(t(end))])
+         hold on
+    end
+end
+
+load('domainllc_meas')
 
 
-subplot('Position',[xspot topp-h*2-0.05 w h])
+for ind=1:size(allp,1)
+    r = allp(ind,10)*10
+    tr = 1/r;
+    L = allp(ind,2)
+    lc = allp(ind,5)
+    mu = 100*abs(allp(ind,3))
+    xi = allp(ind,6)/10
+    ups = allp(ind,7)
+    tscale=L*xi/(ups*mu)^(1/2);
+    sscale=(ups*mu)^(1/2)/lc;
+    nscale = (L/lc -1)^2*xi;
 
-tc = 10;
-ta = 100000;
-nr = 1./(1+(tc./tr).^(3/4));
-sr = 1./((tr/ta).^0.5 + ta./tr);
+    tstop = find(allt(ind,:)==0,1);
+    if(length(tstop)>0)
+        tstop = tstop(1)-1;
+    else
+        tstop = length(allt(ind,:));
+    end
+    t = allt(ind,1:tstop)/10;
+    g = allg(ind,floor(tstop/2):tstop)*10;
 
-loglog(tr,sr,':','DisplayName','Stress')
-hold on
-loglog(tr,nr/2,':','DisplayName','Viscosity')
-ylim([0 1])
-xlim([10^-2 10^8])
+    if(t(end)>2*tscale)
+         loglog(tr/tscale,mean(g)/ups*xi*L,'.','Color',[0.25 0.25 0.25],'DisplayName',['\tau_r = ' num2str(1/allp(ind,10)/10) '  \xi = ' num2str(allp(ind,6)) '  \upsilon = ' num2str(allp(ind,7)) '  t_{last} = ' num2str(t(end))])
+         hold on
+    end
+end
+myx = logspace(-2,4,35);
+loglog(myx,0.125./(1./myx.^(1/4)+myx.^0.5),'--')
+xlim([
+xlabel('Normalized Recycling Time (\tau_r/\tau_a)')
+ylabel('Normalized Strain Rate ($$\dot{\gamma}L\xi/\upsilon$$)','interpreter','latex')
 
-semilogx(tr,sr./nr/10,'Color',[0.25 0.25 0.25],'DisplayName','Strain Rate')
+annotation('textbox', [0.005 0.91 0.05 0.05],'String','a)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
+annotation('textbox', [0.44 0.91 0.05 0.05],'String','b)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
+annotation('textbox', [0.005 0.9-0.4-0.01 0.05 0.05],'String','c)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
+annotation('textbox', [0.42 0.9-0.4+0.01 0.05 0.05],'String','d)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
 
-ylabel('Relative Units')
-xlabel('Recycling Time (\tau_r)')
-set(gca,'ytick',[],'xtick',[tc ta], 'xticklabel',{'\tau_c' '\tau_a'},'xminortick','off')
-
-
-
-
-
-
-annotation('textbox', [0.01 0.9+0.025 0.05 0.05],'String','a)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
-annotation('textbox', [0.01 0.9-h-0.025 0.05 0.05],'String','b)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
-annotation('textbox', [0.41 0.9 0.05 0.05],'String','c)','LineStyle','none','FontSize',16,'FontName','Times','Color',[0.25 0.25 0.25])
-
-
-xspot=xspot+0.42;
-subplot('Position',[xspot topp-h*2-0.025 0.8-w h*2])
-
-r = logspace(-3,3,50);
-[X,Y] = meshgrid(logspace(-3,3,50),logspace(-3,3,50));
-% C = (1+X.^(-3/4))./(X./Y+Y./X);
-C = (1+(Y./X).^(3/4))./(X.^0.5+1./X);
-
-contour(X,Y,log10(C),20)
-hold on
-plot(r,r./r,':','Color',[0.25 0.25 0.25])
-plot(r./r,r,':','Color',[0.25 0.25 0.25])
-
-set(gca,'xscale','log')
-set(gca,'yscale','log')
-xlabel('\tau_r/\tau_a')
-ylabel('\tau_c/\tau_a')
-h = colorbar;
-ylabel(h, 'Strain Rate')
-set(h,'YTick',[])
-set(h,'fontsize',14);
-ylim([0.001,1000])
-
-cd('../../../figures')
-print('-depsc','-r0',['figure_theor.eps']);
+cd('../figures')
+print('-depsc','-r0',['figure8.eps']);
+cd(orig_bp)

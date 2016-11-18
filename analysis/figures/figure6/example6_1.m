@@ -1,5 +1,5 @@
-bp = '../../../data/examples/fig4/';
-code = 'syphjzab';%gcqbbcyr
+bp = '../../../data/examples/fig5/fig5_tear/';
+code = 'yfkhvwnn';%gcqbbcyr
 cd(bp)
 
 makemovs = 0;
@@ -8,22 +8,20 @@ topp = 0.95;
 leftt = 0.525;
 
 %% load param file and decipher params
-fid = fopen([bp code '_scr.txt']);
+fid = fopen([code '_scr.txt']);
 C = textscan(fid, '%s','delimiter', '\n');
 fclose(fid);
 pare = strsplit(C{1}{9}, '>');
 paree = strsplit(pare{1}, ' ');
 paree = {paree{2:end}};
-zet=str2num(paree{2});L=str2num(paree{3});mu=str2num(paree{4});kap=str2num(paree{5});lc=str2num(paree{6});
+zet=str2num(paree{2});L=str2num(paree{3});mu=str2num(paree{4});kap=str2num(paree{5});lc=str2num(paree{6}); 
 xi=str2num(paree{7});ups=str2num(paree{8});phi=str2num(paree{9});psi=str2num(paree{10});
 r=str2num(paree{11});sig=str2num(paree{12});Dx=str2num(paree{13});Dy=str2num(paree{14});Df=str2num(paree{15});
 Dw=str2num(paree{16});ls=str2num(paree{17});lf=str2num(paree{18});
 
-xi=xi/10
-r = r*10
 
 %% load simulation data
-A = importdata([bp code '_out.txt']);
+A = importdata([code '_out.txt']);
 A = A.data;
 if(size(A,1)==1)
     imp2 = importdata([bp code '_out.txt'],' ',9);
@@ -43,19 +41,19 @@ stofe = 0;
 stofc = 0;
 
 %% setup timepoints and space points to measure
-inds = 1:10:10001;
+inds = 1:1:576;
 inds = inds(2:end);
-ex_indis = [1 10 100 1000];
+ex_indis = [10 100 250 575];
 bpos = linspace(0,Dx,51);
 bpos = bpos(1:end-1)+bpos(2)/2;
 ll = 10;
 rl = 40;
 
 %% for loop over timepoints to display
-h2=figure;
+% h2=figure;
 if(makemovs)
     clear mov mov2
-    h1 = figure;
+    h1 = figure; 
     h = figure('Position', [50, 100, 100+600*Dx/Dy, 600]);
 end
 lst = size(zt,1);
@@ -68,8 +66,8 @@ cc2 = (1-trp.^2).*temp2(lst+1:end,:)+(trp.^2).*temp(1:lst,:);
 indi = 1;
 Dx_ = Dx;
 exw = 0.2;
-cdmn = 0.2;
-edmn = 0.02;
+cdmn = 0.6;
+edmn = 0.3;
 lpr = 10;
 rpr = 90;
 
@@ -90,16 +88,16 @@ for ind = inds
     end
     figure(h2)
     if(indi==ex_indis(1))
-        subplot('Position',[0.05 0.95-exw*Dy/Dx_-0.225 exw exw*Dy/Dx_*0.9])
+        subplot('Position',[0.05 0.95-exw*Dy/Dx_ exw exw*Dy/Dx_*0.9])
         netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
         xlabel(['t = ' num2str(t(ind)) ' s'])
         xlim([0.1 0.9]*Dx_)
         ylim([0.1 0.9]*Dy)
         axis equal
         set(gca,'xtick',[],'ytick',[],'box','on')
-        ylabel('\upsilon = 0.1 nN')
+        ylabel('\upsilon = 1 nN')
     elseif(indi==ex_indis(2))
-        subplot('Position',[0.075+exw 0.95-exw*Dy/Dx_-0.225 exw exw*Dy/Dx_*0.9])
+        subplot('Position',[0.075+exw 0.95-exw*Dy/Dx_ exw exw*Dy/Dx_*0.9])
         netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
         xlabel(['t = ' num2str(t(ind)) ' s'])
         xlim([0.1 0.9]*Dx_)
@@ -107,7 +105,7 @@ for ind = inds
         axis equal
         set(gca,'xtick',[],'ytick',[],'box','on')
     elseif(indi==ex_indis(3))
-        subplot('Position',[0.1+2*exw 0.95-exw*Dy/Dx_-0.225 exw exw*Dy/Dx_*0.9])
+        subplot('Position',[0.1+2*exw 0.95-exw*Dy/Dx_ exw exw*Dy/Dx_*0.9])
         netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
         xlabel(['t = ' num2str(t(ind)) ' s'])
         xlim([0.1 0.9]*Dx_)
@@ -115,24 +113,24 @@ for ind = inds
         axis equal
         set(gca,'xtick',[],'ytick',[],'box','on')
     elseif(indi==ex_indis(4))
-        subplot('Position',[0.125+3*exw 0.95-exw*Dy/Dx_-0.225 exw exw*Dy/Dx_*0.9])
+        subplot('Position',[0.125+3*exw 0.95-exw*Dy/Dx_ exw exw*Dy/Dx_*0.9])
         netplot_str(p,L,lf,ls,Dx,Dy,cc,cc2,edmn,cdmn);
         xlabel(['t = ' num2str(t(ind)) ' s'])
         xlim([0.1 0.9]*Dx_)
         ylim([0.1 0.9]*Dy)
         axis equal
         set(gca,'xtick',[],'ytick',[],'box','on')
-
+        
         colormap([flipud(cc2);cc])
         cb=colorbar('Location','east','box','on','Ticks',[0 0.5 1],'TickLabels',{num2str(-cdmn), '0.00', num2str(edmn)});
         pos = cb.Position;
         cb.Position = [pos(1)+pos(3)*3 pos(2)+pos(4)/2 pos(3)/3 pos(4)/2];
     end
-
+    
     dp = (p-op);
     op = p;
-
-    % remove data if has moved farther than realistically possible
+    
+    % remove data if has moved farther than realistically possible 
     % these events are due to crossing domain boundary or recycling
     jumpcut = 50*median(abs(dp(1:1:end,1)));
     subind = abs(dp(1:2:end-1,2))>jumpcut|abs(dp(2:2:end,2))>jumpcut|abs(dp(1:2:end-1,1))>jumpcut|abs(dp(2:2:end,1))>jumpcut;
@@ -140,13 +138,13 @@ for ind = inds
     subind = subind(:);
     dp(subind,:)=[];
     p(subind,:)=[];
-
+    
     % compute velocities
     v = dp/(t(ind)-tl);
     tl = t(ind);
-
+    
     % compute filament strain
-    [XY,sx,sy,str]=get_str(p,L,lf,ls,Dx,Dy);
+    [XY,sx,sy,str]=get_str(p,L,lf,ls,Dx,Dy);   
 
     % compute filament tension
     fstr = mu*str;
@@ -162,23 +160,23 @@ for ind = inds
     [bb,nb,sb]=bindata_line(XY,fx,bpos);
     [be,ne,se]=bindata_line(XY(fx>0,:),abs(fx(fx>0)),bpos);
     [bc,nc,sc]=bindata_line(XY(fx<0,:),abs(fx(fx<0)),bpos);
-    
-    %[bc,nc,sc]=bindata_line(XY,abs(fx),bpos);
+%     [bc,nc,sc]=bindata_line(XY,abs(fx),bpos);
     bv=bindata(v(:,1),p(:,1),bpos);
-
-
+    
+    
     subind = p(:,1)<=bpos(rl)&p(:,1)>=bpos(ll);
     cpx = (XY(:,1)+XY(:,3))/2;
     subindc = cpx(:,1)<=bpos(rl)&cpx(:,1)>=bpos(ll);
-
+    
     % store data
     stot = [stot t(ind)];
     stof = [stof nanmean(bb(ll:rl).*nb(ll:rl))/Dy];
+    
     stofe = [stofe nanmean(be(ll:rl).*ne(ll:rl))/Dy];
     stofc = [stofc nanmean(bc(ll:rl).*nc(ll:rl))/Dy];
 %     stofe = [stofe sum(fstr(str>0))];
 %     stofc = [stofc sum(fstr(str<0))];
-
+   
 %     if(indi==ex_indis(2))
 %         subplot('Position',[0.05 0.925-exw*Dy/Dx_-0.2 0.2 0.2])
 %         ax=plotyy(bpos,bb.*nb/Dy,bpos(1:length(bv)),bv*10);
@@ -190,8 +188,8 @@ for ind = inds
 %         ax(1).YLabel.Color=colorOrder(1,:);
 %         ylabel(ax(2),'Velocity (\mum/s)') % label rigdat = [ht y-axis
 %     end
-
-    % plot spatially resolved data
+    
+    % plot spatially resolved data 
     if(makemovs)
         figure(h1)
         subplot(2,1,1)
@@ -219,7 +217,7 @@ for ind = inds
         mov2(indi) = getframe(h1);
     end
     indi=indi+1;
-
+    
 end
 
 %% if there was any data to store we will now display it and save it
@@ -241,25 +239,8 @@ figure(h2);
 % xlim([0 40])
 % ylabel('Stress (nN/\mum)') % label rigdat = [ht y-axisaxes(ax(2))
 % xlabel('Time (s)') % label x-axis
-axx = subplot('Position',[0.62 0.915-exw*Dy/Dx_-0.225*2 0.35 0.215]);
-plot(stot,stofe)
-hold on
 
-% ylabel('Stress (nN/\mum)') % label rigdat = [ht y-axisaxes(ax(2))
-xlabel('Time (s)') % label x-axis
-xlabh = get(gca,'XLabel');
-set(xlabh,'Position',get(xlabh,'Position') - [100 0 0])
-plot(stot,stofc);
-plot(stot,stof,'Color','k')
-ylim([0 max(stofe)])
-xlim([30 1000])
-% set(gca,'TickLength',[ 0 0 ])
-% set(axx,'YTick',[])
-
-set(axx,'YTickLabel',[])
-legend('Extensional Stress','Compressional Stress','Total Stress','Location','northeast')
-
-subplot('Position',[0.49 0.915-exw*Dy/Dx_-0.225*2 0.125 0.215]);
+axx = subplot('Position',[0.07 0.915-exw*Dy/Dx_-0.225*2 0.335 0.215]);
 % [ax, hh1, hh2]=plotyy(stot,stof,stot,abs(stofc));
 % set(ax,{'ycolor'},{'k';'k'})
 % set(hh1, 'Color', 'black');
@@ -281,18 +262,36 @@ plot(stot,stofe)
 hold on
 
 ylabel('Stress (nN/\mum)') % label rigdat = [ht y-axisaxes(ax(2))
-% xlabel('Time (s)') % label x-axis
+xlabel('Time (s)') % label x-axis
 plot(stot,stofc);
 plot(stot,stof,'Color','k')
 ylim([0 max(stofe)])
-xlim([0 30])
+xlim([0 57.5])
 % set(gca,'TickLength',[ 0 0 ])
 % set(axx,'YTick',[])
-% legend('Extensional Stress','Compressional Stress','Total Stress','Location','northeast')
+legend('Extensional Stress','Compressional Stress','Total Stress','Location','northeast')
 
-% pos = axx.Position;
-% axes('Position',[pos(1)+pos(3)*0.25 pos(2)+0.5*pos(4) pos(3)/4 pos(4)/2])
-% box on
-% plot(stot,stof,'Color','k')
-% xlim([0 100])
+% figure(h2);
+% subplot('Position',[0.07 0.915-2*exw*Dy/Dx_-0.015-0.225 0.4 0.215]);
+% [ax, hh1, hh2]=plotyy(stot/10,stof,stot/10,abs(stofc));
+% set(ax,{'ycolor'},{'k';'k'})
+% set(hh1, 'Color', 'black');
+% ylabel('Stress (nN/\mum)') % label rigdat = [ht y-axisaxes(ax(2))
+% ylim([0 max(stof)])
+% xlabel('Time (s)') % label x-axis
+% axes(ax(2))
+% hold on
+% set(ax(2),'ColorOrderIndex',1)
+% plot(stot/10,stofe);
+% plot(stot/10,0*stot,'k');
+% ylim([0 max(abs(stofe))])
+% tks = linspace(0, max(stofe),7);
+% set(ax(2),'YTick',[])
+% set(ax(2),'YTickLabel', []);
+% xlabel('Time (s)') % label x-axis
+% legend('Compressional','Extensional','Net Stress')
+
+
+
 % close(h2)
+    

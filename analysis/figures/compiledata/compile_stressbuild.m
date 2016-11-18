@@ -25,7 +25,8 @@ for f = files
         code = strsplit(f{1},'_');
         if(exist([code{1} '_out.txt'],'file'))
             code = code{1}
-            measureall
+            check_measure
+%             measureall
         end
     end
 end
@@ -40,6 +41,7 @@ for f = files
         code = strsplit(f{1},'_');
         if(exist([code{1} '_out.txt'],'file'))
             code = code{1}
+            check_measure
             measureall
         end
     end
@@ -61,4 +63,4 @@ for f = files
 end
 
 
-save('astress_meas','allt','allp','allg','alla','allf','alle','allc','allw','alln')
+% save('astress_meas','allt','allp','allg','alla','allf','alle','allc','allw','alln')

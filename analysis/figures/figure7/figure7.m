@@ -100,8 +100,8 @@ for ind=1:size(allt,1)
     xi = allp(ind,6)/10
     ups = allp(ind,7)
 
-    tscale=L*xi/(ups*mu)^(1/2);
-    sscale=0.1*(ups*mu)^(1/2)/lc;
+    tscale=L*xi/(ups*mu)^(1/2);%L*xi/(ups^(2/3)*mu^(1/3));%
+    sscale=0.1*(ups^(2/3)*mu^(1/3))/lc;%0.1*(ups*mu)^(1/2)/lc;
 
     tstop = find(allt(ind,:)==0,2);
     if(length(tstop)>1)
